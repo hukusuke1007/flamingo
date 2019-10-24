@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "5154781182",
+    "firebase_url": "https://flamingo-test-79166.firebaseio.com",
+    "project_id": "flamingo-test-79166",
+    "storage_bucket": "flamingo-test-79166.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5154781182:android:5ede8673ea4b49d9aa72af",
+        "android_client_info": {
+          "package_name": "com.gmail.hukusuke1007.flamingo_example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "5154781182-mptqkb4ic5k02e74ffeqmp41u3ol6uaq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwsu3tvKE1N-ft2x-5d_DQkFevgOjhsSo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "5154781182-mptqkb4ic5k02e74ffeqmp41u3ol6uaq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "5154781182-hcsqvma4sni4hga6umqh4knv84vkmvvp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gmail.hukusuke1007.flamingoExample"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
