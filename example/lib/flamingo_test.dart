@@ -1,4 +1,5 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo/transaction.dart';
 import 'model/user.dart';
 import 'model/history.dart';
 import 'model/setting.dart';
