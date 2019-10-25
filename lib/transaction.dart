@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show TransactionHandler;
 import 'flamingo.dart';
 
 class Transaction {
   static run(TransactionHandler transactionHandler, {Duration timeout = const Duration(seconds: 5)}) {
-    Firestore db = firestore();
+    final db = firestore();
     db.runTransaction(transactionHandler);
   }
 }

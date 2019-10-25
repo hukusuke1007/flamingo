@@ -3,19 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flamingo/flamingo.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('flamingo');
 
   setUp(() {
-    channel.setMockMethodCallHandler((MethodCall methodCall) async {
-      return '42';
-    });
+    print('test');
   });
 
   tearDown(() {
-    channel.setMockMethodCallHandler(null);
+    print('tearDown');
   });
 
-//  test('getPlatformVersion', () async {
-//    expect(await Flamingo.platformVersion, '42');
-//  });
+  test('Document 1', () async {
+    expect(true, true);
+  });
+
 }
