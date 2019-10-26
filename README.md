@@ -1,6 +1,6 @@
 # Flamingo
 
-Firesbase Firestore model framework library.
+Flamingo is a firesbase firestore model framework library.
 
 ## Installation
 
