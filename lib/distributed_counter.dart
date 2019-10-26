@@ -8,8 +8,8 @@ class DistributedCounter {
 
    Future increment(Counter counter, {int count}) async => _increment(counter.parentRef, counter.collectionName, counter.numShards, count: count);
 
-   Future<int> get(Counter counter) async {
-     final count = await _get(counter.parentRef, counter.collectionName);
+   Future<int> load(Counter counter) async {
+     final count = await _load(counter.parentRef, counter.collectionName);
      counter.count = count;
      return count;
     }
@@ -33,7 +33,7 @@ class DistributedCounter {
      return;
    }
 
-   Future<int> _get(DocumentReference ref, String collectionName) async {
+   Future<int> _load(DocumentReference ref, String collectionName) async {
      var totalCount = 0;
      final snapshot = await ref.collection(collectionName).getDocuments();
      snapshot.documents.forEach((item) => totalCount += item['count'] as int);

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:flamingo/flamingo.dart';
 import 'flamingo_test.dart';
 

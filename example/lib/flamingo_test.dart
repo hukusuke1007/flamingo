@@ -148,13 +148,14 @@ class FlamingoTest {
     final storage = Storage();
     final file = await Helper.getImageFileFromAssets('sample.jpg');
 
-    /// fetch for uploading status
+    // fetch for uploading status
     storage.fetch();
     storage.uploader.stream.listen((data){
-      /// status
-      print('total: ${data.snapshot.totalByteCount} tranfer: ${data.snapshot.bytesTransferred}');
+      // confirm status
+      print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
     });
 
+    // save file metadata into firestore
     post.file = await storage.save('${post.documentPath}/${post.folderName}', file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
     post.log();
@@ -162,7 +163,7 @@ class FlamingoTest {
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
     hoge.log();
 
-    /// dispose for uploading status
+    // dispose for uploading status
     storage.dispose();
   }
 
@@ -197,8 +198,8 @@ class FlamingoTest {
       await distributedCounter.increment(score.value, count: 1);
     }
 
-    /// Get
-    final count = await distributedCounter.get(score.value);
+    /// Load
+    final count = await distributedCounter.load(score.value);
     print('count $count ${score.value.count}');
   }
 
