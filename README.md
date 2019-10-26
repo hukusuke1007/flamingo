@@ -65,13 +65,13 @@ final user = User()
 
 DocumentAccessor documentAccessor = DocumentAccessor();
 
-// Save
+// save
 await documentAccessor.save(user);
 
-// Update
+// update
 await documentAccessor.update(user);
 
-// Delete
+// delete
 await documentAccessor.delete(user);
 
 // Batch
@@ -85,7 +85,7 @@ await batch.commit();
 Get a document.
 
 ```dart
-// Get
+// get
 final user = User(id: '0000');  // need to 'id'.
 final hoge = await documentAccessor.load<User>(user);
 ```
@@ -96,16 +96,16 @@ Get documents in collection.
 final path = Document.path<User>();
 final snapshot = await firestoreInstance().collection(path).getDocuments();
 
-// From snapshot
+// from snapshot
 final listA = snapshot.documents.map((item) => User(snapshot: item)).toList()
-  ..forEach((item) {
-    print(item.id); // user model.
+  ..forEach((user) {
+    print(user.id); // user model.
   });
 
-// From values.
+// from values.
 final listB = snapshot.documents.map((item) => User(id: item.documentID, values: item.data)).toList()
-  ..forEach((item) {
-    print(item.id); // user model.
+  ..forEach((user) {
+    print(user.id); // user model.
   });
 ```
 
@@ -153,7 +153,7 @@ class Post extends Document<Post> {
 }
 ```
 
-Upload into Firebase Storage.
+Upload file to Firebase Storage.
 
 ```dart
 final post = Post();
@@ -169,18 +169,20 @@ storage.uploader.stream.listen((data){
 });
 
 // upload file into firebase storage and save file metadata into firestore
-post.file = await storage.save('${post.documentPath}/${post.folderName}', file, mimeType: mimeTypePng); // 'mimeType' is defined in master/master.dart
+final path = '${post.documentPath}/${post.folderName}';
+post.file = await storage.save(path, file, mimeType: mimeTypePng); // 'mimeType' is defined in master/master.dart
 await documentAccessor.save(post);
 
 // dispose for uploading status
 storage.dispose();
 ```
 
-Delete into Firebase Storage.
+Delete storage file.
 
 ```dart
 // delete file in firebase storage and delete file metadata in firestore
-await storage.delete('${post.documentPath}/${post.folderName}', post.file);
+final path = '${post.documentPath}/${post.folderName}';
+await storage.delete(path, post.file);
 await documentAccessor.update(post);
 ```
 
@@ -195,10 +197,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class Score extends Document<Score> {
-  Score({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values) {
-    // Need to defined Counter.
-    // Must be set collectionName and num of shards.
+  Score({String id,
+  }): super(id: id) {
+    // Need to defined Counter. Must be set collectionName and num of shards.
     value = Counter(this, 'shards', numShards);
   }
 
@@ -215,7 +216,8 @@ class Score extends Document<Score> {
 
   // For load data
   @override
-  void fromData(Map<String, dynamic> data) {}
+  void fromData(Map<String, dynamic> data) {
+  }
 }
 ```
 
@@ -226,16 +228,16 @@ Create and increment and load.
 final score = Score()
 await documentAccessor.save(score);
 
-// Create
+// create
 final distributedCounter = DistributedCounter();
 await distributedCounter.create(score.value);
 
-// Increment
+// increment
 for (var i = 0; i < 10; i++) {
   await distributedCounter.increment(score.value, count: 1);
 }
 
-// Load
+// get
 final count = await distributedCounter.load(score.value);
 print('count $count ${score.value.count}'); // count 10 10
 ```

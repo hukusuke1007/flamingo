@@ -156,7 +156,8 @@ class FlamingoTest {
     });
 
     // save file metadata into firestore
-    post.file = await storage.save('${post.documentPath}/${post.folderName}', file, mimeType: mimeTypePng);
+    final path = '${post.documentPath}/${post.folderName}';
+    post.file = await storage.save(path, file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
     post.log();
 
@@ -172,11 +173,12 @@ class FlamingoTest {
     final post = Post();
     final storage = Storage();
     final file = await Helper.getImageFileFromAssets('sample.jpg');
-    post.file = await storage.save('${post.documentPath}/${post.folderName}', file, mimeType: mimeTypePng);
+    final path = '${post.documentPath}/${post.folderName}';
+    post.file = await storage.save(path, file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
     post.log();
 
-    await storage.delete('${post.documentPath}/${post.folderName}', post.file);
+    await storage.delete(path, post.file);
     await documentAccessor.update(post);
 
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));

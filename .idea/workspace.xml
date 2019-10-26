@@ -3,9 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="855252b2-84df-4907-95fd-0ca3d91de53a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/flamingo_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/flamingo_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/distributed_counter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/distributed_counter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/model/score.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/model/score.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -28,8 +28,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/example/lib/flamingo_test.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="104" selection-start-line="104" selection-end-line="112" selection-end-column="38" />
+            <state relative-caret-position="286">
+              <caret line="159" column="39" selection-start-line="159" selection-start-column="39" selection-end-line="159" selection-end-column="39" />
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -106,11 +106,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/lib/model/score.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
-              <folding>
-                <element signature="e#0#54#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="42">
+              <caret line="3" selection-start-line="3" selection-end-line="6" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -201,18 +198,18 @@
         <option value="$PROJECT_DIR$/example/lib/model/count.dart" />
         <option value="$PROJECT_DIR$/example/pubspec.yaml" />
         <option value="$PROJECT_DIR$/example/lib/model/post.dart" />
-        <option value="$PROJECT_DIR$/example/lib/model/score.dart" />
         <option value="$PROJECT_DIR$/lib/storage.dart" />
         <option value="$PROJECT_DIR$/example/lib/main.dart" />
         <option value="$PROJECT_DIR$/lib/distributed_counter.dart" />
         <option value="$PROJECT_DIR$/example/lib/model/user.dart" />
+        <option value="$PROJECT_DIR$/example/lib/model/score.dart" />
         <option value="$PROJECT_DIR$/example/lib/flamingo_test.dart" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1912" />
-    <option name="y" value="23" />
+    <option name="x" value="229" />
+    <option name="y" value="75" />
     <option name="width" value="1584" />
     <option name="height" value="877" />
   </component>
@@ -372,7 +369,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="23" width="1584" height="877" extended-state="0" />
+    <frame x="229" y="75" width="1584" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22892347" />
@@ -385,7 +382,7 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.3295838" />
-      <window_info anchor="bottom" id="Run" order="1" visible="true" weight="0.18471338" />
+      <window_info anchor="bottom" id="Run" order="1" visible="true" weight="0.3987261" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" />
@@ -792,18 +789,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example/lib/model/score.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
-          <folding>
-            <element signature="e#0#54#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="42">
+          <caret line="3" selection-start-line="3" selection-end-line="6" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/example/lib/flamingo_test.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="104" selection-start-line="104" selection-end-line="112" selection-end-column="38" />
+        <state relative-caret-position="286">
+          <caret line="159" column="39" selection-start-line="159" selection-start-column="39" selection-end-line="159" selection-end-column="39" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
