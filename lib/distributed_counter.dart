@@ -27,7 +27,6 @@ class DistributedCounter {
 
    Future<void> _increment(DocumentReference ref, String collectionName, int numShards, {int count}) async {
      final shardId = Random().nextInt(numShards);
-     print(shardId);
      final shardRef = ref.collection(collectionName).document(shardId.toString());
      await shardRef.updateData(<String, dynamic>{'count': FieldValue.increment(count != null ? count : 1)});
      return;

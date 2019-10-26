@@ -22,7 +22,10 @@ Adding a configure code to main.dart.
 ```dart
 import 'package:flamingo/flamingo.dart';
 
-Flamingo.configure(rootName: 'version', version: 1);
+void main() {
+  Flamingo.configure(rootName: 'version', version: 1);
+  ...
+}
 ```
 
 Create model class that inherited Document. And add json mapping code into override functions.
