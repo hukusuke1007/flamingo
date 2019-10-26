@@ -3,10 +3,7 @@ import 'package:flamingo/document.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class History extends Document<History> {
-  History({
-    String id,
-    DocumentSnapshot documentSnapshot,
-    Map<String, dynamic> values,
+  History({String id, DocumentSnapshot documentSnapshot, Map<String, dynamic> values,
   }): super(id: id, snapshot: documentSnapshot, values: values);
 
   String userId;

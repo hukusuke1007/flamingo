@@ -13,7 +13,7 @@ class Helper {
     return file;
   }
   static String randomString({int length}) {
-    const _randomChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const _randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const _charsLength = _randomChars.length;
     final rand = Random();
     final codeUnits = List.generate(length != null ? length : 10, (index) {

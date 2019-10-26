@@ -1,212 +1,230 @@
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo/transaction.dart';
+import 'package:flamingo_example/model/count.dart';
+import 'package:flamingo_example/model/post.dart';
+import 'package:flamingo_example/model/score.dart';
+import 'model/ranking.dart';
 import 'model/user.dart';
-import 'model/history.dart';
-import 'model/setting.dart';
 
 class FlamingoTest {
-  final documentAccessor = DocumentAccessor();
+  DocumentAccessor documentAccessor = DocumentAccessor();
   
   Future save() async {
-    final user = User();
-    user.uid = user.id;
-    user.name = 'shohei';
-    user.memos = ['a', 'i', 'u', 'e', 'o'];
+    print('--- save ---');
+    final user = User()
+        ..name = 'hoge';
     await documentAccessor.save(user);
     user.log();
+
+    final hoge = await documentAccessor.load<User>(User(id: user.id));
+    hoge.log();
   }
 
-  Future update(String id) async {
-    final user = User(id: id);
-    user.uid = user.id;
-    user.name = 'hobbydevelop';
-    user.age = 20;
+  Future update() async {
+    print('--- update ---');
+    final user = User()
+      ..name = 'hoge';
+    await documentAccessor.save(user);
+
+    user.name = 'fuge';
     await documentAccessor.update(user);
-    user.log();
+
+    final hoge = await documentAccessor.load<User>(User(id: user.id));
+    hoge.log();
   }
 
-  Future delete(String id) async {
-    final user = User(id: id);
-    await documentAccessor.delete(user);
+  Future delete() async {
+    print('--- delete ---');
+    final user = User()
+      ..name = 'hoge';
+    await documentAccessor.save(user);
     user.log();
+
+    await documentAccessor.delete(user);
+    final hoge = await documentAccessor.load<User>(User(id: user.id));
+    hoge.log();
   }
 
   Future batchSave() async {
-    final userA = User();
-    userA.name = 'hanako';
-    final userB = User();
-    userB.name = 'tanaka';
-//    final history = History();
-//    history.name = 'history';
-
-    final batch = Batch();
-    batch.save(userA);
-    batch.save(userB);
-//    batch.save(history);
+    print('--- batchSave ---');
+    final userA = User()
+      ..name = 'hoge';
+    final userB = User()
+      ..name = 'fuge';
+    final batch = Batch()
+      ..save(userA)
+      ..save(userB);
     await batch.commit();
-
     userA.log();
     userB.log();
-//    history.log();
   }
 
-  Future batchDelete() async {
-    final userA = User(id: 'xPSq88jiCmCQdVmgX1eT');
-//    final history = History(id: 'sZCCQTJXtvZO31mSZCUN');
-    final batch = Batch();
-    batch.delete(userA);
-//    batch.delete(history);
+  Future batchUpdateDelete() async {
+    print('--- batchUpdateDelete ---');
+    final userA = User()
+      ..name = 'hoge';
+    final userB = User()
+      ..name = 'fuge';
+    final batch = Batch()
+      ..save(userA)
+      ..save(userB);
     await batch.commit();
     userA.log();
-//    history.log();
+    userB.log();
+    await _batchUpdateDelete(userA, userB);
   }
 
-  Future get() async {
-    final id = 'GqnTA8p6lo2ZrjqygnoS';
-    final user = await documentAccessor.load<User>(User(id: id));
-    user.log();
+  Future _batchUpdateDelete(User userA, User userB) async {
+    final hoge = await documentAccessor.load<User>(User(id: userA.id));
+    hoge.name = 'hogehoge';
+    final batch = Batch()
+      ..update(hoge)
+      ..delete(userB);
+    await batch.commit();
+
+    final fuge = await documentAccessor.load<User>(User(id: userB.id));
+    hoge.log();
+    fuge.log();
   }
 
   Future getAndUpdate() async {
-    // 取得
-    final id = 'C6Ut9dAff2n7cQXtXtLG';
-    final user = await documentAccessor.load<User>(User(id: id));
-    // 更新
-    user.name = 'あかさたな';
-    await documentAccessor.update(user);
+    print('--- getAndUpdate ---');
+    final user = User()
+      ..name = 'hoge';
+    await documentAccessor.save(user);
     user.log();
+
+    final hoge = await documentAccessor.load<User>(User(id: user.id));
+    hoge.name = 'hogehoge';
+    await documentAccessor.update(hoge);
+    hoge.log();
   }
 
   Future getCollection() async {
+    print('--- getCollection ---');
     print('path ${Document.path<User>()}');
-    // 取得
-    print('--- listA ---');
     final snapshot = await firestoreInstance().collection(Document.path<User>()).limit(5).getDocuments();
-    final listA = snapshot.documents.map((item) => User(snapshot: item)).toList();
-    print(listA.length);
-    listA.forEach((item) => item.log());
+    print('from Snapshot');
+    final listA = snapshot.documents.map((item) => User(snapshot: item)).toList()
+      ..forEach((item) => item.log());
 
-    // 更新
-    final item = listA[listA.length - 1];
-    item.name = "update";
-    await documentAccessor.update(item);
-
-    print('--- listB NewID ---');
-    final listB = snapshot.documents.map((item) => User(values: item.data)).toList();
-    listB.forEach((item) => item.log());
-
-
-    print('--- listC AlreadyExistID ---');
-    final listC = snapshot.documents.map((item) => User(id: item.documentID, values: item.data)).toList();
-    listC.forEach((item) => item.log());
+    print('from values');
+    final listB = snapshot.documents.map((item) => User(id: item.documentID, values: item.data)).toList()
+      ..forEach((item) => item.log());
   }
 
-  Future saveCollection() async {
+  Future subCollection() async {
+    print('--- subCollection ---');
     print('path ${Document.path<User>()}');
-    // 取得
-    final id = 'vEzo07d5BK3nAJyGdx95';
-    final userA = await documentAccessor.load<User>(User(id: id));
-    userA.log();
+    final ranking = Ranking(id: '20201007')
+      ..title = 'userRanking';
+    await documentAccessor.save(ranking);
+    ranking.log();
 
-    final settingA = Setting(collectionRef: userA.settingsA.ref);
-    settingA.isEnable = false;
-    await documentAccessor.save(settingA);
-    settingA.log();
+    final countA = Count(collectionRef: ranking.count.ref)
+      ..userId = '0'
+      ..count = 10;
+    final countB = Count(collectionRef: ranking.count.ref)
+      ..userId = '1'
+      ..count = 100;
+    final batch = Batch()
+      ..save(countA)
+      ..save(countB);
+    await batch.commit();
 
-    final settingB = Setting(collectionRef: userA.settingsB.ref);
-    settingB.isEnable = false;
-    await documentAccessor.save(settingB);
-  }
+    final snapshot = await firestoreInstance().collection(ranking.count.ref.path).limit(5).getDocuments();
+    print('from Snapshot');
+    final listA = snapshot.documents.map((item) => Count(snapshot: item)).toList()
+      ..forEach((item) => item.log());
 
-  Future getSubCollection() async {
-    print('path ${Document.path<User>()}');
-    // 取得
-    final id = 'vEzo07d5BK3nAJyGdx95';
-    final userA = await documentAccessor.load<User>(User(id: id));
-    userA.log();
-
-    final dataSourceA = firestoreInstance().collection(userA.settingsA.ref.path).limit(5);
-    final snapshotA = await dataSourceA.getDocuments();
-    final listA = snapshotA.documents.map((item) => Setting(
-      documentSnapshot: item, collectionRef: dataSourceA.reference()
-    )).toList();
-    print(listA[0].reference.path);
-    listA[0].log();
-
-    final dataSourceB = firestoreInstance().collection(userA.settingsA.ref.path).limit(5);
-    final snapshotB = await dataSourceB.getDocuments();
-    final listB = snapshotB.documents.map((item) => Setting(
-      documentSnapshot: item, collectionRef: dataSourceB.reference()
-    )).toList();
-    print(listB[0].reference.path);
-    listB[0].log();
+    print('from values');
+    final listB = snapshot.documents.map((item) => Count(id: item.documentID, values: item.data)).toList()
+      ..forEach((item) => item.log());
   }
 
   Future saveStorage() async {
-    final id = '2SfKHjBHfpufRG3qmPul';
-    final userA = await documentAccessor.load<User>(User(id: id));
-    userA.log();
+    print('--- saveStorage ---');
+    final post = Post();
     final storage = Storage();
     final file = await Helper.getImageFileFromAssets('sample.jpg');
-    userA.file = await storage.save('${userA.documentPath}/${userA.folderName}', file, mimeType: mimeTypePng);
-    userA.log();
-    await documentAccessor.update(userA);
+    post.file = await storage.save('${post.documentPath}/${post.folderName}', file, mimeType: mimeTypePng);
+    await documentAccessor.save(post);
+    post.log();
+
+    final hoge = await documentAccessor.load<Post>(Post(id: post.id));
+    hoge.log();
   }
 
   Future deleteStorage() async {
-    final id = '2SfKHjBHfpufRG3qmPul';
-    final userA = await documentAccessor.load<User>(User(id: id));
-    userA.log();
+    print('--- deleteStorage ---');
+    final post = Post();
     final storage = Storage();
-    await storage.delete('${userA.documentPath}/${userA.folderName}', userA.file);
-    await documentAccessor.update(userA);
+    final file = await Helper.getImageFileFromAssets('sample.jpg');
+    post.file = await storage.save('${post.documentPath}/${post.folderName}', file, mimeType: mimeTypePng);
+    await documentAccessor.save(post);
+    post.log();
+
+    await storage.delete('${post.documentPath}/${post.folderName}', post.file);
+    await documentAccessor.update(post);
+
+    final hoge = await documentAccessor.load<Post>(Post(id: post.id));
+    hoge.log();
   }
 
-  Future distributedCreate() async {
-    final user = User();
-    user.uid = user.id;
-    user.name = 'shohei';
-    await documentAccessor.save(user);
-    final distributedCounter = DistributedCounter();
-    await distributedCounter.create(user.likeCounter);
-    user.log();
-  }
+  Future distributedCounter() async {
+    print('--- distributedCounter ---');
 
-  Future distributedIncrement() async {
-    final user = User(id: 'Ggy0Z9S8QAa3jAEVgdOk');
+    /// Create
+    final score = Score()
+      ..userId = '0001';
+    await documentAccessor.save(score);
     final distributedCounter = DistributedCounter();
-    await distributedCounter.increment(user.likeCounter, count: 1);
-  }
+    await distributedCounter.create(score.value);
 
-  Future distributedGet() async {
-    final user = User(id: 'Ggy0Z9S8QAa3jAEVgdOk');
-    final distributedCounter = DistributedCounter();
-    final count = await distributedCounter.get(user.likeCounter);
-    print('count $count ${user.likeCounter.count}');
+    /// Increment
+    for (var i = 0; i < 10; i++) {
+      await distributedCounter.increment(score.value, count: 1);
+    }
+
+    /// Get
+    final count = await distributedCounter.get(score.value);
+    print('count $count ${score.value.count}');
   }
 
   Future transactionSave() async {
+    print('--- transactionSave ---');
     Transaction.run((transaction) async {
-      final user = User();
-      user.name = 'transaction';
+      final user = User()
+        ..name = 'transaction';
       await transaction.set(user.reference, user.toData());
       user.log();
     });
   }
 
   Future transactionUpdate() async {
+    print('--- transactionUpdate ---');
+    final hoge = User()
+      ..name = 'hoge';
+    await documentAccessor.save(hoge);
+    hoge.log();
+
     Transaction.run((transaction) async {
-      final user = User(id: 'e0D1qBFbV1DhJJWzxxQM');
-      user.name = 'transactionAA';
+      final user = User(id: hoge.id)
+        ..name = 'transactionAA';
       await transaction.update(user.reference, user.toData());
       user.log();
     });
   }
 
   Future transactionDelete() async {
+    print('--- transactionDelete ---');
+    final hoge = User()
+      ..name = 'hoge';
+    await documentAccessor.save(hoge);
+    hoge.log();
+
     Transaction.run((transaction) async {
-      final user = User(id: 'e0D1qBFbV1DhJJWzxxQM');
-      await transaction.delete(user.reference);
+      await transaction.delete(User(id: hoge.id).reference);
     });
   }
 

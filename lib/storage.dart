@@ -27,10 +27,10 @@ class Storage {
 //      }
 //    });
     final snapshot = await uploadTask.onComplete;
-    final downloadUrl = await snapshot.ref.getDownloadURL();
+    final downloadUrl = await snapshot.ref.getDownloadURL() as String;
     return StorageFile(
       name: refFileName,
-      url: downloadUrl as String,
+      url: downloadUrl,
       mimeType: refMimeType,
     );
   }

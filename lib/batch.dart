@@ -15,11 +15,12 @@ class Batch {
       final nowAt = Timestamp.now();
       data['createdAt'] = nowAt;
       data['updatedAt'] = nowAt;
-      document.createdAt = nowAt;
-      document.updatedAt = nowAt;
+      document
+        ..createdAt = nowAt
+        ..updatedAt = nowAt;
       _writeBatch.setData(document.reference, data, merge: true);
-    } catch (error) {
-      throw error;
+    } on Exception {
+      rethrow;
     }
   }
 
@@ -30,24 +31,24 @@ class Batch {
       data['updatedAt'] = nowAt;
       document.updatedAt = nowAt;
       _writeBatch.updateData(document.reference, data);
-    } catch (error) {
-      throw error;
+    } on Exception {
+      rethrow;
     }
   }
 
   void delete(Document document) {
     try {
       _writeBatch.delete(document.reference);
-    } catch (error) {
-      throw error;
+    } on Exception {
+      rethrow;
     }
   }
 
   Future commit() async {
     try {
       await _writeBatch.commit();
-    } catch (error) {
-      throw error;
+    } on Exception {
+      rethrow;
     }
   }
 }

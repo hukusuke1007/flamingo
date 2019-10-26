@@ -7,12 +7,13 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flamingo/flamingo.dart';
 
 void main() {
   group('#Firestore', () {
     DocumentAccessor documentAccessor;
-    int mockHandleId = 0;
+    var mockHandleId = 0;
     Firestore firestore;
     FirebaseApp app;
     final List<MethodCall> log = <MethodCall>[];
@@ -51,12 +52,7 @@ void main() {
         switch (methodCall.method) {
           case 'Query#addSnapshotListener':
             final int handle = mockHandleId++;
-            // Wait before sending a message back.
-            // Otherwise the first request didn't have the time to finish.
             Future<void>.delayed(Duration.zero).then<void>((_) {
-              // TODO(hterkelsen): Remove this when defaultBinaryMessages is in stable.
-              // https://github.com/flutter/flutter/issues/33446
-              // ignore: deprecated_member_use
               BinaryMessages.handlePlatformMessage(
                 Firestore.channel.name,
                 Firestore.channel.codec.encodeMethodCall(
@@ -87,9 +83,6 @@ void main() {
             // Wait before sending a message back.
             // Otherwise the first request didn't have the time to finish.
             Future<void>.delayed(Duration.zero).then<void>((_) {
-              // TODO(hterkelsen): Remove this when defaultBinaryMessages is in stable.
-              // https://github.com/flutter/flutter/issues/33446
-              // ignore: deprecated_member_use
               BinaryMessages.handlePlatformMessage(
                 Firestore.channel.name,
                 Firestore.channel.codec.encodeMethodCall(
@@ -342,7 +335,7 @@ void main() {
           })
         ]);
       });
-    }, skip: 'ignore');
+    });
 
     group('#SubCollection', () {
       test('set', () async {
@@ -510,7 +503,7 @@ void main() {
           ),
         ],);
       });
-    }, skip: 'ignore');
+    });
 
     group('#Batch', () {
       test('set update delete', () async {
@@ -576,7 +569,6 @@ void main() {
           ),
         ],);
       });
-    }, skip: 'ignore');
-
+    });
   });
 }

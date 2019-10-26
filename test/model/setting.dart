@@ -3,11 +3,7 @@ import 'package:flamingo/document.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Setting extends Document<Setting> {
-  Setting({
-    String id,
-    DocumentSnapshot documentSnapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+  Setting({String id, DocumentSnapshot documentSnapshot, Map<String, dynamic> values, CollectionReference collectionRef,
   }): super(id: id, snapshot: documentSnapshot, values: values, collectionRef: collectionRef);
 
   bool isEnable;
@@ -23,10 +19,10 @@ class Setting extends Document<Setting> {
   /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
-    this.isEnable = valueFromKey<bool>(data, 'isEnable');
+    isEnable = valueFromKey<bool>(data, 'isEnable');
   }
 
   void log() {
-    print("$id $isEnable $createdAt $updatedAt");
+    print('$id $isEnable $createdAt $updatedAt');
   }
 }

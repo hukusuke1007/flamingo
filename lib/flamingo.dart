@@ -18,8 +18,8 @@ export 'package:flamingo/model/storage_file.dart';
 export 'package:flamingo/batch.dart';
 
 class Flamingo {
-  static final instance = Flamingo();
-  static configure({String rootName, int version, FirebaseApp app}) {
+  static Flamingo instance = Flamingo();
+  static void configure({String rootName, int version, FirebaseApp app}) {
     if (app != null) {
       instance.firestore = Firestore(app: app);
       instance.firebaseStorage = FirebaseStorage(app: app);

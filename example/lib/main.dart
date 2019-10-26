@@ -42,14 +42,14 @@ class _MyAppState extends State<MyApp> {
         child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4),
               child: Text('Document',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.lightBlue,
                   onPressed: () async {
                     await test.save();
@@ -57,85 +57,57 @@ class _MyAppState extends State<MyApp> {
                   child: Text('Save', style: TextStyle(color: Colors.white),),
                 ),
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.amberAccent,
                   onPressed: () async {
-                    final id = 'GqnTA8p6lo2ZrjqygnoS';
-                    await test.update(id);
+                    await test.update();
                   },
                   child: Text('update', style: TextStyle(color: Colors.white),),
                 ),
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.black12,
                   onPressed: () async {
-                    final id = 'GqnTA8p6lo2ZrjqygnoS';
-                    await test.delete(id);
+                    await test.delete();
                   },
                   child: Text('Delete', style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4),
               child: Text('Batch',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.lightBlue,
                   onPressed: () async {
                     await test.batchSave();
                   },
                   child: Text('Save', style: TextStyle(color: Colors.white),),
                 ),
-//                RaisedButton(
-//                  padding: EdgeInsets.all(4.0),
-//                  color: Colors.amberAccent,
-//                  onPressed: () async {
-//                    final id = 'Q3sR1fi5XjEO2SseHesV';
-//                    await test.update(id);
-//                  },
-//                  child: Text('update', style: TextStyle(color: Colors.white),),
-//                ),
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.black12,
                   onPressed: () async {
-                    await test.batchDelete();
+                    await test.batchUpdateDelete();
                   },
                   child: Text('Delete', style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4),
               child: Text('Get',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
-                  color: Colors.lightBlue,
-                  onPressed: () async {
-                    await test.get();
-                  },
-                  child: Text('Get', style: TextStyle(color: Colors.white),),
-                ),
-//                RaisedButton(
-//                  padding: EdgeInsets.all(4.0),
-//                  color: Colors.amberAccent,
-//                  onPressed: () async {
-//                    final id = 'Q3sR1fi5XjEO2SseHesV';
-//                    await test.update(id);
-//                  },
-//                  child: Text('update', style: TextStyle(color: Colors.white),),
-//                ),
-                RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.redAccent,
                   onPressed: () async {
                     await test.getAndUpdate();
@@ -143,7 +115,7 @@ class _MyAppState extends State<MyApp> {
                   child: Text('GetAndUpdate', style: TextStyle(color: Colors.white),),
                 ),
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.green,
                   onPressed: () async {
                     await test.getCollection();
@@ -153,39 +125,31 @@ class _MyAppState extends State<MyApp> {
               ],
             ),
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4),
               child: Text('SubCollection',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.green,
                   onPressed: () async {
-                    await test.saveCollection();
+                    await test.subCollection();
                   },
-                  child: Text('SaveSubCollection', style: TextStyle(color: Colors.white),),
-                ),
-                RaisedButton(
-                  padding: EdgeInsets.all(4.0),
-                  color: Colors.cyan,
-                  onPressed: () async {
-                    await test.getSubCollection();
-                  },
-                  child: Text('GetSubCollection', style: TextStyle(color: Colors.white),),
+                  child: Text('SubCollection', style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4),
               child: Text('Storage',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.lightBlue,
                   onPressed: () async {
                     await test.saveStorage();
@@ -193,7 +157,7 @@ class _MyAppState extends State<MyApp> {
                   child: Text('Save', style: TextStyle(color: Colors.white),),
                 ),
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.black12,
                   onPressed: () async {
                     await test.deleteStorage();
@@ -203,47 +167,31 @@ class _MyAppState extends State<MyApp> {
               ],
             ),
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4),
               child: Text('DistributedCounter',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.lightBlue,
                   onPressed: () async {
-                    await test.distributedCreate();
+                    await test.distributedCounter();
                   },
-                  child: Text('Create', style: TextStyle(color: Colors.white),),
-                ),
-                RaisedButton(
-                  padding: EdgeInsets.all(4.0),
-                  color: Colors.black12,
-                  onPressed: () async {
-                    await test.distributedIncrement();
-                  },
-                  child: Text('Increment', style: TextStyle(color: Colors.white),),
-                ),
-                RaisedButton(
-                  padding: EdgeInsets.all(4.0),
-                  color: Colors.brown,
-                  onPressed: () async {
-                    await test.distributedGet();
-                  },
-                  child: Text('Get', style: TextStyle(color: Colors.white),),
+                  child: Text('CreateIncrementGet', style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),
             Container(
-              padding: EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(4),
               child: Text('Transaction',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.lightBlue,
                   onPressed: () async {
                     await test.transactionSave();
@@ -251,7 +199,7 @@ class _MyAppState extends State<MyApp> {
                   child: Text('Save', style: TextStyle(color: Colors.white),),
                 ),
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.amber,
                   onPressed: () async {
                     await test.transactionUpdate();
@@ -259,7 +207,7 @@ class _MyAppState extends State<MyApp> {
                   child: Text('Update', style: TextStyle(color: Colors.white),),
                 ),
                 RaisedButton(
-                  padding: EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(4),
                   color: Colors.black12,
                   onPressed: () async {
                     await test.transactionDelete();

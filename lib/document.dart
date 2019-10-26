@@ -1,19 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'flamingo.dart';
+import 'type/type.dart';
 
-class Document<T> {
-
-  static String path<T extends Document>({String id}) {
-    final collectionPath = Flamingo.instance.rootReference.collection(T.toString().toLowerCase()).path;
-    return id != null ? '$collectionPath/$id' : collectionPath;
-  }
-
+class Document<T> implements DocumentType {
   /// Constructor
   Document({this.id, this.snapshot, this.values, this.collectionRef}) {
     CollectionReference collectionReference;
-    if (this.collectionRef != null) {
-      collectionReference = this.collectionRef;
+    if (collectionRef != null) {
+      collectionReference = collectionRef;
     } else {
       collectionReference = collectionRootReference();
     }
@@ -37,6 +32,11 @@ class Document<T> {
 
     collectionPath = collectionReference.path;
     documentPath = reference.path;
+  }
+
+  static String path<T extends Document<DocumentType>>({String id}) {
+    final collectionPath = Flamingo.instance.rootReference.collection(T.toString().toLowerCase()).path;
+    return id != null ? '$collectionPath/$id' : collectionPath;
   }
 
   /// Field
@@ -70,14 +70,14 @@ class Document<T> {
 
   /// Public method.
   String modelName() {
-    return this.toString().split(" ")[2].replaceAll("\'", "").toLowerCase();
+    return toString().split(' ')[2].replaceAll("\'", '').toLowerCase();
   }
 
   CollectionReference collectionRootReference() {
     return Flamingo.instance.rootReference.collection(modelName());
   }
 
-  Map<String, dynamic> toData() => Map<String, dynamic>(); /// Data for save
+  Map<String, dynamic> toData() => <String, dynamic>{}; /// Data for save
   void fromData(Map<String, dynamic> data){}               /// Data for load
 
   void setSnapshot(DocumentSnapshot documentSnapshot){
@@ -97,8 +97,8 @@ class Document<T> {
 
   T valueFromKey<T>(Map<String, dynamic> data, String key) => data[key] as T;
 
-  T valueListFromKey<T extends List>(Map<String, dynamic> data, String key) {
-    return (data[key] as List)?.map((e) => e as String)?.toList() as T;
+  T valueListFromKey<T extends List<dynamic>>(Map<String, dynamic> data, String key) {
+    return (data[key] as List)?.map((dynamic e) => e as String)?.toList() as T;
   }
 
   bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);

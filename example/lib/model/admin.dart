@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_example/model/setting.dart';
 
-class User extends Document<User> {
-  User({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+class Admin extends Document<Admin> {
+  Admin({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values) {
     settingsA = Collection(this, 'settingsA');
     settingsB = Collection(this, 'settingsB');
@@ -23,8 +21,8 @@ class User extends Document<User> {
   Counter likeCounter;
 
   /// SubCollection
-  Collection settingsA;
-  Collection settingsB;
+  Collection<Setting> settingsA;
+  Collection<Setting> settingsB;
 
   /// Storage
   StorageFile file;
