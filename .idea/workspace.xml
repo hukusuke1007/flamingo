@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="855252b2-84df-4907-95fd-0ca3d91de53a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/flamingo_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/flamingo_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -24,11 +22,32 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_2_API_28" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/lib/flamingo_test.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14">
-              <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="43" />
+            <state relative-caret-position="157">
+              <caret line="238" column="1" selection-start-line="238" selection-start-column="1" selection-end-line="240" selection-end-column="7" />
+              <folding>
+                <element signature="e#0#40#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="70">
+              <caret line="5" column="52" selection-start-line="5" selection-start-column="52" selection-end-line="5" selection-end-column="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.12.9+5/lib/src/transaction.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="271">
+              <caret line="91" column="15" selection-start-line="91" selection-start-column="15" selection-end-line="91" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -67,15 +86,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-3.0.6/lib/src/event.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="461">
-              <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/lib/model/post.dart">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="336">
@@ -104,15 +114,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="42">
               <caret line="3" selection-start-line="3" selection-end-line="6" selection-end-column="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="39" selection-start-column="39" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -170,7 +171,6 @@
         <option value="$PROJECT_DIR$/example/test/document_test.dart" />
         <option value="$PROJECT_DIR$/test/user.dart" />
         <option value="$PROJECT_DIR$/test/document_test.dart" />
-        <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/analysis_options.yaml" />
         <option value="$PROJECT_DIR$/lib/document.dart" />
         <option value="$PROJECT_DIR$/lib/document_accessor.dart" />
@@ -200,11 +200,12 @@
         <option value="$PROJECT_DIR$/example/lib/model/user.dart" />
         <option value="$PROJECT_DIR$/example/lib/model/score.dart" />
         <option value="$PROJECT_DIR$/example/lib/flamingo_test.dart" />
+        <option value="$PROJECT_DIR$/pubspec.yaml" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="2101" />
+    <option name="x" value="206" />
     <option name="y" value="23" />
     <option name="width" value="1584" />
     <option name="height" value="877" />
@@ -365,10 +366,10 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="2005" y="27" width="1584" height="877" extended-state="0" />
+    <frame x="206" y="23" width="1584" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22892347" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22892347" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -378,17 +379,17 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.3295838" />
-      <window_info anchor="bottom" id="Run" order="1" visible="true" weight="0.19490446" />
+      <window_info anchor="bottom" id="Run" order="1" weight="0.19490446" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" />
       <window_info anchor="bottom" id="Debug" order="5" />
-      <window_info anchor="bottom" id="Terminal" order="6" weight="0.2109375" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="6" visible="true" weight="0.46242037" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Flutter Performance" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
       <window_info anchor="bottom" id="Find" order="10" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.23549107" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.23439491" />
       <window_info anchor="right" id="Device File Explorer" order="0" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
       <window_info anchor="right" id="Theme Preview" order="2" />
@@ -401,13 +402,6 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/example/test/document_test.dart" />
     <entry file="file://$PROJECT_DIR$/example/test/user.dart" />
-    <entry file="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.12.9+5/lib/src/transaction.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/document_test.dart" />
     <entry file="file://$USER_HOME$/Library/flutter/packages/flutter_test/lib/src/matchers.dart">
       <provider selected="true" editor-type-id="text-editor">
@@ -483,13 +477,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="219">
           <caret line="70" column="22" selection-start-line="70" selection-start-column="22" selection-end-line="70" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="22" column="2" selection-start-line="22" selection-start-column="2" selection-end-line="22" selection-end-column="2" />
         </state>
       </provider>
     </entry>
@@ -790,10 +777,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.12.9+5/lib/src/transaction.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="91" column="15" selection-start-line="91" selection-start-column="15" selection-end-line="91" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/example/lib/flamingo_test.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="43" />
+        <state relative-caret-position="157">
+          <caret line="238" column="1" selection-start-line="238" selection-start-column="1" selection-end-line="240" selection-end-column="7" />
+          <folding>
+            <element signature="e#0#40#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="5" column="52" selection-start-line="5" selection-start-column="52" selection-end-line="5" selection-end-column="52" />
         </state>
       </provider>
     </entry>
