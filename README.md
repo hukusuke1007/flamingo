@@ -19,7 +19,7 @@ import 'package:flamingo/flamingo.dart';
 Flamingo.configure(rootName: 'version', version: 1);
 ```
 
-Create model class that inherited Document. And please add json mapping code into override functions.
+Create model class that inherited Document. And add json mapping code into override functions.
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -111,7 +111,100 @@ final listB = snapshot.documents.map((item) => User(id: item.documentID, values:
 
 ### Sub Collection
 
+For example, ranking document has count collection.
 
+#### Ranking model
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/flamingo.dart';
+import 'count.dart';
+
+class Ranking extends Document<Ranking> {
+  Ranking({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  }): super(id: id, snapshot: snapshot, values: values) {
+    // Must be create instance of Collection and set collection name.
+    count = Collection(this, 'count');
+  }
+
+  String title;
+  Collection<Count> count;
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeNotNull(data, 'name', title);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    title = valueFromKey<String>(data, 'title');
+  }
+}
+```
+
+#### Count model
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/flamingo.dart';
+
+class Count extends Document<Count> {
+  Count({String id, DocumentSnapshot snapshot, Map<String, dynamic> values, CollectionReference collectionRef,
+  }): super(id: id, snapshot: snapshot, values: values, collectionRef: collectionRef);
+
+  String userId;
+  int count = 0;
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeNotNull(data, 'userId', userId);
+    writeNotNull(data, 'count', count);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    userId = valueFromKey<String>(data, 'userId');
+    count = valueFromKey<int>(data, 'count');
+  }
+}
+```
+
+#### Save and Get sub collection.
+
+```dart
+// Save ranking document
+final ranking = Ranking(id: '20201007')
+  ..title = 'userRanking';
+await documentAccessor.save(ranking);
+
+// Save sub collection of ranking document
+final countA = Count(collectionRef: ranking.count.ref)
+  ..userId = '0'
+  ..count = 10;
+final countB = Count(collectionRef: ranking.count.ref)
+  ..userId = '1'
+  ..count = 100;
+final batch = Batch()
+  ..save(countA)
+  ..save(countB);
+await batch.commit();
+
+// Get sub collection
+final path = ranking.count.ref.path;
+final snapshot = await firestoreInstance().collection(path).getDocuments();
+final list = snapshot.documents.map((item) => Count(snapshot: item)).toList()
+  ..forEach((count) {
+    print(count);
+  });
+```
 
 ### File
 Can operation into Firebase Storage and upload and delete storage file. Using StorageFile and Storage class.
@@ -160,7 +253,7 @@ final post = Post();
 final storage = Storage();
 final file = await Helper.getImageFileFromAssets('sample.jpg');
 
-// fetch for uploading status
+// fetch uploader stream
 storage.fetch();
 
 // confirm status
@@ -173,7 +266,7 @@ final path = '${post.documentPath}/${post.folderName}';
 post.file = await storage.save(path, file, mimeType: mimeTypePng); // 'mimeType' is defined in master/master.dart
 await documentAccessor.save(post);
 
-// dispose for uploading status
+// dispose uploader stream
 storage.dispose();
 ```
 
@@ -199,7 +292,7 @@ import 'package:flamingo/flamingo.dart';
 class Score extends Document<Score> {
   Score({String id,
   }): super(id: id) {
-    // Need to defined Counter. Must be set collectionName and num of shards.
+    // Must be create instance of Counter. Set collection name and num of shards.
     value = Counter(this, 'shards', numShards);
   }
 
@@ -240,6 +333,30 @@ for (var i = 0; i < 10; i++) {
 // get
 final count = await distributedCounter.load(score.value);
 print('count $count ${score.value.count}'); // count 10 10
+```
+
+### Transaction
+
+This api is simply wrap transaction function of Firestore.
+
+```dart
+import 'package:flamingo/transaction.dart';
+
+Transaction.run((transaction) async {
+  final hoge = User()
+    ..name = 'hoge';
+
+  // save
+  await transaction.set(hoge.reference, hoge.toData());
+
+  // update
+  final fuge = User(id: '0')
+    ..name = 'fuge';
+  await transaction.update(fuge.reference, fuge.toData());
+
+  // delete
+  await transaction.delete(User(id: '1').reference);
+});
 ```
 
 ## Getting Started

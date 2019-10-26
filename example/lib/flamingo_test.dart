@@ -115,7 +115,6 @@ class FlamingoTest {
 
   Future subCollection() async {
     print('--- subCollection ---');
-    print('path ${Document.path<User>()}');
     final ranking = Ranking(id: '20201007')
       ..title = 'userRanking';
     await documentAccessor.save(ranking);
