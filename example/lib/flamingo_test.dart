@@ -191,6 +191,7 @@ class FlamingoTest {
     final score = Score()
       ..userId = '0001';
     await documentAccessor.save(score);
+    score.log();
     final distributedCounter = DistributedCounter();
     await distributedCounter.create(score.value);
 

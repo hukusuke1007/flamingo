@@ -4,6 +4,12 @@ Flamingo is a firesbase firestore model framework library.
 
 ## Installation
 
+Add this to your package's pubspec.yaml file:
+
+```
+dependencies:
+  flamingo: ^0.0.2
+```
 
 ## Setup
 Please check Setup of cloud_firestore.<br>
