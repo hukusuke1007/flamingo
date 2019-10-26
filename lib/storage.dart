@@ -1,9 +1,10 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'flamingo.dart';
 import 'helper/helper.dart';
 import 'model/storage_file.dart';
-import 'flamingo.dart';
-//import 'package:rxdart/rxdart.dart';
-import 'dart:io';
+
 
 class Storage {
   Storage() {
@@ -13,7 +14,7 @@ class Storage {
   static String fileName({int length}) => Helper.randomString(length: length);
 
   FirebaseStorage storage;
-//  PublishSubject<StorageTaskEvent> uploader;
+  StreamController<StorageTaskEvent> uploader;
 
   Future<StorageFile> save(String folderPath, File data, {String fileName, String mimeType}) async {
     final refFileName = fileName != null ? fileName : Storage.fileName();
@@ -21,11 +22,11 @@ class Storage {
     final path = '$folderPath/$refFileName';
     final ref = storage.ref().child(path);
     final uploadTask = ref.putFile(data, StorageMetadata(contentType: refMimeType));
-//    uploadTask.events.listen((event) {
-//      if (uploader != null) {
-//        uploader.add(event);
-//      }
-//    });
+    uploadTask.events.listen((event) {
+      if (uploader != null) {
+        uploader.sink.add(event);
+      }
+    });
     final snapshot = await uploadTask.onComplete;
     final downloadUrl = await snapshot.ref.getDownloadURL() as String;
     return StorageFile(
@@ -47,11 +48,11 @@ class Storage {
     return;
   }
 
-//  void fetch() {
-//    uploader = PublishSubject<StorageTaskEvent>();
-//  }
-//
-//  void dispose() {
-//    uploader.close();
-//  }
+  void fetch() {
+    uploader = StreamController<StorageTaskEvent>();
+  }
+
+  void dispose() {
+    uploader.close();
+  }
 }

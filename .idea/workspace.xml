@@ -2,65 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="855252b2-84df-4907-95fd-0ca3d91de53a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/example/assets/sample.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/assets/sample.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/admin.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/count.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/post.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/ranking.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/score.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/model/admin.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/model/count.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/model/post.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/model/ranking.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/lib/model/score.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/flamingo_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/flamingo_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/history.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/setting.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/setting.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/example/lib/model/user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/flamingo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/flamingo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/batch.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/batch.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/distributed_counter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/distributed_counter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/document.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/document.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/document_accessor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/document_accessor.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/flamingo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/flamingo.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/helper/helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/helper/helper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/model/collection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/model/collection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/model/counter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/model/counter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/model/storage_file.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/model/storage_file.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/storage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/storage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/transaction.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/lib/transaction.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/flamingo_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/flamingo_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/model/history.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/model/history.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/model/setting.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/model/setting.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/model/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flamingo/test/model/user.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/lib/flamingo_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/flamingo_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/model/history.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/model/setting.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/model/setting.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/model/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/model/user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/flamingo.iml" beforeDir="false" afterPath="$PROJECT_DIR$/flamingo.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/batch.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/batch.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/distributed_counter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/distributed_counter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/document.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/document.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/document_accessor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/document_accessor.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flamingo.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flamingo.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/helper/helper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/helper/helper.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/model/collection.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/collection.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/model/counter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/counter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/model/storage_file.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/storage_file.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/storage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/storage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/transaction.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/transaction.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/flamingo_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/flamingo_test.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/model/history.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/model/history.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/model/setting.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/model/setting.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/model/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/model/user.dart" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -80,25 +23,34 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="Pixel_2_API_28" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/example/lib/main.dart">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/example/lib/flamingo_test.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2206">
-              <caret line="192" column="29" selection-start-line="192" selection-start-column="29" selection-end-line="192" selection-end-column="29" />
+            <state relative-caret-position="351">
+              <caret line="154" column="50" selection-start-line="154" selection-start-column="50" selection-end-line="154" selection-end-column="50" />
               <folding>
-                <element signature="e#0#39#0" expanded="true" />
+                <element signature="e#0#40#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/example/lib/flamingo_test.dart">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-3.0.6/lib/src/event.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="219" column="32" selection-start-line="219" selection-start-column="32" selection-end-line="219" selection-end-column="32" />
+            <state relative-caret-position="461">
+              <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lib/storage.dart">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="584">
+              <caret line="55" column="20" selection-start-line="55" selection-start-column="20" selection-end-line="55" selection-end-column="20" />
               <folding>
-                <element signature="e#0#40#0" expanded="true" />
+                <element signature="e#0#20#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -141,7 +93,7 @@
         <entry file="file://$PROJECT_DIR$/example/lib/model/score.dart">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="378">
-              <caret line="27" column="50" lean-forward="true" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
+              <caret line="27" column="50" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -180,18 +132,6 @@
               <caret line="10" column="15" selection-start-line="10" selection-start-column="15" selection-end-line="10" selection-end-column="15" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/document_accessor.dart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="30" column="27" selection-start-line="30" selection-start-column="27" selection-end-line="30" selection-end-column="27" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -244,7 +184,6 @@
         <option value="$PROJECT_DIR$/lib/document_accessor.dart" />
         <option value="$PROJECT_DIR$/lib/distributed_counter.dart" />
         <option value="$PROJECT_DIR$/lib/flamingo.dart" />
-        <option value="$PROJECT_DIR$/lib/storage.dart" />
         <option value="$PROJECT_DIR$/lib/transaction.dart" />
         <option value="$PROJECT_DIR$/lib/model/counter.dart" />
         <option value="$PROJECT_DIR$/lib/helper/helper.dart" />
@@ -267,6 +206,7 @@
         <option value="$PROJECT_DIR$/example/pubspec.yaml" />
         <option value="$PROJECT_DIR$/example/lib/model/post.dart" />
         <option value="$PROJECT_DIR$/example/lib/model/score.dart" />
+        <option value="$PROJECT_DIR$/lib/storage.dart" />
         <option value="$PROJECT_DIR$/example/lib/flamingo_test.dart" />
       </list>
     </option>
@@ -309,79 +249,7 @@
             <path>
               <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
               <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
               <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="flamingo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="Flutter Plugins" type="70bed36:NamedLibraryElementNode" />
-              <item name="flamingo" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -501,7 +369,7 @@
     <frame x="90" y="23" width="1584" height="988" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22892347" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22892347" />
       <window_info id="Captures" order="1" side_tool="true" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
@@ -511,12 +379,12 @@
       <window_info id="Capture Tool" order="7" />
       <window_info id="Favorites" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Dart Analysis" order="0" weight="0.3295838" />
-      <window_info anchor="bottom" id="Run" order="1" visible="true" weight="0.3013393" />
+      <window_info active="true" anchor="bottom" id="Run" order="1" visible="true" weight="0.3013393" />
       <window_info anchor="bottom" id="TODO" order="2" />
       <window_info anchor="bottom" id="Android Profiler" order="3" show_stripe_button="false" />
       <window_info anchor="bottom" id="Logcat" order="4" />
       <window_info anchor="bottom" id="Debug" order="5" />
-      <window_info anchor="bottom" id="Terminal" order="6" weight="0.18526785" />
+      <window_info anchor="bottom" id="Terminal" order="6" weight="0.2109375" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Flutter Performance" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" />
@@ -532,17 +400,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/example/test/widget_test.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#0#908#0" expanded="true" />
-            <element signature="e#357#396#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/example/test/document_test.dart" />
     <entry file="file://$PROJECT_DIR$/example/test/user.dart" />
     <entry file="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-0.12.9+5/lib/src/transaction.dart">
@@ -669,16 +526,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="140" column="18" selection-start-line="140" selection-start-column="18" selection-end-line="140" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lib/storage.dart">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="29" column="70" selection-start-line="29" selection-start-column="70" selection-end-line="29" selection-end-column="70" />
-          <folding>
-            <element signature="e#0#56#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -926,17 +773,34 @@
     <entry file="file://$PROJECT_DIR$/example/lib/model/score.dart">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="378">
-          <caret line="27" column="50" lean-forward="true" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
+          <caret line="27" column="50" selection-start-line="27" selection-start-column="50" selection-end-line="27" selection-end-column="50" />
           <folding>
             <element signature="e#0#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lib/storage.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="584">
+          <caret line="55" column="20" selection-start-line="55" selection-start-column="20" selection-end-line="55" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-3.0.6/lib/src/event.dart">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/example/lib/flamingo_test.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="219" column="32" selection-start-line="219" selection-start-column="32" selection-end-line="219" selection-end-column="32" />
+        <state relative-caret-position="351">
+          <caret line="154" column="50" selection-start-line="154" selection-start-column="50" selection-end-line="154" selection-end-column="50" />
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>

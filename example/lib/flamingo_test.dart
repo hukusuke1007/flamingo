@@ -147,12 +147,23 @@ class FlamingoTest {
     final post = Post();
     final storage = Storage();
     final file = await Helper.getImageFileFromAssets('sample.jpg');
+
+    /// fetch for uploading status
+    storage.fetch();
+    storage.uploader.stream.listen((data){
+      /// status
+      print('total: ${data.snapshot.totalByteCount} tranfer: ${data.snapshot.bytesTransferred}');
+    });
+
     post.file = await storage.save('${post.documentPath}/${post.folderName}', file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
     post.log();
 
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
     hoge.log();
+
+    /// dispose for uploading status
+    storage.dispose();
   }
 
   Future deleteStorage() async {
