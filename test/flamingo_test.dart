@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test/flutter_test.dart' as prefix0;
 import 'model/user.dart';
 import 'dart:async';
 import 'dart:typed_data';
@@ -10,9 +11,12 @@ import 'package:flamingo/flamingo.dart';
 void main() {
 
   group('#Firestore', () {
+
+    DocumentAccessor documentAccessor;
+
     int mockHandleId = 0;
-    FirebaseApp app;
     Firestore firestore;
+    FirebaseApp app;
     final List<MethodCall> log = <MethodCall>[];
     CollectionReference collectionReference;
     Query collectionGroupQuery;
@@ -25,8 +29,8 @@ void main() {
       "isFromCache": false,
     };
     setUp(() async {
-//      Flamingo.configure(firestore().collection('version').document("1"));
       print('setUp');
+      documentAccessor = DocumentAccessor();
       FirebaseApp.channel.setMockMethodCallHandler(
             (MethodCall methodCall) async {},
       );
@@ -37,7 +41,8 @@ void main() {
           gcmSenderID: '1234567890',
         ),
       );
-      firestore = Firestore(app: app);
+      Flamingo.configure(Firestore.instance.collection('version').document("1"), app: app);
+      firestore = firestoreInstance();
       collectionReference = firestore.collection('foo');
       collectionGroupQuery = firestore.collectionGroup('bar');
       transaction = Transaction(0, firestore);
@@ -157,6 +162,14 @@ void main() {
             return null;
           case 'WriteBatch#create':
             return 1;
+          case 'WriteBatch#setData':
+            return null;
+          case 'WriteBatch#update':
+            return null;
+          case 'WriteBatch#delete':
+            return null;
+          case 'WriteBatch#commit':
+            return null;
           default:
             return null;
         }
@@ -168,30 +181,258 @@ void main() {
       print('tearDown');
     });
 
-    test('set', () async {
-      final DocumentReference documentReference =
-      firestore.document('foo/bar');
-      final DocumentSnapshot documentSnapshot = await documentReference.get();
-      final Map<String, dynamic> data = documentSnapshot.data;
-      data['key2'] = 'val2';
-      await transaction.set(documentReference, data);
-      print(documentSnapshot.data);
-      print('----');
-      print(log);
-      expect(log, <Matcher>[
-        isMethodCall('DocumentReference#get', arguments: <String, dynamic>{
-          'app': app.name,
-          'path': 'foo/bar',
-          'source': 'default',
-        }),
-        isMethodCall('Transaction#set', arguments: <String, dynamic>{
-          'app': app.name,
-          'transactionId': 0,
-          'path': documentReference.path,
-          'data': <String, dynamic>{'key1': 'val1', 'key2': 'val2'}
-        })
-      ]);
+    test('configure', () async {
+      expect(Flamingo.instance.rootReference.path, 'version/1');
     });
+
+    test('set', () async {
+      final user = User();
+      user.name = 'hoge';
+      await documentAccessor.save(user);
+      expect(log,  <Matcher>[
+          isMethodCall('WriteBatch#create', arguments: <String, dynamic>{
+            'app': app.name,
+          }),
+          isMethodCall(
+            'WriteBatch#setData',
+            arguments: <String, dynamic>{
+              'app': app.name,
+              'handle': 1,
+              'path': user.documentPath,
+              'data': <String, dynamic>{'name': user.name, 'createdAt': user.createdAt, 'updatedAt': user.updatedAt},
+              'options': {'merge': true}
+            },
+          ),
+          isMethodCall(
+            'WriteBatch#commit',
+            arguments: <String, dynamic>{
+              'handle': 1,
+            },
+          ),
+        ],
+      );
+    });
+
+    test('update', () async {
+      final user = User();
+      user.name = 'hoge';
+      await documentAccessor.save(user);
+      final savedUserName = user.name;
+      final savedCreatedAt = user.createdAt;
+      final savedUpdatedAt = user.updatedAt;
+
+      user.name = 'fuge';
+      await documentAccessor.update(user);
+
+      expect(log,  <Matcher>[
+        isMethodCall('WriteBatch#create', arguments: <String, dynamic>{
+          'app': app.name,
+        }),
+        isMethodCall(
+          'WriteBatch#setData',
+          arguments: <String, dynamic>{
+            'app': app.name,
+            'handle': 1,
+            'path': user.documentPath,
+            'data': <String, dynamic>{'name': savedUserName, 'createdAt': savedCreatedAt, 'updatedAt': savedUpdatedAt},
+            'options': {'merge': true}
+          },
+        ),
+        isMethodCall(
+          'WriteBatch#commit',
+          arguments: <String, dynamic>{
+            'handle': 1,
+          },
+        ),
+        isMethodCall('WriteBatch#create', arguments: <String, dynamic>{
+          'app': app.name,
+        }),
+        isMethodCall(
+          'WriteBatch#updateData',
+          arguments: <String, dynamic>{
+            'app': app.name,
+            'handle': 1,
+            'path': user.documentPath,
+            'data': <String, dynamic>{'name': user.name, 'updatedAt': user.updatedAt},
+          },
+        ),
+        isMethodCall(
+          'WriteBatch#commit',
+          arguments: <String, dynamic>{
+            'handle': 1,
+          },
+        ),
+      ],
+      );
+    });
+
+    test('delete', () async {
+      final user = User();
+      user.name = 'hoge';
+      await documentAccessor.save(user);
+      await documentAccessor.delete(user);
+      expect(log,  <Matcher>[
+        isMethodCall('WriteBatch#create', arguments: <String, dynamic>{
+          'app': app.name,
+        }),
+        isMethodCall(
+          'WriteBatch#setData',
+          arguments: <String, dynamic>{
+            'app': app.name,
+            'handle': 1,
+            'path': user.documentPath,
+            'data': <String, dynamic>{'name': user.name, 'createdAt': user.createdAt, 'updatedAt': user.updatedAt},
+            'options': {'merge': true}
+          },
+        ),
+        isMethodCall(
+          'WriteBatch#commit',
+          arguments: <String, dynamic>{
+            'handle': 1,
+          },
+        ),
+        isMethodCall('WriteBatch#create', arguments: <String, dynamic>{
+          'app': app.name,
+        }),
+        isMethodCall(
+          'WriteBatch#delete',
+          arguments: <String, dynamic>{
+            'app': app.name,
+            'handle': 1,
+            'path': user.documentPath,
+          },
+        ),
+        isMethodCall(
+          'WriteBatch#commit',
+          arguments: <String, dynamic>{
+            'handle': 1,
+          },
+        ),
+      ],
+      );
+    });
+
+//    test('get', () async {
+//      final DocumentReference documentReference =
+//      firestore.document('foo/bar');
+//      final DocumentSnapshot snapshot =
+//      await transaction.get(documentReference);
+//      expect(snapshot.reference.firestore, firestore);
+//      expect(log, <Matcher>[
+//        isMethodCall('Transaction#get', arguments: <String, dynamic>{
+//          'app': app.name,
+//          'transactionId': 0,
+//          'path': documentReference.path
+//        })
+//      ]);
+//    });
+//
+//    test('get notExists', () async {
+//      final DocumentReference documentReference =
+//      firestore.document('foo/notExists');
+//      await transaction.get(documentReference);
+//      expect(log, <Matcher>[
+//        isMethodCall('Transaction#get', arguments: <String, dynamic>{
+//          'app': app.name,
+//          'transactionId': 0,
+//          'path': documentReference.path
+//        })
+//      ]);
+//    });
+//
+//    test('delete', () async {
+//      final DocumentReference documentReference =
+//      firestore.document('foo/bar');
+//      await transaction.delete(documentReference);
+//      expect(log, <Matcher>[
+//        isMethodCall('Transaction#delete', arguments: <String, dynamic>{
+//          'app': app.name,
+//          'transactionId': 0,
+//          'path': documentReference.path
+//        })
+//      ]);
+//    });
+//
+//    test('update', () async {
+//      final DocumentReference documentReference =
+//      firestore.document('foo/bar');
+//      final DocumentSnapshot documentSnapshot = await documentReference.get();
+//      final Map<String, dynamic> data = documentSnapshot.data;
+//      data['key2'] = 'val2';
+//      await transaction.set(documentReference, data);
+//      expect(log, <Matcher>[
+//        isMethodCall('DocumentReference#get', arguments: <String, dynamic>{
+//          'app': app.name,
+//          'path': 'foo/bar',
+//          'source': 'default',
+//        }),
+//        isMethodCall('Transaction#set', arguments: <String, dynamic>{
+//          'app': app.name,
+//          'transactionId': 0,
+//          'path': documentReference.path,
+//          'data': <String, dynamic>{'key1': 'val1', 'key2': 'val2'}
+//        })
+//      ]);
+//    });
+//
+//    test('get', () async {
+//      final DocumentSnapshot snapshot =
+//      await collectionReference.document('bar').get(source: Source.cache);
+//      expect(snapshot.reference.firestore, firestore);
+//      expect(
+//        log,
+//        equals(<Matcher>[
+//          isMethodCall(
+//            'DocumentReference#get',
+//            arguments: <String, dynamic>{
+//              'app': app.name,
+//              'path': 'foo/bar',
+//              'source': 'cache',
+//            },
+//          ),
+//        ]),
+//      );
+//      log.clear();
+//      expect(snapshot.reference.path, equals('foo/bar'));
+//      expect(snapshot.data.containsKey('key1'), equals(true));
+//      expect(snapshot.data['key1'], equals('val1'));
+//      expect(snapshot.exists, isTrue);
+//
+//      final DocumentSnapshot snapshot2 = await collectionReference
+//          .document('notExists')
+//          .get(source: Source.serverAndCache);
+//      expect(snapshot2.data, isNull);
+//      expect(snapshot2.exists, isFalse);
+//      expect(
+//        log,
+//        equals(<Matcher>[
+//          isMethodCall(
+//            'DocumentReference#get',
+//            arguments: <String, dynamic>{
+//              'app': app.name,
+//              'path': 'foo/notExists',
+//              'source': 'default',
+//            },
+//          ),
+//        ]),
+//      );
+//
+//      try {
+//        await collectionReference.document('baz').get();
+//      } on PlatformException catch (e) {
+//        expect(e.code, equals('UNKNOWN_PATH'));
+//      }
+//    });
+//    test('collection', () async {
+//      final CollectionReference colRef =
+//      collectionReference.document('bar').collection('baz');
+//      expect(colRef.path, equals('foo/bar/baz'));
+//    });
+//    test('parent', () async {
+//      final CollectionReference colRef =
+//      collectionReference.document('bar').collection('baz');
+//      expect(colRef.parent().documentID, equals('bar'));
+//    });
 
 //  test('Document 1', () async {
 //  //    final user = User();

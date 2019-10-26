@@ -4,7 +4,7 @@ import 'document.dart';
 
 class Batch {
   Batch() {
-    _writeBatch = batch();
+    _writeBatch = Flamingo.instance.firestore.batch();
   }
 
   WriteBatch _writeBatch;

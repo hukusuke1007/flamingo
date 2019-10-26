@@ -81,7 +81,7 @@ class FlamingoTest {
     print('path ${Document.path<User>()}');
     // 取得
     print('--- listA ---');
-    final snapshot = await firestore().collection(Document.path<User>()).limit(5).getDocuments();
+    final snapshot = await firestoreInstance().collection(Document.path<User>()).limit(5).getDocuments();
     final listA = snapshot.documents.map((item) => User(snapshot: item)).toList();
     print(listA.length);
     listA.forEach((item) => item.log());
@@ -125,7 +125,7 @@ class FlamingoTest {
     final userA = await documentAccessor.load<User>(User(id: id));
     userA.log();
 
-    final dataSourceA = firestore().collection(userA.settingsA.ref.path).limit(5);
+    final dataSourceA = firestoreInstance().collection(userA.settingsA.ref.path).limit(5);
     final snapshotA = await dataSourceA.getDocuments();
     final listA = snapshotA.documents.map((item) => Setting(
       documentSnapshot: item,
@@ -134,7 +134,7 @@ class FlamingoTest {
     print(listA[0].reference.path);
     listA[0].log();
 
-    final dataSourceB = firestore().collection(userA.settingsB.ref.path).limit(5);
+    final dataSourceB = firestoreInstance().collection(userA.settingsB.ref.path).limit(5);
     final snapshotB = await dataSourceB.getDocuments();
     final listB = snapshotB.documents.map((item) => Setting(
       documentSnapshot: item,

@@ -3,7 +3,6 @@ import 'flamingo.dart';
 
 class Transaction {
   static run(TransactionHandler transactionHandler, {Duration timeout = const Duration(seconds: 5)}) {
-    final db = firestore();
-    db.runTransaction(transactionHandler);
+    Flamingo.instance.firestore.runTransaction(transactionHandler);
   }
 }

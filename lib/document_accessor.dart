@@ -1,18 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'document.dart';
+import 'batch.dart';
 import 'dart:async';
 
 class DocumentAccessor {
 
   Future save(Document document) async {
     try {
-      final data = document.toData();
-      final nowAt = Timestamp.now();
-      data['createdAt'] = nowAt;
-      data['updatedAt'] = nowAt;
-      document.createdAt = nowAt;
-      document.updatedAt = nowAt;
-      await document.reference.setData(data, merge: true);
+//      final data = document.toData();
+//      final nowAt = Timestamp.now();
+//      data['createdAt'] = nowAt;
+//      data['updatedAt'] = nowAt;
+//      document.createdAt = nowAt;
+//      document.updatedAt = nowAt;
+//      await document.reference.setData(data, merge: true);
+      final batch = Batch();
+      batch.save(document);
+      await batch.commit();
     } catch (error) {
       throw error;
     }
@@ -20,11 +24,14 @@ class DocumentAccessor {
 
   Future update(Document document) async {
     try {
-      final data = document.toData();
-      final nowAt = Timestamp.now();
-      data['updatedAt'] = nowAt;
-      document.updatedAt = nowAt;
-      await document.reference.updateData(data);
+//      final data = document.toData();
+//      final nowAt = Timestamp.now();
+//      data['updatedAt'] = nowAt;
+//      document.updatedAt = nowAt;
+//      await document.reference.updateData(data);
+      final batch = Batch();
+      batch.update(document);
+      await batch.commit();
     } catch (error) {
       throw error;
     }
@@ -32,7 +39,10 @@ class DocumentAccessor {
 
   Future delete(Document document) async {
     try {
-      await document.reference.delete();
+//      await document.reference.delete();
+      final batch = Batch();
+      batch.delete(document);
+      await batch.commit();
     } catch (error) {
       throw error;
     }

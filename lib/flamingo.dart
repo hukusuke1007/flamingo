@@ -1,6 +1,7 @@
 library flamingo;
 
-import 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference, Firestore, WriteBatch;
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference, Firestore;
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 
 export 'package:flamingo/batch.dart';
@@ -18,20 +19,25 @@ export 'package:flamingo/batch.dart';
 
 class Flamingo {
   static final instance = Flamingo();
-  static configure(DocumentReference reference) {
+  static configure(DocumentReference reference, {FirebaseApp app}) {
     instance.rootReference = reference;
+    if (app != null) {
+      instance.firestore = Firestore(app: app);
+      instance.firebaseStorage = FirebaseStorage(app: app);
+    } else {
+      instance.firestore = Firestore.instance;
+      instance.firebaseStorage = FirebaseStorage.instance;
+    }
   }
   DocumentReference rootReference;
+  Firestore firestore;
+  FirebaseStorage firebaseStorage;
 }
 
-Firestore firestore() {
-  return Firestore.instance;
+Firestore firestoreInstance() {
+  return Flamingo.instance.firestore;
 }
 
-WriteBatch batch() {
-  return Firestore().batch();
-}
-
-FirebaseStorage firebaseStorage() {
-  return FirebaseStorage.instance;
+FirebaseStorage storageInstance() {
+  return Flamingo.instance.firebaseStorage;
 }

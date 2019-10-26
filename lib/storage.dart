@@ -7,7 +7,7 @@ import 'dart:io';
 
 class Storage {
   Storage() {
-    storage = firebaseStorage();
+    storage = storageInstance();
   }
 
   static String fileName({int length}) => Helper.randomString(length: length);

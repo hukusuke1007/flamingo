@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flamingo/flamingo.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'flamingo_test.dart';
 
 void main() {
-  Flamingo.configure(firestore().collection('version').document("1"));
+  Flamingo.configure(Firestore.instance.collection('version').document("1"));
   runApp(MyApp());
 }
 

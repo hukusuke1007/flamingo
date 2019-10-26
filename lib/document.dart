@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'flamingo.dart';
 
@@ -78,8 +77,8 @@ class Document<T> {
     return Flamingo.instance.rootReference.collection(modelName());
   }
 
-  Map<String, dynamic> toData() => Map<String, dynamic>(); /// For save
-  void fromData(Map<String, dynamic> data){}               /// For load
+  Map<String, dynamic> toData() => Map<String, dynamic>(); /// Data for save
+  void fromData(Map<String, dynamic> data){}               /// Data for load
 
   void setSnapshot(DocumentSnapshot documentSnapshot){
     id = documentSnapshot.documentID;
