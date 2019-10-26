@@ -15,7 +15,7 @@ dependencies:
 
 ## Setup
 Please check Setup of cloud_firestore.<br>
-[https://pub.dev/packages/cloud_firestore](https://pub.dev/packages/cloud_firestore)
+[https://pub.dev/packages/cloud_firestore](https://pub.dev/packages/cloud_firestore#setup)
 
 ## Usage
 
