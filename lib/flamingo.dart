@@ -19,8 +19,7 @@ export 'package:flamingo/batch.dart';
 
 class Flamingo {
   static final instance = Flamingo();
-  static configure(DocumentReference reference, {FirebaseApp app}) {
-    instance.rootReference = reference;
+  static configure({String rootName, int version, FirebaseApp app}) {
     if (app != null) {
       instance.firestore = Firestore(app: app);
       instance.firebaseStorage = FirebaseStorage(app: app);
@@ -28,6 +27,9 @@ class Flamingo {
       instance.firestore = Firestore.instance;
       instance.firebaseStorage = FirebaseStorage.instance;
     }
+    instance.rootReference =
+        instance.firestore.collection('${rootName != null ? rootName : 'version'}')
+            .document('${version != null ? version.toString() : '1'}');
   }
   DocumentReference rootReference;
   Firestore firestore;

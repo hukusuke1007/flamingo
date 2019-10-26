@@ -108,12 +108,12 @@ class FlamingoTest {
     final userA = await documentAccessor.load<User>(User(id: id));
     userA.log();
 
-    final settingA = Setting(parent: userA.settingsA.ref);
+    final settingA = Setting(collectionRef: userA.settingsA.ref);
     settingA.isEnable = false;
     await documentAccessor.save(settingA);
     settingA.log();
 
-    final settingB = Setting(parent: userA.settingsB.ref);
+    final settingB = Setting(collectionRef: userA.settingsB.ref);
     settingB.isEnable = false;
     await documentAccessor.save(settingB);
   }
@@ -128,17 +128,15 @@ class FlamingoTest {
     final dataSourceA = firestoreInstance().collection(userA.settingsA.ref.path).limit(5);
     final snapshotA = await dataSourceA.getDocuments();
     final listA = snapshotA.documents.map((item) => Setting(
-      documentSnapshot: item,
-      parent: dataSourceA.reference()
+      documentSnapshot: item, collectionRef: dataSourceA.reference()
     )).toList();
     print(listA[0].reference.path);
     listA[0].log();
 
-    final dataSourceB = firestoreInstance().collection(userA.settingsB.ref.path).limit(5);
+    final dataSourceB = firestoreInstance().collection(userA.settingsA.ref.path).limit(5);
     final snapshotB = await dataSourceB.getDocuments();
     final listB = snapshotB.documents.map((item) => Setting(
-      documentSnapshot: item,
-      parent: dataSourceB.reference()
+      documentSnapshot: item, collectionRef: dataSourceB.reference()
     )).toList();
     print(listB[0].reference.path);
     listB[0].log();

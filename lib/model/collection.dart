@@ -2,13 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../document.dart';
 
 class Collection {
-  Collection(Document parent, String collectionName) {
-    ref = parent.reference.collection(collectionName);
+  Collection(Document parent, String name) {
+    ref = parent.reference.collection(name);
     path = ref.path;
-    this.collectionName = collectionName;
+    this.name = name;
   }
-
   CollectionReference ref;
   String path;
-  String collectionName;
+  String name;
 }

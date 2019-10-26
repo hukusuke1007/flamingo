@@ -10,10 +10,10 @@ class Document<T> {
   }
 
   /// Constructor
-  Document({this.id, this.snapshot, this.values, this.parent}) {
+  Document({this.id, this.snapshot, this.values, this.collectionRef}) {
     CollectionReference collectionReference;
-    if (this.parent != null) {
-      collectionReference = this.parent;
+    if (this.collectionRef != null) {
+      collectionReference = this.collectionRef;
     } else {
       collectionReference = collectionRootReference();
     }
@@ -57,7 +57,7 @@ class Document<T> {
   String documentPath;
 
   @JsonKey(ignore: true)
-  CollectionReference parent;
+  CollectionReference collectionRef;
 
   @JsonKey(ignore: true)
   DocumentReference reference;
