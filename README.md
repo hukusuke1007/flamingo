@@ -2,6 +2,8 @@
 
 Flamingo is a firesbase firestore model framework library.
 
+[https://pub.dev/packages/flamingo](https://pub.dev/packages/flamingo)
+
 ## Installation
 
 Add this to your package's pubspec.yaml file:
@@ -370,3 +372,9 @@ Transaction.run((transaction) async {
 
 ## Getting Started
 See the example directory for a complete sample app using flamingo.
+
+
+## Reference
+- [Firebase for flutter](https://firebase.google.com/docs/flutter/setup)
+- [Ballcap for iOS](https://github.com/1amageek/Ballcap-iOS)
+- [Ballcap for TypeScript](https://github.com/1amageek/ballcap.ts)
