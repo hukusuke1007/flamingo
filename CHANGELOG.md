@@ -1,3 +1,14 @@
-## 0.0.1
+## 0.0.3+2
+Update CHANGELOG.md.  
 
-* TODO: Describe initial release.
+## 0.0.3+1
+Update README.md.  
+
+## 0.0.3
+Bug fix for Android.
+
+## 0.0.2
+Bug fix.
+
+## 0.0.1
+First release.
