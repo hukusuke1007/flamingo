@@ -1,3 +1,6 @@
+## 0.0.4
+Update plugin of firebase. 
+
 ## 0.0.3+2
 Update CHANGELOG.md.  
 

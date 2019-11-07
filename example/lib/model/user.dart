@@ -22,7 +22,7 @@ class User extends Document<User> {
   }
 
   void log() {
-    print('$id $name');
+    print('User $id $name');
   }
 
 }

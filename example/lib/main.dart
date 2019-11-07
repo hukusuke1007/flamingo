@@ -40,7 +40,24 @@ class _MyAppState extends State<MyApp> {
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[
-            Container(
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('All',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.all();
+                  },
+                  child: Text('Start', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
               padding: const EdgeInsets.all(4),
               child: Text('Document',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
@@ -73,7 +90,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-            Container(
+            Padding(
               padding: const EdgeInsets.all(4),
               child: Text('Batch',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
@@ -98,7 +115,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-            Container(
+            Padding(
               padding: const EdgeInsets.all(4),
               child: Text('Get',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
@@ -123,7 +140,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-            Container(
+            Padding(
               padding: const EdgeInsets.all(4),
               child: Text('SubCollection',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
@@ -140,7 +157,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-            Container(
+            Padding(
               padding: const EdgeInsets.all(4),
               child: Text('Storage',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
@@ -165,7 +182,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-            Container(
+            Padding(
               padding: const EdgeInsets.all(4),
               child: Text('DistributedCounter',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
@@ -182,7 +199,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
-            Container(
+            Padding(
               padding: const EdgeInsets.all(4),
               child: Text('Transaction',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),

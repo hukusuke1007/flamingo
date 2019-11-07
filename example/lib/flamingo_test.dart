@@ -8,7 +8,24 @@ import 'model/user.dart';
 
 class FlamingoTest {
   DocumentAccessor documentAccessor = DocumentAccessor();
-  
+
+  Future all() async {
+    await save();
+    await update();
+    await delete();
+    await batchSave();
+    await batchUpdateDelete();
+    await getAndUpdate();
+    await getCollection();
+    await subCollection();
+    await saveStorage();
+    await deleteStorage();
+    await distributedCounter();
+    await transactionSave();
+    await transactionUpdate();
+    await transactionDelete();
+  }
+
   Future save() async {
     print('--- save ---');
     final user = User()
