@@ -1,3 +1,6 @@
+## 0.0.4+1
+Update document.
+
 ## 0.0.4
 Update plugin of firebase. 
 
