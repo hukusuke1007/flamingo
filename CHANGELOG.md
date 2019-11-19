@@ -1,3 +1,6 @@
+## 0.0.5
+Update initialize spec.
+
 ## 0.0.4+1
 Update document.
 

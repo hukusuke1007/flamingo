@@ -10,7 +10,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.0.4+1
+  flamingo: ^0.0.5
 ```
 
 ## Setup
@@ -21,13 +21,35 @@ Please check Setup of cloud_firestore.<br>
 
 Adding a configure code to main.dart.
 
+### Initialize
+
 ```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flamingo/flamingo.dart';
 
 void main() {
-  Flamingo.configure(rootName: 'version', version: 1);
+  final firestore = Firestore.instance;
+  final root = firestore.collection('version').document('1');
+  Flamingo.configure(firestore: firestore, storage: FirebaseStorage.instance, root: root);
   ...
 }
+```
+
+Also be able to set app to firebase instance.
+
+```dart
+final app = await FirebaseApp.configure(
+  name: 'appName',
+  options: const FirebaseOptions(
+    googleAppID: '1:1234567890:ios:42424242424242',
+    gcmSenderID: '1234567890',
+  ),
+);
+final firestore = Firestore(app: app);
+final storage = FirebaseStorage(app: app);
+final root = firestore.collection('version').document('1');
+Flamingo.configure(firestore: firestore, storage: storage, root: root);
 ```
 
 Create model class that inherited Document. And add json mapping code into override functions.

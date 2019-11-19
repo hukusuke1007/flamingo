@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flamingo/flamingo.dart';
 import 'flamingo_test.dart';
 
 void main() {
-  Flamingo.configure(rootName: 'version', version: 1);
+  final firestore = Firestore.instance;
+  final root = firestore.collection('version').document('1');
+  Flamingo.configure(firestore: firestore, storage: FirebaseStorage.instance, root: root);
+
   runApp(MyApp());
 }
 

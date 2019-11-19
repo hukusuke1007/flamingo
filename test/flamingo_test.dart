@@ -41,8 +41,13 @@ void main() {
           gcmSenderID: '1234567890',
         ),
       );
-      Flamingo.configure(rootName: 'version', version: 1, app: app);
-      firestore = firestoreInstance();
+
+      /// initialize
+      final firestore = Firestore(app: app);
+      final storage = FirebaseStorage(app: app);
+      final root = firestore.collection('version').document('1');
+      Flamingo.configure(firestore: firestore, storage: storage, root: root);
+
       collectionReference = firestore.collection('foo');
       collectionGroupQuery = firestore.collectionGroup('bar');
       transaction = Transaction(0, firestore);
