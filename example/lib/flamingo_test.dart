@@ -3,6 +3,7 @@ import 'package:flamingo/transaction.dart';
 import 'package:flamingo_example/model/count.dart';
 import 'package:flamingo_example/model/post.dart';
 import 'package:flamingo_example/model/score.dart';
+import 'package:flamingo_example/model/map_sample.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
 
@@ -24,6 +25,7 @@ class FlamingoTest {
     await transactionSave();
     await transactionUpdate();
     await transactionDelete();
+    await saveMap();
   }
 
   Future save() async {
@@ -173,10 +175,11 @@ class FlamingoTest {
 
     // save file metadata into firestore
     final path = '${post.documentPath}/${post.folderName}';
-    post.file = await storage.save(path, file, mimeType: mimeTypePng);
+    post.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'});
     await documentAccessor.save(post);
     post.log();
 
+    print('  ----get');
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
     hoge.log();
 
@@ -197,6 +200,7 @@ class FlamingoTest {
     await storage.delete(path, post.file);
     await documentAccessor.update(post);
 
+    print('  ----get');
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
     hoge.log();
   }
@@ -257,6 +261,37 @@ class FlamingoTest {
     Transaction.run((transaction) async {
       await transaction.delete(User(id: hoge.id).reference);
     });
+  }
+
+  Future saveMap() async {
+    print('--- saveMap ---');
+    final sample1 = MapSample()
+      ..strMap = {
+        'userId1': 'tanaka',
+        'userId2': 'hanako',
+        'userId3': 'shohei',
+      }
+      ..intMap = {
+        'userId1': 0,
+        'userId2': 1,
+        'userId3': 2,
+      }
+      ..doubleMap = {
+        'userId1': 1.02,
+        'userId2': 0.14,
+        'userId3': 0.89,
+      }
+      ..boolMap = {
+        'userId1': true,
+        'userId2': true,
+        'userId3': true,
+      };
+    await documentAccessor.save(sample1);
+    sample1.log();
+
+    print('  ----get');
+    final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
+    _sample1.log();
   }
 
 }

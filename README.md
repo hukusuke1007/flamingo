@@ -10,7 +10,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.0.5
+  flamingo: ^0.0.6
 ```
 
 ## Setup
@@ -115,6 +115,7 @@ final batch = Batch()
 await batch.commit();
 ```
 
+
 Get a document.
 
 ```dart
@@ -140,6 +141,78 @@ final listB = snapshot.documents.map((item) => User(id: item.documentID, values:
   ..forEach((user) {
     print(user.id); // user model.
   });
+```
+
+### Map objects
+
+Create the following model class.
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/flamingo.dart';
+
+class MapSample extends Document<MapSample> {
+  MapSample({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  }): super(id: id, snapshot: snapshot, values: values);
+
+  Map<String, String> strMap;
+  Map<String, int> intMap;
+  Map<String, double> doubleMap;
+  Map<String, bool> boolMap;
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeNotNull(data, 'strMap', strMap);
+    writeNotNull(data, 'intMap', intMap);
+    writeNotNull(data, 'doubleMap', doubleMap);
+    writeNotNull(data, 'boolMap', boolMap);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    strMap = valueMapFromKey<String, String>(data, 'strMap');
+    intMap = valueMapFromKey<String, int>(data, 'intMap');
+    doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
+    boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
+  }
+
+  void log() {
+    print('MapSample $id $strMap $intMap $doubleMap $boolMap');
+  }
+}
+```
+
+And save and load documents. 
+
+```dart
+final sample1 = MapSample()
+  ..strMap = {
+    'userId1': 'tanaka',
+    'userId2': 'hanako',
+    'userId3': 'shohei',
+  }
+  ..intMap = {
+    'userId1': 0,
+    'userId2': 1,
+    'userId3': 2,
+  }
+  ..doubleMap = {
+    'userId1': 1.02,
+    'userId2': 0.14,
+    'userId3': 0.89,
+  }
+  ..boolMap = {
+    'userId1': true,
+    'userId2': true,
+    'userId3': true,
+  };
+await documentAccessor.save(sample1);
+
+final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
 ```
 
 ### Sub Collection
@@ -272,9 +345,7 @@ class Post extends Document<Post> {
   // For load data
   @override
   void fromData(Map<String, dynamic> data) {
-    if (isVal(data, folderName)) {
-      file = StorageFile.fromJson(Helper.fromMap(data[folderName] as Map));
-    }
+    file = storageFile(data, folderName);
   }
 }
 ```
@@ -296,7 +367,7 @@ storage.uploader.stream.listen((data){
 
 // upload file into firebase storage and save file metadata into firestore
 final path = '${post.documentPath}/${post.folderName}';
-post.file = await storage.save(path, file, mimeType: mimeTypePng); // 'mimeType' is defined in master/master.dart
+post.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'}); // 'mimeType' is defined in master/master.dart
 await documentAccessor.save(post);
 
 // dispose uploader stream

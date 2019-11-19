@@ -11,6 +11,7 @@ StorageFile _$StorageFileFromJson(Map<String, dynamic> json) {
     name: json['name'] as String,
     url: json['url'] as String,
     mimeType: json['mimeType'] as String,
+    metadata: Map<String, String>.from(json['metadata'] as Map),
   );
 }
 
@@ -19,4 +20,5 @@ Map<String, dynamic> _$StorageFileToJson(StorageFile instance) =>
       'name': instance.name,
       'url': instance.url,
       'mimeType': instance.mimeType,
+      'metadata': instance.metadata,
     };

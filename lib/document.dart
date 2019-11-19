@@ -95,11 +95,18 @@ class Document<T> implements DocumentType {
     }
   }
 
-  T valueFromKey<T>(Map<String, dynamic> data, String key) => data[key] as T;
-
-  T valueListFromKey<T extends List<dynamic>>(Map<String, dynamic> data, String key) {
-    return (data[key] as List)?.map((dynamic e) => e as String)?.toList() as T;
+  StorageFile storageFile(Map<String, dynamic> data, String folderName) {
+    final fileMap = valueMapFromKey<String, dynamic>(data, folderName);
+    if (fileMap != null) {
+      return StorageFile.fromJson(fileMap);
+    } else {
+      return null;
+    }
   }
+
+  T valueFromKey<T>(Map<String, dynamic> data, String key) => data[key] as T;
+  Map<T, U> valueMapFromKey<T, U>(Map<String, dynamic> data, String key) => isVal(data, key) ? Map<T, U>.from(Helper.fromMap(data[key] as Map)) : null;
+  T valueListFromKey<T extends List<dynamic>>(Map<String, dynamic> data, String key) => (data[key] as List)?.map((dynamic e) => e as String)?.toList() as T;
 
   bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);
 

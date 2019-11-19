@@ -25,9 +25,7 @@ class Post extends Document<Post> {
   /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
-    if (isVal(data, folderName)) {
-      file = StorageFile.fromJson(Helper.fromMap(data[folderName] as Map));
-    }
+    file = storageFile(data, folderName);
   }
 
   void log() {

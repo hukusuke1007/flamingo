@@ -4,7 +4,7 @@ part 'storage_file.g.dart';
 
 @JsonSerializable(nullable: true)
 class StorageFile {
-  StorageFile({this.name, this.url, this.mimeType});
+  StorageFile({this.name, this.url, this.mimeType, this.metadata});
   factory StorageFile.fromJson(Map<String, dynamic> json) => _$StorageFileFromJson(json);
 
   @JsonKey(ignore: true)
@@ -13,6 +13,7 @@ class StorageFile {
   String name;
   String url;
   String mimeType;
+  Map<String, String> metadata;
 
   Map<String, dynamic> toJson() => _$StorageFileToJson(this);
 }

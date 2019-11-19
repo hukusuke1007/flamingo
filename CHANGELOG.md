@@ -1,3 +1,6 @@
+## 0.0.6
+Added function for mapping map objects and added metadata to storage file.
+
 ## 0.0.5
 Update initialize spec.
 
