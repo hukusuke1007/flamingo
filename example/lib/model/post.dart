@@ -12,13 +12,7 @@ class Post extends Document<Post> {
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    if (file != null) {
-      if (!file.isDeleted) {
-        data[folderName] = file.toJson();
-      } else {
-        data[folderName] = FieldValue.delete();
-      }
-    }
+    writeStorage(data, folderName, file);
     return data;
   }
 

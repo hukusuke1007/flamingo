@@ -4,6 +4,7 @@ import 'package:flamingo_example/model/count.dart';
 import 'package:flamingo_example/model/post.dart';
 import 'package:flamingo_example/model/score.dart';
 import 'package:flamingo_example/model/map_sample.dart';
+import 'package:flamingo_example/model/list_sample.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
 
@@ -26,6 +27,7 @@ class FlamingoTest {
     await transactionUpdate();
     await transactionDelete();
     await saveMap();
+    await saveList();
   }
 
   Future save() async {
@@ -266,26 +268,15 @@ class FlamingoTest {
   Future saveMap() async {
     print('--- saveMap ---');
     final sample1 = MapSample()
-      ..strMap = {
-        'userId1': 'tanaka',
-        'userId2': 'hanako',
-        'userId3': 'shohei',
-      }
-      ..intMap = {
-        'userId1': 0,
-        'userId2': 1,
-        'userId3': 2,
-      }
-      ..doubleMap = {
-        'userId1': 1.02,
-        'userId2': 0.14,
-        'userId3': 0.89,
-      }
-      ..boolMap = {
-        'userId1': true,
-        'userId2': true,
-        'userId3': true,
-      };
+      ..strMap = {'userId1': 'tanaka', 'userId2': 'hanako', 'userId3': 'shohei',}
+      ..intMap = {'userId1': 0, 'userId2': 1, 'userId3': 2,}
+      ..doubleMap = {'userId1': 1.02, 'userId2': 0.14, 'userId3': 0.89,}
+      ..boolMap = {'userId1': true, 'userId2': true, 'userId3': true,}
+      ..listStrMap = [
+        {'userId1': 'tanaka', 'userId2': 'hanako',},
+        {'adminId1': 'shohei', 'adminId2': 'tanigawa',},
+        {'managerId1': 'ueno', 'managerId2': 'yoshikawa',},
+      ];
     await documentAccessor.save(sample1);
     sample1.log();
 
@@ -294,5 +285,24 @@ class FlamingoTest {
     _sample1.log();
   }
 
+  Future saveList() async {
+    print('--- saveList ---');
+    final sample1 = ListSample()
+      ..strList = ['userId1', 'userId2', 'userId3',]
+      ..intList = [0, 1, 2,]
+      ..doubleList = [0.0, 0.1, 0.2,]
+      ..boolList = [true, false, true,]
+      ..files = [
+        StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+        StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+        StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+      ];
+    await documentAccessor.save(sample1);
+    sample1.log();
+
+    print('  ----get');
+    final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+    _sample1.log();
+  }
 }
 

@@ -55,7 +55,7 @@ class User extends Document<User> {
       ..name = valueFromKey<String>(data, 'name')
       ..age = valueFromKey<int>(data, 'age')
       ..numShards = valueFromKey<int>(data, 'numShards')
-      ..memos = valueListFromKey<List<String>>(data, 'memos');
+      ..memos = valueListFromKey<String>(data, 'memos');
     if (isVal(data, folderName)) {
       file = StorageFile.fromJson(Helper.fromMap(data[folderName] as Map));
     }

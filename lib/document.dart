@@ -95,6 +95,26 @@ class Document<T> implements DocumentType {
     }
   }
 
+  void writeStorage(Map<String, dynamic> data, String key, StorageFile storageFile,) {
+    if (storageFile != null) {
+      if (!storageFile.isDeleted) {
+        data[key] = storageFile.toJson();
+      } else {
+        data[key] = FieldValue.delete();
+      }
+    }
+  }
+
+  void writeStorageList(Map<String, dynamic> data, String key, List<StorageFile> storageFiles) {
+    if (storageFiles != null) {
+      if (storageFiles.isNotEmpty) {
+        data[key] = storageFiles.map((d) => d.toJson()).toList();
+      } else {
+        data[key] = FieldValue.delete();
+      }
+    }
+  }
+
   StorageFile storageFile(Map<String, dynamic> data, String folderName) {
     final fileMap = valueMapFromKey<String, dynamic>(data, folderName);
     if (fileMap != null) {
@@ -104,9 +124,19 @@ class Document<T> implements DocumentType {
     }
   }
 
+  List<StorageFile> storageFiles(Map<String, dynamic> data, String folderName) {
+    final fileMapList = valueMapListFromKey<String, dynamic>(data, folderName);
+    if (fileMapList != null) {
+      return fileMapList.map((d) => StorageFile.fromJson(d)).toList();
+    } else {
+      return null;
+    }
+  }
+
   T valueFromKey<T>(Map<String, dynamic> data, String key) => data[key] as T;
   Map<T, U> valueMapFromKey<T, U>(Map<String, dynamic> data, String key) => isVal(data, key) ? Map<T, U>.from(Helper.fromMap(data[key] as Map)) : null;
-  T valueListFromKey<T extends List<dynamic>>(Map<String, dynamic> data, String key) => (data[key] as List)?.map((dynamic e) => e as String)?.toList() as T;
+  List<T> valueListFromKey<T>(Map<String, dynamic> data, String key) => (data[key] as List)?.map((dynamic e) => e as T)?.toList();
+  List<Map<T, U>> valueMapListFromKey<T, U>(Map<String, dynamic> data, String key)  => isVal(data, key) ? (data[key] as List).map((dynamic d) => Map<T, U>.from(d as Map)).toList() : null;
 
   bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);
 

@@ -9,6 +9,7 @@ class MapSample extends Document<MapSample> {
   Map<String, int> intMap;
   Map<String, double> doubleMap;
   Map<String, bool> boolMap;
+  List<Map<String, String>> listStrMap;
 
   /// For save data
   @override
@@ -18,6 +19,7 @@ class MapSample extends Document<MapSample> {
     writeNotNull(data, 'intMap', intMap);
     writeNotNull(data, 'doubleMap', doubleMap);
     writeNotNull(data, 'boolMap', boolMap);
+    writeNotNull(data, 'listStrMap', listStrMap);
     return data;
   }
 
@@ -28,10 +30,11 @@ class MapSample extends Document<MapSample> {
     intMap = valueMapFromKey<String, int>(data, 'intMap');
     doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
     boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
+    listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
   }
 
   void log() {
-    print('MapSample $id $strMap $intMap $doubleMap $boolMap');
+    print('MapSample $id $strMap $intMap $doubleMap $boolMap $listStrMap');
   }
 
 }

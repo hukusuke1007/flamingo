@@ -33,7 +33,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Flamingo sample app'),
         ),
-        body: _body(),
+        body: SingleChildScrollView(
+          child: _body(),
+        ),
       ),
     );
   }
@@ -249,6 +251,23 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.lightBlue,
                   onPressed: () async {
                     await test.saveMap();
+                  },
+                  child: Text('Save', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('ListSave',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.saveList();
                   },
                   child: Text('Save', style: TextStyle(color: Colors.white),),
                 ),

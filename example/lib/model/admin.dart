@@ -53,10 +53,8 @@ class Admin extends Document<Admin> {
       ..name = valueFromKey<String>(data, 'name')
       ..age = valueFromKey<int>(data, 'age')
       ..numShards = valueFromKey<int>(data, 'numShards')
-      ..memos = valueListFromKey<List<String>>(data, 'memos');
-    if (isVal(data, folderName)) {
-      file = StorageFile.fromJson(Helper.fromMap(data[folderName] as Map));
-    }
+      ..memos = valueListFromKey<String>(data, 'memos');
+    file = storageFile(data, folderName);
   }
 
   void log() {

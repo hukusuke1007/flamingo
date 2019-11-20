@@ -10,7 +10,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.0.6
+  flamingo: ^0.0.7
 ```
 
 ## Setup
@@ -159,6 +159,7 @@ class MapSample extends Document<MapSample> {
   Map<String, int> intMap;
   Map<String, double> doubleMap;
   Map<String, bool> boolMap;
+  List<Map<String, String>> listStrMap;
 
   /// For save data
   @override
@@ -168,6 +169,7 @@ class MapSample extends Document<MapSample> {
     writeNotNull(data, 'intMap', intMap);
     writeNotNull(data, 'doubleMap', doubleMap);
     writeNotNull(data, 'boolMap', boolMap);
+    writeNotNull(data, 'listStrMap', listStrMap);
     return data;
   }
 
@@ -178,10 +180,7 @@ class MapSample extends Document<MapSample> {
     intMap = valueMapFromKey<String, int>(data, 'intMap');
     doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
     boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
-  }
-
-  void log() {
-    print('MapSample $id $strMap $intMap $doubleMap $boolMap');
+    listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
   }
 }
 ```
@@ -190,29 +189,81 @@ And save and load documents.
 
 ```dart
 final sample1 = MapSample()
-  ..strMap = {
-    'userId1': 'tanaka',
-    'userId2': 'hanako',
-    'userId3': 'shohei',
-  }
-  ..intMap = {
-    'userId1': 0,
-    'userId2': 1,
-    'userId3': 2,
-  }
-  ..doubleMap = {
-    'userId1': 1.02,
-    'userId2': 0.14,
-    'userId3': 0.89,
-  }
-  ..boolMap = {
-    'userId1': true,
-    'userId2': true,
-    'userId3': true,
-  };
+  ..strMap = {'userId1': 'tanaka', 'userId2': 'hanako', 'userId3': 'shohei',}
+  ..intMap = {'userId1': 0, 'userId2': 1, 'userId3': 2,}
+  ..doubleMap = {'userId1': 1.02, 'userId2': 0.14, 'userId3': 0.89,}
+  ..boolMap = {'userId1': true, 'userId2': true, 'userId3': true,}
+  ..listStrMap = [
+    {'userId1': 'tanaka', 'userId2': 'hanako',},
+    {'adminId1': 'shohei', 'adminId2': 'tanigawa',},
+    {'managerId1': 'ueno', 'managerId2': 'yoshikawa',},
+  ];
 await documentAccessor.save(sample1);
 
 final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
+```
+
+### List
+
+Create the following model class.
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/flamingo.dart';
+
+class ListSample extends Document<ListSample> {
+  ListSample({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  }): super(id: id, snapshot: snapshot, values: values);
+
+  List<String> strList;
+  List<int> intList;
+  List<double> doubleList;
+  List<bool> boolList;
+  List<StorageFile> files;
+  String folderName = 'files';
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeNotNull(data, 'strList', strList);
+    writeNotNull(data, 'intList', intList);
+    writeNotNull(data, 'doubleList', doubleList);
+    writeNotNull(data, 'boolList', boolList);
+    writeStorageList(data, folderName, files);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    strList = valueListFromKey<String>(data, 'strList');
+    intList = valueListFromKey<int>(data, 'intList');
+    doubleList = valueListFromKey<double>(data, 'doubleList');
+    boolList = valueListFromKey<bool>(data, 'boolList');
+    files = storageFiles(data, folderName);
+  }
+}
+```
+
+And save and load documents. 
+
+```dart
+final sample1 = ListSample()
+  ..strList = ['userId1', 'userId2', 'userId3',]
+  ..intList = [0, 1, 2,]
+  ..doubleList = [0.0, 0.1, 0.2,]
+  ..boolList = [true, false, true,]
+  ..files = [
+    StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+    StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+    StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+  ];
+await documentAccessor.save(sample1);
+sample1.log();
+
+print('  ----get');
+final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
 
 ### Sub Collection
@@ -332,13 +383,7 @@ class Post extends Document<Post> {
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    if (file != null) {
-      if (!file.isDeleted) {
-        data[folderName] = file.toJson();
-      } else {
-        data[folderName] = FieldValue.delete();
-      }
-    }
+    writeStorage(data, folderName, file);
     return data;
   }
 
