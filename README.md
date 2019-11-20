@@ -262,7 +262,6 @@ final sample1 = ListSample()
 await documentAccessor.save(sample1);
 sample1.log();
 
-print('  ----get');
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
 
