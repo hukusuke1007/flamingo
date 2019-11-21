@@ -178,6 +178,12 @@ class FlamingoTest {
     // save file metadata into firestore
     final path = '${post.documentPath}/${post.folderName}';
     post.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'});
+    post.file.additionalData = <String, dynamic>{
+      'key0': 'key',
+      'key1': 10,
+      'key2': 0.123,
+      'key3': true,
+    };
     await documentAccessor.save(post);
     post.log();
 

@@ -1,3 +1,6 @@
+## 0.0.7+1
+Added additionalData parameter of storage file.
+
 ## 0.0.7
 Added function for mapping list and modified mapping json of storage file.
 
