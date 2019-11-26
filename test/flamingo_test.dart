@@ -1,37 +1,37 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flamingo/flamingo.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'model/history.dart';
 import 'model/setting.dart';
 import 'model/user.dart';
-import 'dart:async';
-import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flamingo/flamingo.dart';
 
 void main() {
   group('#Firestore', () {
     DocumentAccessor documentAccessor;
     var mockHandleId = 0;
-    Firestore firestore;
     FirebaseApp app;
-    final List<MethodCall> log = <MethodCall>[];
+    final log = <MethodCall>[];
     CollectionReference collectionReference;
     Query collectionGroupQuery;
     Transaction transaction;
     Timestamp timestamp;
-    const Map<String, dynamic> kMockDocumentSnapshotData = <String, dynamic>{
+    const kMockDocumentSnapshotData = <String, dynamic>{
       '1': 2
     };
-    const Map<String, dynamic> kMockSnapshotMetadata = <String, dynamic>{
-      "hasPendingWrites": false,
-      "isFromCache": false,
+    const kMockSnapshotMetadata = <String, dynamic>{
+      'hasPendingWrites': false,
+      'isFromCache': false,
     };
+    const firebaseCoreChannel = MethodChannel('plugins.flutter.io/firebase_core');
     setUp(() async {
       print('setUp');
       documentAccessor = DocumentAccessor();
-      FirebaseApp.channel.setMockMethodCallHandler(
+      firebaseCoreChannel.setMockMethodCallHandler(
             (MethodCall methodCall) async {},
       );
       app = await FirebaseApp.configure(
@@ -47,7 +47,6 @@ void main() {
       final storage = FirebaseStorage(app: app);
       final root = firestore.collection('version').document('1');
       Flamingo.configure(firestore: firestore, storage: storage, root: root);
-
       collectionReference = firestore.collection('foo');
       collectionGroupQuery = firestore.collectionGroup('bar');
       transaction = Transaction(0, firestore);
@@ -186,8 +185,8 @@ void main() {
 
     group('#Document', () {
       test('set', () async {
-        final user = User();
-        user.name = 'hoge';
+        final user = User()
+          ..name = 'hoge';
         await documentAccessor.save(user);
         expect(log,  <Matcher>[
           isMethodCall('WriteBatch#create', arguments: <String, dynamic>{
@@ -199,7 +198,14 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': user.documentPath,
-              'data': <String, dynamic>{'name': user.name, 'createdAt': user.createdAt, 'updatedAt': user.updatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': user.name,
+                'age': null,
+                'memos': null,
+                'createdAt': user.createdAt,
+                'updatedAt': user.updatedAt,
+              },
               'options': {'merge': true}
             },
           ),
@@ -214,8 +220,8 @@ void main() {
       });
 
       test('update', () async {
-        final user = User();
-        user.name = 'hoge';
+        final user = User()
+          ..name = 'hoge';
         await documentAccessor.save(user);
         final savedUserName = user.name;
         final savedCreatedAt = user.createdAt;
@@ -234,7 +240,14 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': user.documentPath,
-              'data': <String, dynamic>{'name': savedUserName, 'createdAt': savedCreatedAt, 'updatedAt': savedUpdatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': savedUserName,
+                'createdAt': savedCreatedAt,
+                'age': null,
+                'memos': null,
+                'updatedAt': savedUpdatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -253,7 +266,13 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': user.documentPath,
-              'data': <String, dynamic>{'name': user.name, 'updatedAt': user.updatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': user.name,
+                'age': null,
+                'memos': null,
+                'updatedAt': user.updatedAt
+              },
             },
           ),
           isMethodCall(
@@ -267,8 +286,8 @@ void main() {
       });
 
       test('delete', () async {
-        final user = User();
-        user.name = 'hoge';
+        final user = User()
+          ..name = 'hoge';
         await documentAccessor.save(user);
         await documentAccessor.delete(user);
         expect(log,  <Matcher>[
@@ -281,7 +300,14 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': user.documentPath,
-              'data': <String, dynamic>{'name': user.name, 'createdAt': user.createdAt, 'updatedAt': user.updatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': user.name,
+                'age': null,
+                'memos': null,
+                'createdAt': user.createdAt,
+                'updatedAt': user.updatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -344,11 +370,11 @@ void main() {
 
     group('#SubCollection', () {
       test('set', () async {
-        final user = User();
-        user.name = 'hoge';
+        final user = User()
+          ..name = 'hoge';
         await documentAccessor.save(user);
-        final setting = Setting(collectionRef: user.settingsA.ref);
-        setting.isEnable = true;
+        final setting = Setting(collectionRef: user.settingsA.ref)
+          ..isEnable = true;
         print(setting.documentPath);
         await documentAccessor.save(setting);
         expect(log,  <Matcher>[
@@ -361,7 +387,14 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': user.documentPath,
-              'data': <String, dynamic>{'name': user.name, 'createdAt': user.createdAt, 'updatedAt': user.updatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': user.name,
+                'age': null,
+                'memos': null,
+                'createdAt': user.createdAt,
+                'updatedAt': user.updatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -380,7 +413,11 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': setting.documentPath,
-              'data': <String, dynamic>{'isEnable': setting.isEnable, 'createdAt': setting.createdAt, 'updatedAt': setting.updatedAt},
+              'data': <String, dynamic>{
+                'isEnable': setting.isEnable,
+                'createdAt': setting.createdAt,
+                'updatedAt': setting.updatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -393,12 +430,13 @@ void main() {
         ],);
       });
 
+
       test('update', () async {
-        final user = User();
-        user.name = 'hoge';
+        final user = User()
+          ..name = 'hoge';
         await documentAccessor.save(user);
-        final setting = Setting(collectionRef: user.settingsA.ref);
-        setting.isEnable = true;
+        final setting = Setting(collectionRef: user.settingsA.ref)
+          ..isEnable = true;
         await documentAccessor.save(setting);
         final savedCreatedAt = setting.createdAt;
         final savedUpdatedAt = setting.updatedAt;
@@ -414,7 +452,14 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': user.documentPath,
-              'data': <String, dynamic>{'name': user.name, 'createdAt': user.createdAt, 'updatedAt': user.updatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': user.name,
+                'age': null,
+                'memos': null,
+                'createdAt': user.createdAt,
+                'updatedAt': user.updatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -433,7 +478,11 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': setting.documentPath,
-              'data': <String, dynamic>{'isEnable': true, 'createdAt': savedCreatedAt, 'updatedAt': savedUpdatedAt},
+              'data': <String, dynamic>{
+                'isEnable': true,
+                'createdAt': savedCreatedAt,
+                'updatedAt': savedUpdatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -452,7 +501,10 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': setting.documentPath,
-              'data': <String, dynamic>{'isEnable': setting.isEnable, 'updatedAt': setting.updatedAt},
+              'data': <String, dynamic>{
+                'isEnable': setting.isEnable,
+                'updatedAt': setting.updatedAt
+              },
             },
           ),
           isMethodCall(
@@ -465,8 +517,8 @@ void main() {
       });
 
       test('delete', () async {
-        final setting = Setting(collectionRef: User(id: '0000').settingsA.ref);
-        setting.isEnable = true;
+        final setting = Setting(collectionRef: User(id: '0000').settingsA.ref)
+          ..isEnable = true;
         await documentAccessor.save(setting);
         await documentAccessor.delete(setting);
         expect(log,  <Matcher>[
@@ -479,7 +531,11 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': setting.documentPath,
-              'data': <String, dynamic>{'isEnable': setting.isEnable, 'createdAt': setting.createdAt, 'updatedAt': setting.updatedAt},
+              'data': <String, dynamic>{
+                'isEnable': setting.isEnable,
+                'createdAt': setting.createdAt,
+                'updatedAt': setting.updatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -508,22 +564,23 @@ void main() {
           ),
         ],);
       });
+
     });
 
     group('#Batch', () {
       test('set update delete', () async {
-        final userA = User();
-        userA.name = 'hoge';
-        final historyA = History();
-        historyA.userId = userA.id;
-        final userB = User(id: '0000');
-        userB.name = 'fuge';
+        final userA = User()
+          ..name = 'hoge';
+        final historyA = History()
+          ..userId = userA.id;
+        final userB = User(id: '0000')
+          ..name = 'fuge';
         final historyB = History(id: '0');
-        final batch = Batch();
-        batch.save(userA);
-        batch.save(historyA);
-        batch.update(userB);
-        batch.delete(historyB);
+        final batch = Batch()
+          ..save(userA)
+          ..save(historyA)
+          ..update(userB)
+          ..delete(historyB);
         await batch.commit();
         expect(log,  <Matcher>[
           isMethodCall('WriteBatch#create', arguments: <String, dynamic>{
@@ -535,7 +592,14 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': userA.documentPath,
-              'data': <String, dynamic>{'name': userA.name, 'createdAt': userA.createdAt, 'updatedAt': userA.updatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': userA.name,
+                'age': null,
+                'memos': null,
+                'createdAt': userA.createdAt,
+                'updatedAt': userA.updatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -545,7 +609,11 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': historyA.documentPath,
-              'data': <String, dynamic>{'userId': historyA.userId, 'createdAt': historyA.createdAt, 'updatedAt': historyA.updatedAt},
+              'data': <String, dynamic>{
+                'userId': historyA.userId,
+                'createdAt': historyA.createdAt,
+                'updatedAt': historyA.updatedAt
+              },
               'options': {'merge': true}
             },
           ),
@@ -555,7 +623,13 @@ void main() {
               'app': app.name,
               'handle': 1,
               'path': userB.documentPath,
-              'data': <String, dynamic>{'name': userB.name, 'updatedAt': userB.updatedAt},
+              'data': <String, dynamic>{
+                'uid': null,
+                'name': userB.name,
+                'age': null,
+                'memos': null,
+                'updatedAt': userB.updatedAt
+              },
             },
           ),
           isMethodCall(
@@ -575,5 +649,6 @@ void main() {
         ],);
       });
     });
+
   });
 }

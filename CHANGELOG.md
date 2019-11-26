@@ -1,3 +1,6 @@
+## 0.0.8
+Added write function. Added path parameter of storage file. Updated firebase packages. Updated README.
+
 ## 0.0.7+1
 Added additionalData parameter of storage file.
 

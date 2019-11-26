@@ -12,13 +12,13 @@ class History extends Document<History> {
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeNotNull(data, 'userId', userId);
+    write(data, 'userId', userId);
     return data;
   }
 
   /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
-    this.userId = valueFromKey<String>(data, 'userId');
+    userId = valueFromKey<String>(data, 'userId');
   }
 }

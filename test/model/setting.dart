@@ -12,7 +12,7 @@ class Setting extends Document<Setting> {
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeNotNull(data, 'isEnable', isEnable);
+    write(data, 'isEnable', isEnable);
     return data;
   }
 

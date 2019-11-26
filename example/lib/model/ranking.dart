@@ -3,7 +3,10 @@ import 'package:flamingo/flamingo.dart';
 import 'count.dart';
 
 class Ranking extends Document<Ranking> {
-  Ranking({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  Ranking({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values) {
     count = Collection(this, 'count');
   }

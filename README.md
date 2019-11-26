@@ -10,7 +10,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.0.7+1
+  flamingo: ^0.0.8
 ```
 
 ## Setup
@@ -59,7 +59,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class User extends Document<User> {
-  User({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  User({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
   String name;
@@ -152,7 +155,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class MapSample extends Document<MapSample> {
-  MapSample({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  MapSample({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
   Map<String, String> strMap;
@@ -212,7 +218,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class ListSample extends Document<ListSample> {
-  ListSample({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  ListSample({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
   List<String> strList;
@@ -277,7 +286,10 @@ import 'package:flamingo/flamingo.dart';
 import 'count.dart';
 
 class Ranking extends Document<Ranking> {
-  Ranking({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  Ranking({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values) {
     // Must be create instance of Collection and set collection name.
     count = Collection(this, 'count');
@@ -309,7 +321,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class Count extends Document<Count> {
-  Count({String id, DocumentSnapshot snapshot, Map<String, dynamic> values, CollectionReference collectionRef,
+  Count({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
+    CollectionReference collectionRef,
   }): super(id: id, snapshot: snapshot, values: values, collectionRef: collectionRef);
 
   String userId;
@@ -372,7 +388,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class Post extends Document<Post> {
-  Post({String id}): super(id: id);
+  Post({
+    String id
+  }): super(id: id);
 
   // Storage
   StorageFile file;
@@ -438,7 +456,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class Score extends Document<Score> {
-  Score({String id,
+  Score({
+    String id,
   }): super(id: id) {
     // Must be create instance of Counter. Set collection name and num of shards.
     value = Counter(this, 'shards', numShards);

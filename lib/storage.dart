@@ -32,6 +32,7 @@ class Storage {
     return StorageFile(
       name: refFileName,
       url: downloadUrl,
+      path: path,
       mimeType: refMimeType,
       metadata: metadata,
     );

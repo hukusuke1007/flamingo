@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class Post extends Document<Post> {
-  Post({String id}): super(id: id);
+  Post({
+    String id
+  }): super(id: id);
 
   /// Storage
   StorageFile file;

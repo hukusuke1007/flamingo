@@ -1,7 +1,8 @@
 import 'package:flamingo/flamingo.dart';
 
 class Score extends Document<Score> {
-  Score({String id,
+  Score({
+    String id,
   }): super(id: id) {
     value = Counter(this, 'shards', numShards);
   }

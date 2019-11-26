@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class Count extends Document<Count> {
-  Count({String id, DocumentSnapshot snapshot, Map<String, dynamic> values, CollectionReference collectionRef,
+  Count({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
+    CollectionReference collectionRef,
   }): super(id: id, snapshot: snapshot, values: values, collectionRef: collectionRef);
 
   String userId;

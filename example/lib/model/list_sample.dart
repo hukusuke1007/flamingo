@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class ListSample extends Document<ListSample> {
-  ListSample({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  ListSample({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
   List<String> strList;
@@ -35,8 +38,8 @@ class ListSample extends Document<ListSample> {
   }
 
   void log() {
-    print('ListSample $id $strList $intList $doubleList $boolList');
-    files.forEach((d) => print(d.toJson()));
+    print('ListSample $id $strList $intList $doubleList $boolList $files');
+    files?.forEach((d) => print(d.toJson()));
   }
 
 }

@@ -26,25 +26,14 @@ class User extends Document<User> {
   Collection settingsA;
   Collection settingsB;
 
-  /// Storage
-  StorageFile file;
-  String folderName = 'file';
-
   /// For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeNotNull(data, 'uid', uid);
-    writeNotNull(data, 'name', name);
-    writeNotNull(data, 'age', age);
-    writeNotNull(data, 'memos', memos);
-    if (file != null) {
-      if (!file.isDeleted) {
-        data[folderName] = file.toJson();
-      } else {
-        data[folderName] = FieldValue.delete();
-      }
-    }
+    write(data, 'uid', uid);
+    write(data, 'name', name);
+    write(data, 'age', age);
+    write(data, 'memos', memos);
     return data;
   }
 
@@ -56,15 +45,12 @@ class User extends Document<User> {
       ..age = valueFromKey<int>(data, 'age')
       ..numShards = valueFromKey<int>(data, 'numShards')
       ..memos = valueListFromKey<String>(data, 'memos');
-    if (isVal(data, folderName)) {
-      file = StorageFile.fromJson(Helper.fromMap(data[folderName] as Map));
-    }
   }
 
   void log() {
     print('$id $uid $name $age $numShards $createdAt $updatedAt');
     print('$memos');
-    print('$file $settingsA $settingsB');
+    print('$settingsA $settingsB');
   }
 
 }

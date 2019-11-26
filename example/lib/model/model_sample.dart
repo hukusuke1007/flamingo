@@ -1,43 +1,44 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
-class MapSample extends Document<MapSample> {
-  MapSample({
+class ModelSample extends Document<ModelSample> {
+  ModelSample({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
+  String name;
+  List<String> strList;
   Map<String, String> strMap;
-  Map<String, int> intMap;
-  Map<String, double> doubleMap;
-  Map<String, bool> boolMap;
   List<Map<String, String>> listStrMap;
+  StorageFile file;
+  String folderName = 'file';
 
   /// For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeNotNull(data, 'strMap', strMap);
-    writeNotNull(data, 'intMap', intMap);
-    writeNotNull(data, 'doubleMap', doubleMap);
-    writeNotNull(data, 'boolMap', boolMap);
-    writeNotNull(data, 'listStrMap', listStrMap);
+    write(data, 'name', name);
+    write(data, 'strList', strList);
+    write(data, 'strMap', strMap);
+    write(data, 'listStrMap', listStrMap);
+    writeStorage(data, folderName, file);
     return data;
   }
 
   /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
+    name = valueFromKey<String>(data, 'name');
+    strList = valueListFromKey<String>(data, 'strList');
     strMap = valueMapFromKey<String, String>(data, 'strMap');
-    intMap = valueMapFromKey<String, int>(data, 'intMap');
-    doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
-    boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
     listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
+    file = storageFile(data, folderName);
   }
 
   void log() {
-    print('MapSample $id $strMap $intMap $doubleMap $boolMap $listStrMap');
+    print('ModelSample $id $name $strList $strMap $listStrMap ${file?.toJson()}');
   }
 
 }

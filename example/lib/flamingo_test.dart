@@ -5,6 +5,7 @@ import 'package:flamingo_example/model/post.dart';
 import 'package:flamingo_example/model/score.dart';
 import 'package:flamingo_example/model/map_sample.dart';
 import 'package:flamingo_example/model/list_sample.dart';
+import 'package:flamingo_example/model/model_sample.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
 
@@ -28,6 +29,7 @@ class FlamingoTest {
     await transactionDelete();
     await saveMap();
     await saveList();
+    await checkModelSample();
   }
 
   Future save() async {
@@ -286,9 +288,25 @@ class FlamingoTest {
     await documentAccessor.save(sample1);
     sample1.log();
 
-    print('  ----get');
-    final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
-    _sample1.log();
+    {
+      print('  ----get');
+      final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
+      _sample1.log();
+    }
+
+    sample1
+      ..strMap = null
+      ..intMap = null
+      ..doubleMap = null
+      ..boolMap = null
+      ..listStrMap = null;
+    await documentAccessor.save(sample1);
+
+    {
+      print('  ----get delete');
+      final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
+      _sample1.log();
+    }
   }
 
   Future saveList() async {
@@ -306,9 +324,66 @@ class FlamingoTest {
     await documentAccessor.save(sample1);
     sample1.log();
 
-    print('  ----get');
-    final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
-    _sample1.log();
+    {
+      print('  ----get');
+      final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+      _sample1.log();
+    }
+
+    sample1
+      ..strList = null
+      ..intList = null
+      ..doubleList = null
+      ..boolList = null;
+
+    sample1.files.forEach((d) => d.isDeleted = true);
+    await documentAccessor.save(sample1);
+
+    {
+      print('  ----get delete');
+      final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+      _sample1.log();
+    }
+  }
+
+  Future checkModelSample() async {
+    print('--- ModelSample ---');
+    final item = ModelSample();
+    await documentAccessor.save(item);
+    item.log();
+
+    final storage = Storage();
+    final file = await Helper.getImageFileFromAssets('sample.jpg');
+
+    // fetch for uploading status
+    storage.fetch();
+    storage.uploader.stream.listen((data){
+      // confirm status
+      print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
+    });
+
+    // save file metadata into firestore
+    final path = '${item.documentPath}/${item.folderName}';
+    item.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'});
+    await documentAccessor.save(item);
+    item.log();
+
+    {
+      print('  ----get');
+      final _item = await documentAccessor.load<ModelSample>(ModelSample(id: item.id));
+      _item.log();
+    }
+
+    {
+      print('  ----get delete file');
+      await storage.delete(path, item.file);
+      await documentAccessor.update(item);
+      final _item = await documentAccessor.load<ModelSample>(ModelSample(id: item.id));
+      _item.log();
+    }
+
+    // dispose for uploading status
+    storage.dispose();
   }
 }
 

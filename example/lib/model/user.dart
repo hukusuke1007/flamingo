@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class User extends Document<User> {
-  User({String id, DocumentSnapshot snapshot, Map<String, dynamic> values,
+  User({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
   String name;
