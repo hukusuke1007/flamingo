@@ -295,11 +295,11 @@ class FlamingoTest {
     }
 
     sample1
-      ..strMap = null
-      ..intMap = null
-      ..doubleMap = null
-      ..boolMap = null
-      ..listStrMap = null;
+      ..strMap = {}
+      ..intMap = {}
+      ..doubleMap = {}
+      ..boolMap = {}
+      ..listStrMap = [];
     await documentAccessor.save(sample1);
 
     {
@@ -331,10 +331,10 @@ class FlamingoTest {
     }
 
     sample1
-      ..strList = null
-      ..intList = null
-      ..doubleList = null
-      ..boolList = null;
+      ..strList = []
+      ..intList = []
+      ..doubleList = []
+      ..boolList = [];
 
     sample1.files.forEach((d) => d.isDeleted = true);
     await documentAccessor.save(sample1);
