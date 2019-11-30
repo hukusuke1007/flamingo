@@ -1,6 +1,7 @@
 library flamingo;
 
-import 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference, Firestore;
+import 'package:cloud_firestore/cloud_firestore.dart'
+    show DocumentReference, Firestore;
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 
 export 'package:flamingo/batch.dart';
@@ -18,11 +19,13 @@ export 'package:flamingo/model/model.dart';
 
 class Flamingo {
   static Flamingo instance = Flamingo();
-  static void configure({Firestore firestore, FirebaseStorage storage, DocumentReference root}) {
+  static void configure(
+      {Firestore firestore, FirebaseStorage storage, DocumentReference root}) {
     instance.firestore = firestore;
     instance.firebaseStorage = storage;
     instance.rootReference = root;
   }
+
   DocumentReference rootReference;
   Firestore firestore;
   FirebaseStorage firebaseStorage;

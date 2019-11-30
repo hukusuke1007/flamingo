@@ -8,4 +8,3 @@ const mimeTypeMov = 'video/quicktime';
 const mimeTypePdf = 'application/pdf';
 const mimeTypeZip = 'application/zip';
 const mimeTypeMpeg = 'audio/mpeg';
-

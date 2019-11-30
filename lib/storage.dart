@@ -5,7 +5,6 @@ import 'flamingo.dart';
 import 'helper/helper.dart';
 import 'model/storage_file.dart';
 
-
 class Storage {
   Storage() {
     storage = storageInstance();
@@ -16,12 +15,14 @@ class Storage {
   FirebaseStorage storage;
   StreamController<StorageTaskEvent> uploader;
 
-  Future<StorageFile> save(String folderPath, File data, {String fileName, String mimeType, Map<String, String> metadata}) async {
+  Future<StorageFile> save(String folderPath, File data,
+      {String fileName, String mimeType, Map<String, String> metadata}) async {
     final refFileName = fileName != null ? fileName : Storage.fileName();
     final refMimeType = mimeType != null ? mimeType : '';
     final path = '$folderPath/$refFileName';
     final ref = storage.ref().child(path);
-    final uploadTask = ref.putFile(data, StorageMetadata(contentType: refMimeType, customMetadata: metadata));
+    final uploadTask = ref.putFile(data,
+        StorageMetadata(contentType: refMimeType, customMetadata: metadata));
     uploadTask.events.listen((event) {
       if (uploader != null) {
         uploader.sink.add(event);

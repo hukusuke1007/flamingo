@@ -4,11 +4,9 @@ import 'batch.dart';
 import 'document.dart';
 
 class DocumentAccessor {
-
   Future save(Document document) async {
     try {
-      final batch = Batch()
-        ..save(document);
+      final batch = Batch()..save(document);
       await batch.commit();
     } on Exception {
       rethrow;
@@ -17,8 +15,7 @@ class DocumentAccessor {
 
   Future update(Document document) async {
     try {
-      final batch = Batch()
-        ..update(document);
+      final batch = Batch()..update(document);
       await batch.commit();
     } on Exception {
       rethrow;
@@ -27,15 +24,15 @@ class DocumentAccessor {
 
   Future delete(Document document) async {
     try {
-      final batch = Batch()
-        ..delete(document);
+      final batch = Batch()..delete(document);
       await batch.commit();
     } on Exception {
       rethrow;
     }
   }
 
-  Future<T> load<T extends Document<T>>(Document document, {Source source}) async {
+  Future<T> load<T extends Document<T>>(Document document,
+      {Source source}) async {
     try {
       Document _document;
       if (source == null) {
@@ -63,4 +60,3 @@ class DocumentAccessor {
     }
   }
 }
-

@@ -17,7 +17,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.0.10
+  flamingo: ^0.1.0
 ```
 
 ## Setup

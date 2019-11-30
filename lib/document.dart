@@ -36,7 +36,9 @@ class Document<T> extends Base implements DocumentType {
   }
 
   static String path<T extends Document<DocumentType>>({String id}) {
-    final collectionPath = Flamingo.instance.rootReference.collection(T.toString().toLowerCase()).path;
+    final collectionPath = Flamingo.instance.rootReference
+        .collection(T.toString().toLowerCase())
+        .path;
     return id != null ? '$collectionPath/$id' : collectionPath;
   }
 
@@ -78,10 +80,14 @@ class Document<T> extends Base implements DocumentType {
     return Flamingo.instance.rootReference.collection(modelName());
   }
 
-  Map<String, dynamic> toData() => <String, dynamic>{}; /// Data for save
-  void fromData(Map<String, dynamic> data){}               /// Data for load
+  Map<String, dynamic> toData() => <String, dynamic>{};
 
-  void setSnapshot(DocumentSnapshot documentSnapshot){
+  /// Data for save
+  void fromData(Map<String, dynamic> data) {}
+
+  /// Data for load
+
+  void setSnapshot(DocumentSnapshot documentSnapshot) {
     id = documentSnapshot.documentID;
     if (documentSnapshot.exists) {
       final data = documentSnapshot.data;

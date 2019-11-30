@@ -12,8 +12,12 @@ StorageFile _$StorageFileFromJson(Map<String, dynamic> json) {
     path: json['path'] as String,
     url: json['url'] as String,
     mimeType: json['mimeType'] as String,
-    additionalData: json['additionalData'] != null ? Map<String, dynamic>.from(json['additionalData'] as Map) : null,
-    metadata: json['metadata'] != null ? Map<String, String>.from(json['metadata'] as Map) : null,
+    additionalData: json['additionalData'] != null
+        ? Map<String, dynamic>.from(json['additionalData'] as Map)
+        : null,
+    metadata: json['metadata'] != null
+        ? Map<String, String>.from(json['metadata'] as Map)
+        : null,
   );
 }
 
