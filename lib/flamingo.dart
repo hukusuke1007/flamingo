@@ -1,7 +1,6 @@
 library flamingo;
 
 import 'package:cloud_firestore/cloud_firestore.dart' show DocumentReference, Firestore;
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 
 export 'package:flamingo/batch.dart';
@@ -15,7 +14,7 @@ export 'package:flamingo/master/master.dart';
 export 'package:flamingo/model/collection.dart';
 export 'package:flamingo/model/counter.dart';
 export 'package:flamingo/model/storage_file.dart';
-export 'package:flamingo/batch.dart';
+export 'package:flamingo/model/model.dart';
 
 class Flamingo {
   static Flamingo instance = Flamingo();

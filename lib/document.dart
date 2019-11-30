@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'base.dart';
 import 'flamingo.dart';
 import 'type/type.dart';
 
-class Document<T> implements DocumentType {
+class Document<T> extends Base implements DocumentType {
   /// Constructor
   Document({this.id, this.snapshot, this.values, this.collectionRef}) {
     CollectionReference collectionReference;
@@ -57,16 +58,16 @@ class Document<T> implements DocumentType {
   String documentPath;
 
   @JsonKey(ignore: true)
-  CollectionReference collectionRef;
+  final CollectionReference collectionRef;
 
   @JsonKey(ignore: true)
   DocumentReference reference;
 
   @JsonKey(ignore: true)
-  DocumentSnapshot snapshot;
+  final DocumentSnapshot snapshot;
 
   @JsonKey(ignore: true)
-  Map<String, dynamic> values;
+  final Map<String, dynamic> values;
 
   /// Public method.
   String modelName() {
@@ -88,94 +89,6 @@ class Document<T> implements DocumentType {
       fromData(data);
     }
   }
-
-  void write(Map<String, dynamic> data, String key, dynamic value) {
-    data[key] = value;
-  }
-
-  void writeNotNull(Map<String, dynamic> data, String key, dynamic value) {
-    if (value != null) {
-      data[key] = value;
-    }
-  }
-
-  void writeStorage(Map<String, dynamic> data, String key, StorageFile storageFile) => _writeStorage(
-      data,
-      key,
-      storageFile,
-      isSetNull: true
-  );
-
-  void writeStorageNotNull(Map<String, dynamic> data, String key, StorageFile storageFile) => _writeStorage(
-      data,
-      key,
-      storageFile,
-      isSetNull: false
-  );
-
-  void writeStorageList(Map<String, dynamic> data, String key, List<StorageFile> storageFiles) => _writeStorageList(
-      data,
-      key,
-      storageFiles,
-      isSetNull: true
-  );
-
-  void writeStorageListNotNull(Map<String, dynamic> data, String key, List<StorageFile> storageFiles) => _writeStorageList(
-      data,
-      key,
-      storageFiles,
-      isSetNull: false
-  );
-
-  void _writeStorage(Map<String, dynamic> data, String key, StorageFile storageFile, {bool isSetNull}) {
-    if (storageFile != null) {
-      if (!storageFile.isDeleted) {
-        data[key] = storageFile.toJson();
-      } else {
-        data[key] = isSetNull ? null : FieldValue.delete();
-      }
-    }
-  }
-
-  void _writeStorageList(Map<String, dynamic> data, String key, List<StorageFile> storageFiles, {bool isSetNull}) {
-    if (storageFiles != null && storageFiles.isNotEmpty) {
-      data[key] = storageFiles.where((d) => d.isDeleted != true).map((d) => d.toJson()).toList();
-      if ((data[key] as List).isEmpty) {
-        data[key] = isSetNull ? null : FieldValue.delete();
-      }
-    }
-  }
-
-  StorageFile storageFile(Map<String, dynamic> data, String folderName) {
-    final fileMap = valueMapFromKey<String, dynamic>(data, folderName);
-    if (fileMap != null) {
-      return StorageFile.fromJson(fileMap);
-    } else {
-      return null;
-    }
-  }
-
-  List<StorageFile> storageFiles(Map<String, dynamic> data, String folderName) {
-    final fileMapList = valueMapListFromKey<String, dynamic>(data, folderName);
-    if (fileMapList != null) {
-      return fileMapList.map((d) => StorageFile.fromJson(d)).toList();
-    } else {
-      return null;
-    }
-  }
-
-  U valueFromKey<U>(Map<String, dynamic> data, String key) => data[key] as U;
-  Map<U, V> valueMapFromKey<U, V>(Map<String, dynamic> data, String key) => isVal(data, key) && data[key] != null
-      ? Map<U, V>.from(Helper.fromMap(data[key] as Map))
-      : null;
-  List<U> valueListFromKey<U>(Map<String, dynamic> data, String key) => data[key] != null
-      ? (data[key] as List)?.map((dynamic e) => e as U)?.toList()
-      : null;
-  List<Map<U, V>> valueMapListFromKey<U, V>(Map<String, dynamic> data, String key)  => isVal(data, key) && data[key] != null
-      ? (data[key] as List).map((dynamic d) => Map<U, V>.from(d as Map)).toList()
-      : null;
-
-  bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);
 
   /// Private method
   void _fromAt(Map<String, dynamic> data) {

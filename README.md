@@ -4,13 +4,20 @@ Flamingo is a firebase firestore model framework library.
 
 [https://pub.dev/packages/flamingo](https://pub.dev/packages/flamingo)
 
+[日本語ドキュメント(T.B.D)](./README_j.md)
+
+## Example code
+See the example directory for a complete sample app using flamingo.
+
+[https://github.com/hukusuke1007/flamingo/tree/master/example](https://github.com/hukusuke1007/flamingo/tree/master/example)
+
 ## Installation
 
 Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.0.9
+  flamingo: ^0.0.10
 ```
 
 ## Setup
@@ -52,7 +59,7 @@ final root = firestore.collection('version').document('1');
 Flamingo.configure(firestore: firestore, storage: storage, root: root);
 ```
 
-Create model class that inherited Document. And add json mapping code into override functions.
+Create class that inherited **Document**. And add json mapping code into override functions.
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -82,6 +89,7 @@ class User extends Document<User> {
   }
 }
 ```
+
 ### Initialization
 
 ```dart
@@ -131,6 +139,7 @@ final user = User(id: '0000');  // need to 'id'.
 final hoge = await documentAccessor.load<User>(user);
 ```
 
+
 Get documents in collection.
 
 ```dart
@@ -150,132 +159,216 @@ final listB = snapshot.documents.map((item) => User(id: item.documentID, values:
   });
 ```
 
-### Map objects
+### Model of map object
 
-Create the following model class.
+Example, Owner's document object is the following json.
+
+```json
+{
+  "name": "owner",
+  "address": {
+    "postCode": "0000",
+    "country": "japan"
+  },
+  "medals": [
+    {"name": "gold"},
+    {"name": "silver"},
+    {"name": "bronze"}
+  ]
+}
+```
+
+Owner that inherited **Document** has model of map object.
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flamingo/flamingo.dart';
-
-class MapSample extends Document<MapSample> {
-  MapSample({
+class Owner extends Document<Owner> {
+  Owner({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values);
 
-  Map<String, String> strMap;
-  Map<String, int> intMap;
-  Map<String, double> doubleMap;
-  Map<String, bool> boolMap;
-  List<Map<String, String>> listStrMap;
+  String name;
+
+  // Model of map object
+  Address address;
+  List<Medal> medals;
 
   /// For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeNotNull(data, 'strMap', strMap);
-    writeNotNull(data, 'intMap', intMap);
-    writeNotNull(data, 'doubleMap', doubleMap);
-    writeNotNull(data, 'boolMap', boolMap);
-    writeNotNull(data, 'listStrMap', listStrMap);
+    writeNotNull(data, 'name', name);
+    writeModelNotNull(data, 'address', address);  // For model.
+    writeModelListNotNull(data, 'medals', medals); // For model list.
     return data;
   }
 
   /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
-    strMap = valueMapFromKey<String, String>(data, 'strMap');
-    intMap = valueMapFromKey<String, int>(data, 'intMap');
-    doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
-    boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
-    listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
+    name = valueFromKey<String>(data, 'name');
+    address = Address(values: valueMapFromKey<String, String>(data, 'address')); // For model
+    medals = valueMapListFromKey<String, String>(data, 'medals') // For model list.
+        .where((d) => d != null)
+        .map((d) => Medal(values: d))
+        .toList();
   }
 }
 ```
 
-And save and load documents. 
+Create class that inherited **Model**.
 
 ```dart
-final sample1 = MapSample()
-  ..strMap = {'userId1': 'tanaka', 'userId2': 'hanako', 'userId3': 'shohei',}
-  ..intMap = {'userId1': 0, 'userId2': 1, 'userId3': 2,}
-  ..doubleMap = {'userId1': 1.02, 'userId2': 0.14, 'userId3': 0.89,}
-  ..boolMap = {'userId1': true, 'userId2': true, 'userId3': true,}
-  ..listStrMap = [
-    {'userId1': 'tanaka', 'userId2': 'hanako',},
-    {'adminId1': 'shohei', 'adminId2': 'tanigawa',},
-    {'managerId1': 'ueno', 'managerId2': 'yoshikawa',},
-  ];
-await documentAccessor.save(sample1);
-
-final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
-```
-
-### List
-
-Create the following model class.
-
-```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flamingo/flamingo.dart';
-
-class ListSample extends Document<ListSample> {
-  ListSample({
-    String id,
-    DocumentSnapshot snapshot,
+class Address extends Model {
+  Address({
+    this.postCode,
+    this.country,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }): super(values: values);
 
-  List<String> strList;
-  List<int> intList;
-  List<double> doubleList;
-  List<bool> boolList;
-  List<StorageFile> files;
-  String folderName = 'files';
+  String postCode;
+  String country;
 
   /// For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeNotNull(data, 'strList', strList);
-    writeNotNull(data, 'intList', intList);
-    writeNotNull(data, 'doubleList', doubleList);
-    writeNotNull(data, 'boolList', boolList);
-    writeStorageList(data, folderName, files);
+    writeNotNull(data, 'postCode', postCode);
+    writeNotNull(data, 'country', country);
     return data;
   }
 
   /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
-    strList = valueListFromKey<String>(data, 'strList');
-    intList = valueListFromKey<int>(data, 'intList');
-    doubleList = valueListFromKey<double>(data, 'doubleList');
-    boolList = valueListFromKey<bool>(data, 'boolList');
-    files = storageFiles(data, folderName);
+    postCode = valueFromKey<String>(data, 'postCode');
+    country = valueFromKey<String>(data, 'country');
+  }
+
+}
+```
+
+
+```dart
+class Medal extends Model {
+  Medal({
+    this.name,
+    Map<String, dynamic> values,
+  }): super(values: values);
+
+  String name;
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeNotNull(data, 'name', name);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    name = valueFromKey<String>(data, 'name');
   }
 }
 ```
 
-And save and load documents. 
+Example of usage.
 
 ```dart
-final sample1 = ListSample()
-  ..strList = ['userId1', 'userId2', 'userId3',]
-  ..intList = [0, 1, 2,]
-  ..doubleList = [0.0, 0.1, 0.2,]
-  ..boolList = [true, false, true,]
-  ..files = [
-    StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
-    StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
-    StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+// save
+final owner = Owner()
+  ..name = 'owner'
+  ..address = Address(
+    postCode: '0000',
+    country: 'japan',
+  )
+  ..medals = [
+    Medal(name: 'gold',),
+    Medal(name: 'silver',),
+    Medal(name: 'bronze',),
   ];
-await documentAccessor.save(sample1);
-sample1.log();
 
-final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+await documentAccessor.save(owner);
+
+// load
+final _owner = await documentAccessor.load<Owner>(Owner(id: owner.id));
+print('id: ${_owner.id}, name: ${_owner.name}');
+print('address: ${_owner.id} ${_owner.address.postCode} ${_owner.address.country}');
+print('medals: ${_owner.medals.map((d) => d.name)}');
+```
+
+<a href="https://imgur.com/O9f1LOb"><img src="https://i.imgur.com/O9f1LOb.png" width="90%" /></a>
+
+### Snapshot Listener 
+
+Listen snapshot of document.
+
+```dart
+// Listen
+final user = User(id: '0')
+  ..name = 'hoge';
+
+final dispose = user.reference.snapshots().listen((snap) {
+  final user = User(snapshot: snap);
+  print('${user.id}, ${user.name}');
+});
+
+// Save, update, delete
+DocumentAccessor documentAccessor = DocumentAccessor();
+await documentAccessor.save(user);
+
+user.name = 'fuga';
+await documentAccessor.update(user);
+
+await documentAccessor.delete(user);
+
+await dispose.cancel();
+```
+
+Listen snapshot of collection documents.
+
+Need to import cloud_firestore.
+
+```
+import 'package:cloud_firestore/cloud_firestore.dart';
+```
+
+```dart
+// Listen
+final path = Document.path<User>();
+final query = firestoreInstance().collection(path).limit(20);
+final dispose = query.snapshots().listen((querySnapshot) {
+  for (var change in querySnapshot.documentChanges) {
+    if (change.type == DocumentChangeType.added ) {
+      print('added ${change.document.documentID}');
+    }
+    if (change.type == DocumentChangeType.modified) {
+      print('modified ${change.document.documentID}');
+    }
+    if (change.type == DocumentChangeType.removed) {
+      print('removed ${change.document.documentID}');
+    }
+  }
+  final _ = querySnapshot.documents.map((item) => User(snapshot: item)).toList()
+    ..forEach((item) => print('${item.id}, ${item.name}'));
+});
+
+// Save, update, delete
+final user = User(id: '0')
+  ..name = 'hoge';
+
+DocumentAccessor documentAccessor = DocumentAccessor();
+await documentAccessor.save(user);
+
+user.name = 'fuga';
+await documentAccessor.update(user);
+
+await documentAccessor.delete(user);
+
+await dispose.cancel();
 ```
 
 ### Sub Collection
@@ -533,11 +626,138 @@ Transaction.run((transaction) async {
 });
 ```
 
-## Getting Started
-See the example directory for a complete sample app using flamingo.
 
+### Objects for model
+
+#### Map objects
+
+Create the following model class.
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/flamingo.dart';
+
+class MapSample extends Document<MapSample> {
+  MapSample({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
+  }): super(id: id, snapshot: snapshot, values: values);
+
+  Map<String, String> strMap;
+  Map<String, int> intMap;
+  Map<String, double> doubleMap;
+  Map<String, bool> boolMap;
+  List<Map<String, String>> listStrMap;
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeNotNull(data, 'strMap', strMap);
+    writeNotNull(data, 'intMap', intMap);
+    writeNotNull(data, 'doubleMap', doubleMap);
+    writeNotNull(data, 'boolMap', boolMap);
+    writeNotNull(data, 'listStrMap', listStrMap);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    strMap = valueMapFromKey<String, String>(data, 'strMap');
+    intMap = valueMapFromKey<String, int>(data, 'intMap');
+    doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
+    boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
+    listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
+  }
+}
+```
+
+And save and load documents. 
+
+```dart
+final sample1 = MapSample()
+  ..strMap = {'userId1': 'tanaka', 'userId2': 'hanako', 'userId3': 'shohei',}
+  ..intMap = {'userId1': 0, 'userId2': 1, 'userId3': 2,}
+  ..doubleMap = {'userId1': 1.02, 'userId2': 0.14, 'userId3': 0.89,}
+  ..boolMap = {'userId1': true, 'userId2': true, 'userId3': true,}
+  ..listStrMap = [
+    {'userId1': 'tanaka', 'userId2': 'hanako',},
+    {'adminId1': 'shohei', 'adminId2': 'tanigawa',},
+    {'managerId1': 'ueno', 'managerId2': 'yoshikawa',},
+  ];
+await documentAccessor.save(sample1);
+
+final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
+```
+
+#### List
+
+Create the following model class.
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/flamingo.dart';
+
+class ListSample extends Document<ListSample> {
+  ListSample({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
+  }): super(id: id, snapshot: snapshot, values: values);
+
+  List<String> strList;
+  List<int> intList;
+  List<double> doubleList;
+  List<bool> boolList;
+  List<StorageFile> files;
+  String folderName = 'files';
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeNotNull(data, 'strList', strList);
+    writeNotNull(data, 'intList', intList);
+    writeNotNull(data, 'doubleList', doubleList);
+    writeNotNull(data, 'boolList', boolList);
+    writeStorageList(data, folderName, files);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    strList = valueListFromKey<String>(data, 'strList');
+    intList = valueListFromKey<int>(data, 'intList');
+    doubleList = valueListFromKey<double>(data, 'doubleList');
+    boolList = valueListFromKey<bool>(data, 'boolList');
+    files = storageFiles(data, folderName);
+  }
+}
+```
+
+And save and load documents. 
+
+```dart
+final sample1 = ListSample()
+  ..strList = ['userId1', 'userId2', 'userId3',]
+  ..intList = [0, 1, 2,]
+  ..doubleList = [0.0, 0.1, 0.2,]
+  ..boolList = [true, false, true,]
+  ..files = [
+    StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+    StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+    StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+  ];
+await documentAccessor.save(sample1);
+sample1.log();
+
+final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+```
 
 ## Reference
-- [Firebase for flutter](https://firebase.google.com/docs/flutter/setup)
+- [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)
 - [Ballcap for iOS](https://github.com/1amageek/Ballcap-iOS)
 - [Ballcap for TypeScript](https://github.com/1amageek/ballcap.ts)

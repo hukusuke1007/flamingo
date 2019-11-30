@@ -1,11 +1,15 @@
 import 'package:flamingo/flamingo.dart';
-import 'package:flamingo/transaction.dart';
+import 'package:flamingo/transaction.dart' as flamingo;
 import 'package:flamingo_example/model/count.dart';
 import 'package:flamingo_example/model/post.dart';
 import 'package:flamingo_example/model/score.dart';
 import 'package:flamingo_example/model/map_sample.dart';
 import 'package:flamingo_example/model/list_sample.dart';
 import 'package:flamingo_example/model/model_sample.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'model/address.dart';
+import 'model/medal.dart';
+import 'model/owner.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
 
@@ -30,6 +34,8 @@ class FlamingoTest {
     await saveMap();
     await saveList();
     await checkModelSample();
+    await listenerSample();
+    await model();
   }
 
   Future save() async {
@@ -245,7 +251,7 @@ class FlamingoTest {
 
   Future transactionSave() async {
     print('--- transactionSave ---');
-    Transaction.run((transaction) async {
+    flamingo.Transaction.run((transaction) async {
       final user = User()
         ..name = 'transaction';
       await transaction.set(user.reference, user.toData());
@@ -260,7 +266,7 @@ class FlamingoTest {
     await documentAccessor.save(hoge);
     hoge.log();
 
-    Transaction.run((transaction) async {
+    flamingo.Transaction.run((transaction) async {
       final user = User(id: hoge.id)
         ..name = 'transactionAA';
       await transaction.update(user.reference, user.toData());
@@ -275,7 +281,7 @@ class FlamingoTest {
     await documentAccessor.save(hoge);
     hoge.log();
 
-    Transaction.run((transaction) async {
+    flamingo.Transaction.run((transaction) async {
       await transaction.delete(User(id: hoge.id).reference);
     });
   }
@@ -398,6 +404,80 @@ class FlamingoTest {
 
     // dispose for uploading status
     storage.dispose();
+  }
+
+  Future listenerSample() async {
+    print('--- listenerSample ---');
+
+    /// Collection
+    final path = Document.path<User>();
+    final query = firestoreInstance().collection(path).limit(20);
+    final collectionDispose = query.snapshots().listen((querySnapshot) {
+      print('--- Listen of collection documents ---');
+      for (var change in querySnapshot.documentChanges) {
+        if (change.type == DocumentChangeType.added ) {
+          print('added ${change.document.documentID}');
+        }
+        if (change.type == DocumentChangeType.modified) {
+          print('modified ${change.document.documentID}');
+        }
+        if (change.type == DocumentChangeType.removed) {
+          print('removed ${change.document.documentID}');
+        }
+      }
+      final _ = querySnapshot.documents.map((item) => User(snapshot: item)).toList()
+        ..forEach((item) => print('${item.id}, ${item.name}'));
+    });
+
+
+    /// Document
+    final user = User(id: '0')
+      ..name = 'hoge';
+
+    final dispose = user.reference.snapshots().listen((snap) {
+      print('--- Listen of document ---');
+      print('snap: ${snap.documentID} ${snap.data}');
+      final user = User(snapshot: snap);
+      print('${user.id}, ${user.name}');
+    });
+
+    print('--- save ---');
+    await documentAccessor.save(user);
+
+    print('--- update ---');
+    user.name = 'fuga';
+    await documentAccessor.update(user);
+
+    print('--- delete ---');
+    await documentAccessor.delete(user);
+
+    await dispose.cancel();
+    await collectionDispose.cancel();
+  }
+
+  Future model() async {
+    print('--- model ---');
+    final owner = Owner()
+      ..name = 'owner'
+      ..address = Address(
+        postCode: '0000',
+        country: 'japan',
+      )
+      ..medals = [
+        Medal(name: 'gold',),
+        Medal(name: 'silver',),
+        Medal(name: 'bronze',),
+      ];
+    
+    print('--- save ---');
+    print('${owner.id}');
+    await documentAccessor.save(owner);
+
+    print('--- load ---');
+    final _owner = await documentAccessor.load<Owner>(Owner(id: owner.id));
+    print('id: ${_owner.id}, name: ${_owner.name}');
+    print('address: ${_owner.id} ${_owner.address.postCode} ${_owner.address.country}');
+    print('medals: ${_owner.medals.map((d) => d.name)}');
   }
 }
 

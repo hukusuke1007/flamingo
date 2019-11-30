@@ -1,3 +1,6 @@
+## 0.0.10
+Add model class of map object. Updated and README.
+
 ## 0.0.9
 Updated load of DocumentAccessor and README.
 
