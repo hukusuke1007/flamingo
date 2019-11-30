@@ -6,9 +6,9 @@ import 'package:path_provider/path_provider.dart';
 
 class Helper {
   static Map<String, dynamic> fromMap(Map map) => Map<String, dynamic>.from(map);
-  static Future<File> getImageFileFromAssets(String path) async {
-    final byteData = await rootBundle.load('assets/$path');
-    final file = File('${(await getTemporaryDirectory()).path}/$path');
+  static Future<File> getImageFileFromAssets(String path, String name) async {
+    final byteData = await rootBundle.load('$path/$name');
+    final file = File('${(await getTemporaryDirectory()).path}/$name');
     await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
     return file;
   }

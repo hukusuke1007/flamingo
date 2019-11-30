@@ -37,22 +37,27 @@ class DocumentAccessor {
 
   Future<T> load<T extends Document<T>>(Document document, {Source source}) async {
     try {
+      Document _document;
       if (source == null) {
-        await _load(document, Source.serverAndCache);
+        _document = await _load(document, Source.serverAndCache);
       } else {
-        await _load(document, source);
+        _document = await _load(document, source);
       }
-      return document as T;
+      return _document as T;
     } on Exception {
       rethrow;
     }
   }
 
-  Future _load(Document document, Source source) async {
+  Future<Document> _load(Document document, Source source) async {
     try {
       final documentSnapshot = await document.reference.get(source: source);
 //      print('snapshot ${documentSnapshot.data}');
-      document.setSnapshot(documentSnapshot);
+      if (documentSnapshot.data != null) {
+        document.setSnapshot(documentSnapshot);
+        return document;
+      }
+      return null;
     } on Exception {
       rethrow;
     }

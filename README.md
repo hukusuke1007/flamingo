@@ -10,7 +10,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.0.8
+  flamingo: ^0.0.9
 ```
 
 ## Setup
@@ -117,6 +117,10 @@ final batch = Batch()
   ..delete(user);
 await batch.commit();
 ```
+
+If save a document, please check firestore console.
+
+<a href="https://imgur.com/tlmwnrr"><img src="https://i.imgur.com/tlmwnrr.png" width="90%" /></a>
 
 
 Get a document.
@@ -352,10 +356,8 @@ class Count extends Document<Count> {
 #### Save and Get sub collection.
 
 ```dart
-// Save ranking document
 final ranking = Ranking(id: '20201007')
   ..title = 'userRanking';
-await documentAccessor.save(ranking);
 
 // Save sub collection of ranking document
 final countA = Count(collectionRef: ranking.count.ref)
@@ -365,6 +367,7 @@ final countB = Count(collectionRef: ranking.count.ref)
   ..userId = '1'
   ..count = 100;
 final batch = Batch()
+  ..save(ranking)
   ..save(countA)
   ..save(countB);
 await batch.commit();
@@ -417,22 +420,22 @@ Upload file to Firebase Storage.
 ```dart
 final post = Post();
 final storage = Storage();
-final file = await Helper.getImageFileFromAssets('sample.jpg');
+final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
 
-// fetch uploader stream
+// Fetch uploader stream
 storage.fetch();
 
-// confirm status
+// Checking status
 storage.uploader.stream.listen((data){
   print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
 });
 
-// upload file into firebase storage and save file metadata into firestore
+// Upload file into firebase storage and save file metadata into firestore
 final path = '${post.documentPath}/${post.folderName}';
 post.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'}); // 'mimeType' is defined in master/master.dart
 await documentAccessor.save(post);
 
-// dispose uploader stream
+// Dispose uploader stream
 storage.dispose();
 ```
 
@@ -459,24 +462,28 @@ class Score extends Document<Score> {
   Score({
     String id,
   }): super(id: id) {
-    // Must be create instance of Counter. Set collection name and num of shards.
     value = Counter(this, 'shards', numShards);
   }
 
-  // DistributedCounter
+  /// Document
+  String userId;
+
+  /// DistributedCounter
   int numShards = 10;
   Counter value;
 
-  // For save data
+  /// For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
+    writeNotNull(data, 'userId', userId);
     return data;
   }
 
-  // For load data
+  /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
+    userId = valueFromKey<String>(data, 'userId');
   }
 }
 ```
@@ -484,22 +491,22 @@ class Score extends Document<Score> {
 Create and increment and load.
 
 ```dart
-// Create document before set distributed counter.
+/// Create
 final score = Score()
+  ..userId = '0001';
 await documentAccessor.save(score);
 
-// create
 final distributedCounter = DistributedCounter();
 await distributedCounter.create(score.value);
 
-// increment
+/// Increment
 for (var i = 0; i < 10; i++) {
   await distributedCounter.increment(score.value, count: 1);
 }
 
-// get
+/// Load
 final count = await distributedCounter.load(score.value);
-print('count $count ${score.value.count}'); // count 10 10
+print('count $count ${score.value.count}');
 ```
 
 ### Transaction

@@ -1,3 +1,6 @@
+## 0.0.9
+Updated load of DocumentAccessor and README.
+
 ## 0.0.8
 Added write function. Added path parameter of storage file. Updated firebase packages. Updated README.
 

@@ -1,6 +1,6 @@
 name: flamingo
 description: Flamingo is a firesbase firestore model framework library.
-version: 0.0.8
+version: 0.0.9
 author: shohei <hukusuke1007@gmail.com>
 homepage: https://twitter.com/hobbydevelop
 repository: https://github.com/hukusuke1007/flamingo

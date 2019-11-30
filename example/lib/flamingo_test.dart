@@ -39,8 +39,8 @@ class FlamingoTest {
     await documentAccessor.save(user);
     user.log();
 
-    final hoge = await documentAccessor.load<User>(User(id: user.id));
-    hoge.log();
+    final _user = await documentAccessor.load<User>(User(id: user.id));
+    _user.log();
   }
 
   Future update() async {
@@ -48,12 +48,14 @@ class FlamingoTest {
     final user = User()
       ..name = 'hoge';
     await documentAccessor.save(user);
+    user.log();
 
-    user.name = 'fuge';
-    await documentAccessor.update(user);
+    final updateUser = User(id: user.id)
+      ..name = 'fuga';
+    await documentAccessor.update(updateUser);
 
-    final hoge = await documentAccessor.load<User>(User(id: user.id));
-    hoge.log();
+    final _user = await documentAccessor.load<User>(User(id: user.id));
+    _user.log();
   }
 
   Future delete() async {
@@ -63,9 +65,9 @@ class FlamingoTest {
     await documentAccessor.save(user);
     user.log();
 
-    await documentAccessor.delete(user);
-    final hoge = await documentAccessor.load<User>(User(id: user.id));
-    hoge.log();
+    await documentAccessor.delete(User(id: user.id));
+    final _user = await documentAccessor.load<User>(User(id: user.id));
+    print(_user);
   }
 
   Future batchSave() async {
@@ -73,7 +75,7 @@ class FlamingoTest {
     final userA = User()
       ..name = 'hoge';
     final userB = User()
-      ..name = 'fuge';
+      ..name = 'fuga';
     final batch = Batch()
       ..save(userA)
       ..save(userB);
@@ -87,7 +89,7 @@ class FlamingoTest {
     final userA = User()
       ..name = 'hoge';
     final userB = User()
-      ..name = 'fuge';
+      ..name = 'fuga';
     final batch = Batch()
       ..save(userA)
       ..save(userB);
@@ -105,9 +107,9 @@ class FlamingoTest {
       ..delete(userB);
     await batch.commit();
 
-    final fuge = await documentAccessor.load<User>(User(id: userB.id));
+    final _user = await documentAccessor.load<User>(User(id: userB.id));
     hoge.log();
-    fuge.log();
+    print(_user);
   }
 
   Future getAndUpdate() async {
@@ -140,9 +142,6 @@ class FlamingoTest {
     print('--- subCollection ---');
     final ranking = Ranking(id: '20201007')
       ..title = 'userRanking';
-    await documentAccessor.save(ranking);
-    ranking.log();
-
     final countA = Count(collectionRef: ranking.count.ref)
       ..userId = '0'
       ..count = 10;
@@ -150,6 +149,7 @@ class FlamingoTest {
       ..userId = '1'
       ..count = 100;
     final batch = Batch()
+      ..save(ranking)
       ..save(countA)
       ..save(countB);
     await batch.commit();
@@ -168,7 +168,7 @@ class FlamingoTest {
     print('--- saveStorage ---');
     final post = Post();
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('sample.jpg');
+    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
@@ -179,7 +179,14 @@ class FlamingoTest {
 
     // save file metadata into firestore
     final path = '${post.documentPath}/${post.folderName}';
-    post.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'});
+    post.file = await storage.save(
+      path,
+      file,
+      mimeType: mimeTypePng,
+      metadata: {
+        'newPost': 'true'
+      }
+    );
     post.file.additionalData = <String, dynamic>{
       'key0': 'key',
       'key1': 10,
@@ -201,7 +208,7 @@ class FlamingoTest {
     print('--- deleteStorage ---');
     final post = Post();
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('sample.jpg');
+    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
     final path = '${post.documentPath}/${post.folderName}';
     post.file = await storage.save(path, file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
@@ -353,7 +360,7 @@ class FlamingoTest {
     item.log();
 
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('sample.jpg');
+    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
@@ -364,7 +371,14 @@ class FlamingoTest {
 
     // save file metadata into firestore
     final path = '${item.documentPath}/${item.folderName}';
-    item.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'});
+    item.file = await storage.save(
+      path,
+      file,
+      mimeType: mimeTypePng,
+      metadata: {
+        'newPost': 'true'
+      }
+    );
     await documentAccessor.save(item);
     item.log();
 
