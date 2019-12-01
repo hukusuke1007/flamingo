@@ -17,7 +17,7 @@ Add this to your package's pubspec.yaml file:
 
 ```
 dependencies:
-  flamingo: ^0.1.0+1
+  flamingo: ^0.1.1
 ```
 
 ## Setup
@@ -607,9 +607,7 @@ print('count $count ${score.value.count}');
 This api is simply wrap transaction function of Firestore.
 
 ```dart
-import 'package:flamingo/transaction.dart';
-
-Transaction.run((transaction) async {
+RunTransaction.scope((transaction) async {
   final hoge = User()
     ..name = 'hoge';
 

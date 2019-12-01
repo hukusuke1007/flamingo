@@ -1,5 +1,4 @@
 import 'package:flamingo/flamingo.dart';
-import 'package:flamingo/transaction.dart' as flamingo;
 import 'package:flamingo_example/model/count.dart';
 import 'package:flamingo_example/model/post.dart';
 import 'package:flamingo_example/model/score.dart';
@@ -251,7 +250,7 @@ class FlamingoTest {
 
   Future transactionSave() async {
     print('--- transactionSave ---');
-    flamingo.Transaction.run((transaction) async {
+    RunTransaction.scope((transaction) async {
       final user = User()
         ..name = 'transaction';
       await transaction.set(user.reference, user.toData());
@@ -266,11 +265,10 @@ class FlamingoTest {
     await documentAccessor.save(hoge);
     hoge.log();
 
-    flamingo.Transaction.run((transaction) async {
+    RunTransaction.scope((transaction) async {
       final user = User(id: hoge.id)
         ..name = 'transactionAA';
       await transaction.update(user.reference, user.toData());
-      user.log();
     });
   }
 
@@ -281,7 +279,7 @@ class FlamingoTest {
     await documentAccessor.save(hoge);
     hoge.log();
 
-    flamingo.Transaction.run((transaction) async {
+    RunTransaction.scope((transaction) async {
       await transaction.delete(User(id: hoge.id).reference);
     });
   }

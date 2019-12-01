@@ -9,7 +9,7 @@ export 'package:flamingo/distributed_counter.dart';
 export 'package:flamingo/document.dart';
 export 'package:flamingo/document_accessor.dart';
 export 'package:flamingo/storage.dart';
-//export 'package:flamingo/transaction.dart';
+export 'package:flamingo/run_transaction.dart';
 export 'package:flamingo/helper/helper.dart';
 export 'package:flamingo/master/master.dart';
 export 'package:flamingo/model/collection.dart';
