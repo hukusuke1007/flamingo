@@ -1,34 +1,26 @@
 # Flamingo
 
-Flamingo is a firebase firestore model framework library.
+Flamingoを利用したサンプルコードは[こちら](https://github.com/hukusuke1007/flamingo/tree/master/example)です。
 
-[https://pub.dev/packages/flamingo](https://pub.dev/packages/flamingo)
+## 事前準備
+予め利用するプロジェクトへFirebaseの設定を行います。公式リファレンスのステップ１〜ステップ３までを実施してください。
 
-[日本語ドキュメント](./README_j.md)
+[Flutter アプリに Firebase を追加する](https://firebase.google.com/docs/flutter/setup?hl=ja)
 
-## Example code
-See the example directory for a complete sample app using flamingo.
+## インストール
 
-[https://github.com/hukusuke1007/flamingo/tree/master/example](https://github.com/hukusuke1007/flamingo/tree/master/example)
-
-## Installation
-
-Add this to your package's pubspec.yaml file:
+pubspec.yamlへFlamingoをインストールします。
 
 ```
 dependencies:
   flamingo:
 ```
 
-## Setup
-Please check Setup of cloud_firestore.<br>
-[https://pub.dev/packages/cloud_firestore](https://pub.dev/packages/cloud_firestore#setup)
+## 使い方
 
-## Usage
+### 初期設定
 
-Adding a configure code to main.dart.
-
-### Initialize
+ルートとなるコレクションとFirestoreとCloudStorageのインスタンスを設定します。
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,23 +35,11 @@ void main() {
 }
 ```
 
-Also be able to set app to firebase instance.
+### モデルクラスの作成
 
-```dart
-final app = await FirebaseApp.configure(
-  name: 'appName',
-  options: const FirebaseOptions(
-    googleAppID: '1:1234567890:ios:42424242424242',
-    gcmSenderID: '1234567890',
-  ),
-);
-final firestore = Firestore(app: app);
-final storage = FirebaseStorage(app: app);
-final root = firestore.collection('version').document('1');
-Flamingo.configure(firestore: firestore, storage: storage, root: root);
-```
+Userのモデルクラスを作成します。
 
-Create class that inherited **Document**. And add json mapping code into override functions.
+Firestoreへ書き込みするデータを設定するオーバーライドメソッド（toData）と、Firestoreからデータを取得してモデルクラスのフィールドへマッピングするオーバーライドメソッド（fromData）を実装します。
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -90,18 +70,15 @@ class User extends Document<User> {
 }
 ```
 
-### Initialization
+toDataとfromDataを実装しなければFirestoreへの読み書きができないので実装は必須です。
 
-```dart
-final user = User();
-print(user.id); // id: Create document id;
-
-final user = User(id: '0000');
-print(user.id); // id: '0000'
-```
+（本当はライブラリ内でこれらのマッピング処理を完結したかったのですが、Dartでの実現手段がわかっていないのでtoDataとfromDataでマッピング処理を実装していただく形になっています。実現手段が見つかりましたらライブラリ内で自動マッピングできるようにアップデートしたいと思います）
 
 ### CRUD
-Using DocumentAccessor or Batch or Transaction in order to CRUD.
+
+Document への操作は、Flamingoが提供する DocumentAccessor を利用します。
+
+#### 書き込み
 
 ```dart
 final user = User()
@@ -109,38 +86,62 @@ final user = User()
 
 DocumentAccessor documentAccessor = DocumentAccessor();
 
-// save
 await documentAccessor.save(user);
-
-// update
-await documentAccessor.update(user);
-
-// delete
-await documentAccessor.delete(user);
-
-// Batch
-final batch = Batch()
-  ..save(user)
-  ..update(user);
-  ..delete(user);
-await batch.commit();
 ```
 
-If save a document, please check firestore console.
+Userの id を指定しなかった場合は自動で生成されます。例では'EYkOA3gBsWGbuWxOmbf0'が生成。
+
+Firestoreへ次のように保存されます。
 
 <a href="https://imgur.com/tlmwnrr"><img src="https://i.imgur.com/tlmwnrr.png" width="90%" /></a>
 
 
-Get a document.
+#### 読み込み
 
 ```dart
-// get
-final user = User(id: '0000');  // need to 'id'.
-final hoge = await documentAccessor.load<User>(user);
+DocumentAccessor documentAccessor = DocumentAccessor();
+final user = await documentAccessor.load<User>(User(id: 'EYkOA3gBsWGbuWxOmbf0'));
+print(user.name) // hoge
 ```
 
+#### 更新
 
-Get documents in collection.
+```dart
+final user = User(id: 'EYkOA3gBsWGbuWxOmbf0')
+      ..name = 'fuga';
+
+DocumentAccessor documentAccessor = DocumentAccessor();
+await documentAccessor.update(user);
+```
+
+#### 削除
+
+```dart
+DocumentAccessor documentAccessor = DocumentAccessor();
+await documentAccessor.delete(User(id: 'EYkOA3gBsWGbuWxOmbf0'));
+```
+
+### Batchを使って一括操作
+
+Batchを使えば複数のドキュメント操作を一括でできます。
+
+```dart
+final userA = User(id: '0')
+      ..name = 'hoge';
+final userB = User(id: '1')
+      ..name = 'fuga';
+final userC = User(id: '2');
+
+final batch = Batch()
+  ..save(userA)
+  ..update(userB)
+  ..delete(userC);
+await batch.commit();
+```
+
+### Collection
+
+Flamingoではコレクション操作をラップしたインターフェースは作っていません。そのため、Flamingoに設定したFirestoreインスタンス経由でCollection操作を行います。
 
 ```dart
 final path = Document.path<User>();
@@ -159,9 +160,14 @@ final listB = snapshot.documents.map((item) => User(id: item.documentID, values:
   });
 ```
 
-### Model of map object
+コレクションから取得した DocumentSnapshot をモデルクラスのパラメータに渡すことでマッピングされます。また、**Algolia**などの外部サービスを使うことを考慮してMap<String, dynamic>型のvaluesもマッピングできるようにしています。
 
-Example, Owner's document object is the following json.
+
+### Mapのモデル
+
+Mapオブジェクトのモデルクラスを作成できます。
+
+例として Owner のドキュメントが次のデータ構造の場合を考えてみます。
 
 ```json
 {
@@ -178,7 +184,7 @@ Example, Owner's document object is the following json.
 }
 ```
 
-Owner that inherited **Document** has model of map object.
+実装例は次の通りです。
 
 ```dart
 class Owner extends Document<Owner> {
@@ -217,7 +223,7 @@ class Owner extends Document<Owner> {
 }
 ```
 
-Create class that inherited **Model**.
+Mapオブジェクトを管理するモデルクラスを作成します。
 
 ```dart
 class Address extends Model {
@@ -275,7 +281,7 @@ class Medal extends Model {
 }
 ```
 
-Example of usage.
+documentAccessor を使って保存取得する例です。
 
 ```dart
 // save
@@ -302,9 +308,9 @@ print('medals: ${_owner.medals.map((d) => d.name)}');
 
 <a href="https://imgur.com/O9f1LOb"><img src="https://i.imgur.com/O9f1LOb.png" width="90%" /></a>
 
-### Snapshot Listener 
+### Snapshot Listener
 
-Listen snapshot of document.
+モデルクラスの reference を用いることでドキュメントの作成、更新、削除のイベントを監視できます。
 
 ```dart
 // Listen
@@ -328,9 +334,9 @@ await documentAccessor.delete(user);
 await dispose.cancel();
 ```
 
-Listen snapshot of collection documents.
+コレクションのスナップショットも監視することができます。
 
-Need to import cloud_firestore.
+DocumentChangeType を利用する場合は cloud_firestore をインポートしてください。
 
 ```
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -371,11 +377,17 @@ await documentAccessor.delete(user);
 await dispose.cancel();
 ```
 
+
 ### Sub Collection
 
-For example, ranking document has count collection.
+モデルクラスにCollectionを持たせることもできます。
 
-#### Ranking model
+例として、Rankingモデル が Countモデル のCollectionを持った構造を考えてみます。
+
+#### モデルクラスを作成
+
+Sub Collectionにしたいフィールドを Collection の型で指定します（※1）。
+また、Sub Collectionに親のリファレンスとコレクション名を指定する必要があるため、Rankingのコンストラクタ内でCollectionの初期化をします（※2）。
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -388,14 +400,14 @@ class Ranking extends Document<Ranking> {
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
   }): super(id: id, snapshot: snapshot, values: values) {
-    // Must be create instance of Collection and set collection name.
+    // ※2 Must be create instance of Collection and set collection name.
     count = Collection(this, 'count');
   }
 
   String title;
-  Collection<Count> count;
+  Collection<Count> count; // ※1
 
-  /// For save data
+  // For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
@@ -403,7 +415,7 @@ class Ranking extends Document<Ranking> {
     return data;
   }
 
-  /// For load data
+  // For load data
   @override
   void fromData(Map<String, dynamic> data) {
     title = valueFromKey<String>(data, 'title');
@@ -411,7 +423,8 @@ class Ranking extends Document<Ranking> {
 }
 ```
 
-#### Count model
+Countのモデルクラスは次の通りです。
+Sub Collectionされる場合はコンストラクタにCollectionReferenceのパラメータを設定できるようにします（※1）。
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -422,13 +435,13 @@ class Count extends Document<Count> {
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    CollectionReference collectionRef, // ※1 Need to set a CollectionReference parameter.
   }): super(id: id, snapshot: snapshot, values: values, collectionRef: collectionRef);
 
   String userId;
   int count = 0;
 
-  /// For save data
+  // For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
@@ -437,7 +450,7 @@ class Count extends Document<Count> {
     return data;
   }
 
-  /// For load data
+  // For load data
   @override
   void fromData(Map<String, dynamic> data) {
     userId = valueFromKey<String>(data, 'userId');
@@ -446,17 +459,21 @@ class Count extends Document<Count> {
 }
 ```
 
-#### Save and Get sub collection.
+#### Sub Collectionの保存と取得
+
+Sub Collectionとして保存したい場合は collectionRef のパラメータに親が保持するSub Collectionのリファレンスを指定します。例では、Rankingモデルが持つ ranking.count.ref をCountモデルへ指定しています（※1）。
+
+Sub Collectionの取得する際のパスは ranking.count.ref.path を使います（※2）。
 
 ```dart
 final ranking = Ranking(id: '20201007')
   ..title = 'userRanking';
 
 // Save sub collection of ranking document
-final countA = Count(collectionRef: ranking.count.ref)
+final countA = Count(collectionRef: ranking.count.ref) // ※1
   ..userId = '0'
   ..count = 10;
-final countB = Count(collectionRef: ranking.count.ref)
+final countB = Count(collectionRef: ranking.count.ref) // ※1
   ..userId = '1'
   ..count = 100;
 final batch = Batch()
@@ -466,18 +483,20 @@ final batch = Batch()
 await batch.commit();
 
 // Get sub collection
-final path = ranking.count.ref.path;
+final path = ranking.count.ref.path; // ※2
 final snapshot = await firestoreInstance().collection(path).getDocuments();
 final list = snapshot.documents.map((item) => Count(snapshot: item)).toList()
   ..forEach((count) {
-    print(count);
+    print('${count.userId}, ${count.count}');
   });
 ```
 
-### File
-Can operation into Firebase Storage and upload and delete storage file. Using StorageFile and Storage class.
 
-For examople, create post model that have StorageFile.
+### Cloud Storageへの保存
+
+Flamingoを使えばCloud Storageへの保存と、保存されたURLなどの情報をFirestoreへ簡単に保存することができます。
+
+対象となるフィールドを StorageFile 型で定義します。
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -508,12 +527,12 @@ class Post extends Document<Post> {
 }
 ```
 
-Upload file to Firebase Storage.
+Cloud Storageへの操作はFlamingoが提供する Storage を利用します。
 
 ```dart
 final post = Post();
 final storage = Storage();
-final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg'); // flutterプロジェクト内に保存されている画像を取得
 
 // Fetch uploader stream
 storage.fetch();
@@ -525,27 +544,33 @@ storage.uploader.stream.listen((data){
 
 // Upload file into firebase storage and save file metadata into firestore
 final path = '${post.documentPath}/${post.folderName}';
-post.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'}); // 'mimeType' is defined in master/master.dart
+post.file = await storage.save(
+  path,
+  file,
+  mimeType: mimeTypePng, // 'mimeType' is defined in master/master.dart
+  metadata: {
+    'newPost': 'true'
+  }
+);
 await documentAccessor.save(post);
 
 // Dispose uploader stream
 storage.dispose();
 ```
 
-Delete storage file.
+削除は次の通りです。保存されたCloud Storage内のファイルとFirestoreへ保存されているStorageFileのフィールドを削除します。
 
 ```dart
-// delete file in firebase storage and delete file metadata in firestore
 final path = '${post.documentPath}/${post.folderName}';
 await storage.delete(path, post.file);
 await documentAccessor.update(post);
 ```
 
-### Distributed counter
+### 分散カウンタ
 
-Using DistributedCounter and Counter.
+Flamingoが提供する DistributedCounter を使えば簡単に分散カウンタを作れます。
 
-For examople, create score model that have Counter.
+対象となるフィールドを Counter 型で定義します。
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -558,14 +583,14 @@ class Score extends Document<Score> {
     value = Counter(this, 'shards', numShards);
   }
 
-  /// Document
+  // Document
   String userId;
 
-  /// DistributedCounter
+  // DistributedCounter
   int numShards = 10;
   Counter value;
 
-  /// For save data
+  // For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
@@ -573,7 +598,7 @@ class Score extends Document<Score> {
     return data;
   }
 
-  /// For load data
+  // For load data
   @override
   void fromData(Map<String, dynamic> data) {
     userId = valueFromKey<String>(data, 'userId');
@@ -581,10 +606,12 @@ class Score extends Document<Score> {
 }
 ```
 
-Create and increment and load.
+DistributedCounter を使った実装は次の通りです。
+
+例では 10カウントアップさせています。
 
 ```dart
-/// Create
+// Create document before set distributed counter.
 final score = Score()
   ..userId = '0001';
 await documentAccessor.save(score);
@@ -592,19 +619,19 @@ await documentAccessor.save(score);
 final distributedCounter = DistributedCounter();
 await distributedCounter.create(score.value);
 
-/// Increment
+// Increment
 for (var i = 0; i < 10; i++) {
   await distributedCounter.increment(score.value, count: 1);
 }
 
-/// Load
+// Load
 final count = await distributedCounter.load(score.value);
 print('count $count ${score.value.count}');
 ```
 
-### Transaction
+### トランザクション
 
-This api is simply wrap transaction function of Firestore.
+Flamingoではトランザクション処理の軽量なラップ関数を提供しています。
 
 ```dart
 RunTransaction.scope((transaction) async {
@@ -625,11 +652,10 @@ RunTransaction.scope((transaction) async {
 ```
 
 
-### Objects for model
+### 様々なデータ型に対する実装
 
-#### Map objects
+#### Map
 
-Create the following model class.
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -672,7 +698,6 @@ class MapSample extends Document<MapSample> {
 }
 ```
 
-And save and load documents. 
 
 ```dart
 final sample1 = MapSample()
@@ -691,8 +716,6 @@ final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id
 ```
 
 #### List
-
-Create the following model class.
 
 ```dart
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -736,7 +759,6 @@ class ListSample extends Document<ListSample> {
 }
 ```
 
-And save and load documents. 
 
 ```dart
 final sample1 = ListSample()
@@ -750,12 +772,16 @@ final sample1 = ListSample()
     StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
   ];
 await documentAccessor.save(sample1);
-sample1.log();
 
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
+
+## 終わりに
+
+不具合、改善点ありましたら[Github](https://github.com/hukusuke1007/flamingo)までお願いしますm(__)m
 
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)
 - [Ballcap for iOS](https://github.com/1amageek/Ballcap-iOS)
 - [Ballcap for TypeScript](https://github.com/1amageek/ballcap.ts)
+

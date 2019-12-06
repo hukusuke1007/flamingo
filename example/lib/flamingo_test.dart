@@ -147,10 +147,10 @@ class FlamingoTest {
     print('--- subCollection ---');
     final ranking = Ranking(id: '20201007')
       ..title = 'userRanking';
-    final countA = Count(collectionRef: ranking.count.ref)
+    final countA = Count(id: '0', collectionRef: ranking.count.ref)
       ..userId = '0'
       ..count = 10;
-    final countB = Count(collectionRef: ranking.count.ref)
+    final countB = Count(id: '1', collectionRef: ranking.count.ref)
       ..userId = '1'
       ..count = 100;
     final batch = Batch()
@@ -167,6 +167,19 @@ class FlamingoTest {
     print('from values');
     final listB = snapshot.documents.map((item) => Count(id: item.documentID, values: item.data)).toList()
       ..forEach((item) => item.log());
+
+    print('document');
+    {
+      final count1 = await documentAccessor.load<Count>(
+          Count(id: '0', collectionRef: ranking.count.ref)
+      );
+      final count2 = await documentAccessor.load<Count>(
+          Count(id: '1', collectionRef: ranking.count.ref)
+      );
+      print('count1 ${count1.toData()}');
+      print('count2 ${count2.toData()}');
+    }
+
   }
 
   Future saveStorage() async {
