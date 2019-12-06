@@ -1,3 +1,6 @@
+## 0.1.1+2
+Modified pubspec.yaml.
+
 ## 0.1.1+1
 Updated document.
 

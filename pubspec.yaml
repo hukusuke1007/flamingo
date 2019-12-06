@@ -1,6 +1,6 @@
 name: flamingo
 description: Flamingo is a firesbase firestore model framework library. Flamingo  manage DocumentReference and CollectionReference. And provide wrap interface of CRUD.
-version: 0.1.1+1
+version: 0.1.1+2
 author: shohei <hukusuke1007@gmail.com>
 homepage: https://twitter.com/hobbydevelop
 repository: https://github.com/hukusuke1007/flamingo
@@ -14,7 +14,7 @@ dependencies:
   json_annotation: ^3.0.0
   path_provider: ^1.4.0
   firebase_core: ^0.4.2+1
-  cloud_firestore: 0.12.10+2
+  cloud_firestore: ^0.12.10+2
   firebase_storage: ^3.0.8
 
 dev_dependencies:
