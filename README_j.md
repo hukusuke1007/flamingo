@@ -776,10 +776,6 @@ await documentAccessor.save(sample1);
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
 
-## 終わりに
-
-不具合、改善点ありましたら[Github](https://github.com/hukusuke1007/flamingo)までお願いしますm(__)m
-
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)
 - [Ballcap for iOS](https://github.com/1amageek/Ballcap-iOS)
