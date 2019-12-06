@@ -72,8 +72,6 @@ class User extends Document<User> {
 
 toDataとfromDataを実装しなければFirestoreへの読み書きができないので実装は必須です。
 
-（本当はライブラリ内でこれらのマッピング処理を完結したかったのですが、Dartでの実現手段がわかっていないのでtoDataとfromDataでマッピング処理を実装していただく形になっています。実現手段が見つかりましたらライブラリ内で自動マッピングできるようにアップデートしたいと思います）
-
 ### CRUD
 
 Document への操作は、Flamingoが提供する DocumentAccessor を利用します。
