@@ -315,7 +315,7 @@ print('medals: ${_owner.medals.map((d) => d.name)}');
 final user = User(id: '0')
   ..name = 'hoge';
 
-final dispose = user.reference.snapshots().listen((snap) {
+final disposer = user.reference.snapshots().listen((snap) {
   final user = User(snapshot: snap);
   print('${user.id}, ${user.name}');
 });
@@ -329,7 +329,7 @@ await documentAccessor.update(user);
 
 await documentAccessor.delete(user);
 
-await dispose.cancel();
+await disposer.cancel();
 ```
 
 コレクションのスナップショットも監視することができます。
