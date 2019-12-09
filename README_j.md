@@ -646,7 +646,7 @@ final _card = await documentAccessor.load<CreditCard>(card);
 print('point ${_card.point.value}, score: ${_card.score.value}'); // point 0, score 0.0
 ```
 
-また、DocumentAccessor のincrement関数を使えば incrementデータ のみの操作ができます。
+また、DocumentAccessor のincrement関数を使えば、incrementデータのみの操作ができます。
 
 ```dart
 final card = CreditCard();
