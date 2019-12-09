@@ -581,8 +581,8 @@ class CreditCard extends Document<CreditCard> {
   /// For completed create, update, delete.
   @override
   void onCompleted() {
-    point.onCompleted(); // need!!
-    score.onCompleted(); // need!!
+    point = point.onRefresh(); // need!!
+    score = score.onRefresh(); // need!!
   }
 }
 ```
@@ -596,6 +596,7 @@ final card = CreditCard()
   ..point.incrementValue = 1
   ..score.incrementValue = 1.25;
 await documentAccessor.save(card);
+print('point ${card.point.value}, score: ${card.score.value}'); // point 1, score 1.25
 
 final _card = await documentAccessor.load<CreditCard>(card);
 print('point ${_card.point.value}, score: ${_card.score.value}'); // point 1, score 1.25
@@ -606,16 +607,18 @@ card
   ..point.incrementValue = -1
   ..score.incrementValue = -1.00;
 await documentAccessor.update(card);
+print('point ${card.point.value}, score: ${card.score.value}'); // point 0, score 0.25
 
 final _card = await documentAccessor.load<CreditCard>(card);
 print('point ${_card.point.value}, score: ${_card.score.value}'); // point 0, score 0.25
 
 
-// Clear values
+// Clear
 card
   ..point.isClearValue = true
   ..score.isClearValue = true;
 await documentAccessor.update(card);
+print('point ${card.point.value}, score: ${card.score.value}'); // point 0, score 0.0
 
 final _card = await documentAccessor.load<CreditCard>(card);
 print('point ${_card.point.value}, score: ${_card.score.value}'); // point 0, score 0.0
@@ -634,24 +637,15 @@ card
   ..point = await documentAccessor.increment<int>(card.point, card.reference, value: 10)
   ..score = await documentAccessor.increment<double>(card.score, card.reference, value: 3.5);
 
-final _card = await documentAccessor.load<CreditCard>(card);
-print('point ${_card.point.value}, score: ${_card.score.value}'); // point 10, score 3.5
-
 // Decrement
 card
   ..point = await documentAccessor.increment<int>(card.point, card.reference, value: -5)
   ..score = await documentAccessor.increment<double>(card.score, card.reference, value: -2.5);
 
-final _card = await documentAccessor.load<CreditCard>(card);
-print('point ${_card.point.value}, score: ${_card.score.value}'); // point 5, score 1.0
-
-// Clear values
-card1
+// Clear
+card
   ..point = await documentAccessor.increment<int>(card.point, card.reference, isClear: true)
   ..score = await documentAccessor.increment<double>(card.score, card.reference, isClear: true);
-
-final _card = await documentAccessor.load<CreditCard>(card);
-print('point ${_card.point.value}, score: ${_card.score.value}'); // point 0, score 0.0
 ```
 
 Attension: 

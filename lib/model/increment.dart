@@ -11,8 +11,21 @@ class Increment<T extends num> {
     fieldName: isClear != true ? FieldValue.increment(value) : value,
   };
 
-  void onCompleted() {
+  Increment<T> onRefresh() {
+    Increment<T> result;
+    if (isClearValue) {
+      final _value = T.toString() == 'double' ? 0.0 : 0;
+      result = Increment<T>(fieldName, value: _value as T);
+    } else {
+      if (incrementValue != null) {
+        final _value = value != null ? value + incrementValue : incrementValue;
+        result = Increment<T>(fieldName, value: _value);
+      } else {
+        result = Increment<T>(fieldName, value: value);
+      }
+    }
     _clear();
+    return result;
   }
 
   void _clear() {

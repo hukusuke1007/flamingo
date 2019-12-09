@@ -33,13 +33,13 @@ class CreditCard extends Document<CreditCard> {
   /// For completed create, update, delete.
   @override
   void onCompleted() {
-    point.onCompleted();
-    score.onCompleted();
+    point = point.onRefresh();
+    score = score.onRefresh();
   }
 
   void log() {
     print('$id ${point.value} ${score.value}');
-    print('${point.incrementValue} ${score.incrementValue}');
+    // print('${point.incrementValue} ${score.incrementValue}');
   }
 
 }

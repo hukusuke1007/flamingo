@@ -546,6 +546,8 @@ class FlamingoTest {
         ..point.incrementValue = 1
         ..score.incrementValue = 1.25;
       await documentAccessor.save(card1);
+      card1.log();
+
       final _card = await documentAccessor.load<CreditCard>(card1);
       _card.log();
 
@@ -555,6 +557,8 @@ class FlamingoTest {
             ..point.incrementValue = -1
             ..score.incrementValue = -1.00;
         await documentAccessor.update(card1);
+        card1.log();
+
         final _card = await documentAccessor.load<CreditCard>(card1);
         _card.log();
       }
@@ -562,6 +566,8 @@ class FlamingoTest {
       print('--- incrementTest null check ---');
       {
         await documentAccessor.update(card1);
+        card1.log();
+
         final _card = await documentAccessor.load<CreditCard>(card1);
         _card.log();
       }
@@ -572,6 +578,8 @@ class FlamingoTest {
           ..point.isClearValue = true
           ..score.isClearValue = true;
         await documentAccessor.update(card1);
+        card1.log();
+
         final _card = await documentAccessor.load<CreditCard>(card1);
         _card.log();
       }
@@ -581,6 +589,8 @@ class FlamingoTest {
           ..point.incrementValue = 20
           ..score.incrementValue = 1.2345;
         await documentAccessor.update(card1);
+        card1.log();
+
         final _card = await documentAccessor.load<CreditCard>(card1);
         _card.log();
       }
