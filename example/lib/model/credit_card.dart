@@ -30,9 +30,9 @@ class CreditCard extends Document<CreditCard> {
     score = valueFromIncrement<double>(data, score.fieldName);
   }
 
-  /// For completed create, update, delete.
+  /// Call after create, update, delete.
   @override
-  void onCompleted() {
+  void onCompleted(ExecuteType executeType) {
     point = point.onRefresh();
     score = score.onRefresh();
   }

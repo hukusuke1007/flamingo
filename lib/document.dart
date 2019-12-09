@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'base.dart';
+import 'enum/execute_type.dart';
 import 'flamingo.dart';
 import 'type/type.dart';
+
 
 class Document<T> extends Base implements DocumentType {
   /// Constructor
@@ -87,7 +89,7 @@ class Document<T> extends Base implements DocumentType {
   void fromData(Map<String, dynamic> data) {}
 
   /// Completed create, update, delete.
-  void onCompleted() {}
+  void onCompleted(ExecuteType executeType) {}
 
   void setSnapshot(DocumentSnapshot documentSnapshot) {
     id = documentSnapshot.documentID;

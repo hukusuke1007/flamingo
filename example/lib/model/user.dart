@@ -24,6 +24,12 @@ class User extends Document<User> {
     name = valueFromKey<String>(data, 'name');
   }
 
+  /// For completed create, update, delete.
+  @override
+  void onCompleted(ExecuteType executeType) {
+    print('onCompleted $executeType');
+  }
+
   void log() {
     print('User $id $name');
   }

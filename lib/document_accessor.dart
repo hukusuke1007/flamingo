@@ -1,15 +1,13 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'batch.dart';
-import 'document.dart';
-import 'model/increment.dart';
+import 'flamingo.dart';
 
 class DocumentAccessor {
   Future save(Document document) async {
     try {
       final batch = Batch()..save(document);
       await batch.commit();
-      document.onCompleted();
+      document.onCompleted(ExecuteType.create);
     } on Exception {
       rethrow;
     }
@@ -41,7 +39,7 @@ class DocumentAccessor {
     try {
       final batch = Batch()..update(document);
       await batch.commit();
-      document.onCompleted();
+      document.onCompleted(ExecuteType.update);
     } on Exception {
       rethrow;
     }
@@ -51,7 +49,7 @@ class DocumentAccessor {
     try {
       final batch = Batch()..delete(document);
       await batch.commit();
-      document.onCompleted();
+      document.onCompleted(ExecuteType.delete);
     } on Exception {
       rethrow;
     }

@@ -17,6 +17,7 @@ export 'package:flamingo/model/counter.dart';
 export 'package:flamingo/model/storage_file.dart';
 export 'package:flamingo/model/model.dart';
 export 'package:flamingo/model/increment.dart';
+export 'package:flamingo/enum/execute_type.dart';
 
 class Flamingo {
   static Flamingo instance = Flamingo();

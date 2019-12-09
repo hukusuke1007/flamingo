@@ -87,6 +87,12 @@ class User extends Document<User> {
   void fromData(Map<String, dynamic> data) {
     name = valueFromKey<String>(data, 'name');
   }
+  
+  // Call after create, update, delete.
+  @override
+  void onCompleted(ExecuteType executeType) {
+    print('$executeType');
+  }
 }
 ```
 
@@ -578,11 +584,11 @@ class CreditCard extends Document<CreditCard> {
     score = valueFromIncrement<double>(data, score.fieldName);
   }
 
-  /// For completed create, update, delete.
+  /// Call after create, update, delete
   @override
-  void onCompleted() {
-    point = point.onRefresh(); // need!!
-    score = score.onRefresh(); // need!!
+  void onCompleted(ExecuteType executeType) {
+    point = point.onRefresh();
+    score = score.onRefresh();
   }
 }
 ```

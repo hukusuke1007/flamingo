@@ -8,83 +8,68 @@ class Batch {
   }
 
   WriteBatch _writeBatch;
+  final List<_BatchDocument> _batchDocument = [];
 
   void save(Document document) {
-    try {
-      final data = document.toData();
-      final nowAt = Timestamp.now();
-      data['createdAt'] = nowAt;
-      data['updatedAt'] = nowAt;
-      document
-        ..createdAt = nowAt
-        ..updatedAt = nowAt;
-      _writeBatch.setData(document.reference, data, merge: true);
-    } on Exception {
-      rethrow;
-    }
+    final data = document.toData();
+    final nowAt = Timestamp.now();
+    data['createdAt'] = nowAt;
+    data['updatedAt'] = nowAt;
+    document
+      ..createdAt = nowAt
+      ..updatedAt = nowAt;
+    _writeBatch.setData(document.reference, data, merge: true);
+    _batchDocument.add(_BatchDocument(document, ExecuteType.create));
   }
 
   void update(Document document) {
-    try {
-      final data = document.toData();
-      final nowAt = Timestamp.now();
-      data['updatedAt'] = nowAt;
-      document.updatedAt = nowAt;
-      _writeBatch.updateData(document.reference, data);
-    } on Exception {
-      rethrow;
-    }
+    final data = document.toData();
+    final nowAt = Timestamp.now();
+    data['updatedAt'] = nowAt;
+    document.updatedAt = nowAt;
+    _writeBatch.updateData(document.reference, data);
+    _batchDocument.add(_BatchDocument(document, ExecuteType.update));
   }
 
   void delete(Document document) {
-    try {
-      _writeBatch.delete(document.reference);
-    } on Exception {
-      rethrow;
-    }
+    _writeBatch.delete(document.reference);
+    _batchDocument.add(_BatchDocument(document, ExecuteType.delete));
   }
 
   void saveRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) {
-    try {
-      final data = values;
-      final nowAt = Timestamp.now();
-      if (isTimestamp) {
-        data['createdAt'] = nowAt;
-        data['updatedAt'] = nowAt;
-      }
-      _writeBatch.setData(reference, data, merge: true);
-    } on Exception {
-      rethrow;
+    final data = values;
+    final nowAt = Timestamp.now();
+    if (isTimestamp) {
+      data['createdAt'] = nowAt;
+      data['updatedAt'] = nowAt;
     }
+    _writeBatch.setData(reference, data, merge: true);
   }
 
   void updateRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) {
-    try {
-      final data = values;
-      final nowAt = Timestamp.now();
-      if (isTimestamp) {
-        data['updatedAt'] = nowAt;
-      }
-      _writeBatch.updateData(reference, data);
-    } on Exception {
-      rethrow;
+    final data = values;
+    final nowAt = Timestamp.now();
+    if (isTimestamp) {
+      data['updatedAt'] = nowAt;
     }
+    _writeBatch.updateData(reference, data);
   }
 
   void deleteWithReference(DocumentReference reference) {
-    try {
-      _writeBatch.delete(reference);
-    } on Exception {
-      rethrow;
-    }
+    _writeBatch.delete(reference);
   }
 
-  Future commit({Document document}) async {
-    try {
-      await _writeBatch.commit();
-      document?.onCompleted();
-    } on Exception {
-      rethrow;
+  Future commit() async {
+    await _writeBatch.commit();
+    for (var item in _batchDocument) {
+      item.document.onCompleted(item.executeType);
     }
+    _batchDocument.clear();
   }
+}
+
+class _BatchDocument {
+  _BatchDocument(this.document, this.executeType);
+  final Document document;
+  final ExecuteType executeType;
 }
