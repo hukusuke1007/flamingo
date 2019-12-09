@@ -612,7 +612,7 @@ class CreditCard extends Document<CreditCard> {
 }
 ```
 
-point と score の数値のインクリメント、デクリメント、クリアする実装は次の通りです。
+point と score のインクリメント、デクリメント、クリアする実装は次の通りです。
 
 ```dart
 
