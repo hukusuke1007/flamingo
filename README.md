@@ -541,6 +541,123 @@ await storage.delete(path, post.file);
 await documentAccessor.update(post);
 ```
 
+### Increment
+
+Example, CreditCard's document has point and score field. Their fields is Increment type.
+
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/flamingo.dart';
+
+class CreditCard extends Document<CreditCard> {
+  CreditCard({
+    String id,
+    DocumentSnapshot snapshot,
+    Map<String, dynamic> values,
+  }): super(id: id, snapshot: snapshot, values: values) {
+    point = Increment('point'); // Set field name of point
+    score = Increment('score'); // Set field name of score
+  }
+
+  Increment<int> point;
+  Increment<double> score;
+
+  /// For save data
+  @override
+  Map<String, dynamic> toData() {
+    final data = <String, dynamic>{};
+    writeIncrement(data, point);
+    writeIncrement(data, score);
+    return data;
+  }
+
+  /// For load data
+  @override
+  void fromData(Map<String, dynamic> data) {
+    point = valueFromIncrement<int>(data, point.fieldName);
+    score = valueFromIncrement<double>(data, score.fieldName);
+  }
+
+  /// For completed create, update, delete.
+  @override
+  void onCompleted() {
+    point.onCompleted(); // need!!
+    score.onCompleted(); // need!!
+  }
+}
+```
+
+Increment and decrement of data.
+
+```dart
+
+// Increment
+final card = CreditCard()
+  ..point.incrementValue = 1
+  ..score.incrementValue = 1.25;
+await documentAccessor.save(card);
+
+final _card = await documentAccessor.load<CreditCard>(card);
+print('point ${_card.point.value}, score: ${_card.score.value}'); // point 1, score 1.25
+
+
+// Decrement
+card
+  ..point.incrementValue = -1
+  ..score.incrementValue = -1.00;
+await documentAccessor.update(card);
+
+final _card = await documentAccessor.load<CreditCard>(card);
+print('point ${_card.point.value}, score: ${_card.score.value}'); // point 0, score 0.25
+
+
+// Clear values
+card
+  ..point.isClearValue = true
+  ..score.isClearValue = true;
+await documentAccessor.update(card);
+
+final _card = await documentAccessor.load<CreditCard>(card);
+print('point ${_card.point.value}, score: ${_card.score.value}'); // point 0, score 0.0
+```
+
+Or can be use with increment method of DocumentAccessor.
+
+```dart
+final card = CreditCard();
+final batch = Batch()
+  ..save(card);
+await batch.commit();
+
+// Increment
+card
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, value: 10)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, value: 3.5);
+
+final _card = await documentAccessor.load<CreditCard>(card);
+print('point ${_card.point.value}, score: ${_card.score.value}'); // point 10, score 3.5
+
+// Decrement
+card
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, value: -5)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, value: -2.5);
+
+final _card = await documentAccessor.load<CreditCard>(card);
+print('point ${_card.point.value}, score: ${_card.score.value}'); // point 5, score 1.0
+
+// Clear values
+card1
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, isClear: true)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, isClear: true);
+
+final _card = await documentAccessor.load<CreditCard>(card);
+print('point ${_card.point.value}, score: ${_card.score.value}'); // point 0, score 0.0
+```
+
+Attension: 
+
+Clear process only set 0 to document and update. It not try transaction process. Do not use except to first set doument
+
 ### Distributed counter
 
 Using DistributedCounter and Counter.

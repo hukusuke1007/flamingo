@@ -7,6 +7,16 @@ class Base {
     data[key] = value;
   }
 
+  void writeIncrement(Map<String, dynamic> data, Increment entity) {
+    if (entity.isClearValue) {
+      data[entity.fieldName] = entity.value.runtimeType == double ? 0.0 : 0;
+    } else {
+      if (entity.incrementValue != null) {
+        data[entity.fieldName] = FieldValue.increment(entity.incrementValue);
+      }
+    }
+  }
+
   void writeModel(Map<String, dynamic> data, String key, Model model) {
     data[key] = model.toData();
   }
@@ -120,6 +130,7 @@ class Base {
               .map((dynamic d) => Map<U, V>.from(d as Map))
               .toList()
           : null;
+  Increment<U> valueFromIncrement<U extends num>(Map<String, dynamic> data, String key) => Increment(key, value: data[key] as U);
 
   bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);
 }

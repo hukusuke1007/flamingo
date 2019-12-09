@@ -124,6 +124,31 @@ class _MyAppState extends State<MyApp> {
             ),
             Padding(
               padding: const EdgeInsets.all(4),
+              child: Text('Batch Raw',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.batchSaveRaw();
+                  },
+                  child: Text('Save Raw', style: TextStyle(color: Colors.white),),
+                ),
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.black12,
+                  onPressed: () async {
+                    await test.batchUpdateDeleteRaw();
+                  },
+                  child: Text('Delete Raw', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
               child: Text('Get',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
@@ -321,6 +346,48 @@ class _MyAppState extends State<MyApp> {
                     await test.model();
                   },
                   child: Text('Save', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('Increment',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.incrementTest1();
+                  },
+                  child: Text('Save 1', style: TextStyle(color: Colors.white),),
+                ),
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.deepPurple,
+                  onPressed: () async {
+                    await test.incrementTest2();
+                  },
+                  child: Text('Save 2', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('ValueZeroTest',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.valueZeroTest();
+                  },
+                  child: Text('Save 1', style: TextStyle(color: Colors.white),),
                 ),
               ],
             ),

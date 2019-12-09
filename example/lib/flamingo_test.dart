@@ -7,10 +7,12 @@ import 'package:flamingo_example/model/list_sample.dart';
 import 'package:flamingo_example/model/model_sample.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'model/address.dart';
+import 'model/credit_card.dart';
 import 'model/medal.dart';
 import 'model/owner.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
+import 'model/point.dart';
 
 class FlamingoTest {
   DocumentAccessor documentAccessor = DocumentAccessor();
@@ -21,6 +23,8 @@ class FlamingoTest {
     await delete();
     await batchSave();
     await batchUpdateDelete();
+    await batchSaveRaw();
+    await batchUpdateDeleteRaw();
     await getAndUpdate();
     await getCollection();
     await subCollection();
@@ -35,6 +39,9 @@ class FlamingoTest {
     await checkModelSample();
     await listenerSample();
     await model();
+    await incrementTest1();
+    await incrementTest2();
+    await valueZeroTest();
   }
 
   Future save() async {
@@ -89,6 +96,20 @@ class FlamingoTest {
     userB.log();
   }
 
+  Future batchSaveRaw() async {
+    print('--- batchSaveRaw ---');
+    final userA = User()
+      ..name = 'hoge';
+    final userB = User()
+      ..name = 'fuga';
+    final batch = Batch()
+      ..saveRaw(userA.toData(), userA.reference)
+      ..saveRaw(userB.toData(), userA.reference, isTimestamp: true);
+    await batch.commit();
+    userA.log();
+    userB.log();
+  }
+
   Future batchUpdateDelete() async {
     print('--- batchUpdateDelete ---');
     final userA = User()
@@ -115,6 +136,33 @@ class FlamingoTest {
     final _user = await documentAccessor.load<User>(User(id: userB.id));
     hoge.log();
     print(_user);
+  }
+
+  Future batchUpdateDeleteRaw() async {
+    print('--- batchUpdateDeleteRaw ---');
+    final userA = User()
+      ..name = 'hoge';
+    final userB = User()
+      ..name = 'fuga';
+    final batch = Batch()
+      ..save(userA)
+      ..save(userB);
+    await batch.commit();
+    userA.log();
+    userB.log();
+
+    {
+      final hoge = await documentAccessor.load<User>(User(id: userA.id));
+      hoge.name = 'hogehoge';
+      final batch = Batch()
+        ..updateRaw(hoge.toData(), hoge.reference, isTimestamp: true)
+        ..deleteWithReference(userB.reference);
+      await batch.commit();
+
+      final _user = await documentAccessor.load<User>(User(id: userB.id));
+      hoge.log();
+      print(_user);
+    }
   }
 
   Future getAndUpdate() async {
@@ -489,6 +537,147 @@ class FlamingoTest {
     print('id: ${_owner.id}, name: ${_owner.name}');
     print('address: ${_owner.id} ${_owner.address.postCode} ${_owner.address.country}');
     print('medals: ${_owner.medals.map((d) => d.name)}');
+  }
+
+  Future incrementTest1() async {
+    print('--- incrementTest 1 ---');
+    {
+      final card1 = CreditCard()
+        ..point.incrementValue = 1
+        ..score.incrementValue = 1.25;
+      await documentAccessor.save(card1);
+      final _card = await documentAccessor.load<CreditCard>(card1);
+      _card.log();
+
+      print('--- incrementTest minus ---');
+      {
+        card1
+            ..point.incrementValue = -1
+            ..score.incrementValue = -1.00;
+        await documentAccessor.update(card1);
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        _card.log();
+      }
+
+      print('--- incrementTest null check ---');
+      {
+        await documentAccessor.update(card1);
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        _card.log();
+      }
+
+      print('--- incrementTest clear ---');
+      {
+        card1
+          ..point.isClearValue = true
+          ..score.isClearValue = true;
+        await documentAccessor.update(card1);
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        _card.log();
+      }
+
+      {
+        card1
+          ..point.incrementValue = 20
+          ..score.incrementValue = 1.2345;
+        await documentAccessor.update(card1);
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        _card.log();
+      }
+    }
+  }
+
+  Future incrementTest2() async {
+    print('--- incrementTest 2 ---');
+    {
+      final card1 = CreditCard();
+      final batch = Batch()
+        ..save(card1);
+      await batch.commit();
+      final _card = await documentAccessor.load<CreditCard>(card1);
+      _card.log();
+
+      print('--- increment int ---');
+      {
+        print('--- increment +10 ---');
+        card1.point = await documentAccessor.increment<int>(card1.point, card1.reference, value: 10);
+        print('point ${card1.point.value}');
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        print('point load ${_card.point.value}');
+      }
+
+      {
+        print('--- increment +100 ---');
+        card1.point = await documentAccessor.increment<int>(card1.point, card1.reference, value: 100);
+        print('point ${card1.point.value}');
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        print('point load ${_card.point.value}');
+      }
+
+      {
+        print('--- increment -100 ---');
+        card1.point = await documentAccessor.increment<int>(card1.point, card1.reference, value: -100);
+        print('point ${card1.point.value}');
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        print('point load ${_card.point.value}');
+      }
+
+      print('--- increment double ---');
+      card1.log();
+      {
+        print('--- increment +0.5 ---');
+        card1.score = await documentAccessor.increment<double>(card1.score, card1.reference, value: 0.5);
+        print('score ${card1.score.value}');
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        print('score load ${_card.score.value}');
+      }
+
+      {
+        print('--- increment +10.5 ---');
+        card1.score = await documentAccessor.increment<double>(card1.score, card1.reference, value: 10.5);
+        print('score ${card1.score.value}');
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        print('score load ${_card.score.value}');
+      }
+
+      {
+        print('--- increment -2.5 ---');
+        card1.score = await documentAccessor.increment<double>(card1.score, card1.reference, value: -2.5);
+        print('score ${card1.score.value}');
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        print('score load ${_card.score.value}');
+        _card.log();
+      }
+
+      {
+        print('--- increment clear ---');
+        card1
+          ..point = await documentAccessor.increment<int>(card1.point, card1.reference, isClear: true)
+          ..score = await documentAccessor.increment<double>(card1.score, card1.reference, isClear: true);
+        print('point ${card1.point.value}, score: ${card1.score.value}');
+        final _card = await documentAccessor.load<CreditCard>(card1);
+        print('load point: ${_card.point.value}, score: ${_card.score.value}');
+        _card.log();
+      }
+    }
+  }
+
+
+  Future valueZeroTest() async {
+    print('--- valueZeroTest ---');
+    final point = Point()
+      ..pointInt = 0
+      ..pointDouble = 0.0;
+
+    print('--- save ---');
+    print('${point.id}');
+    await documentAccessor.save(point);
+
+    {
+      print('--- load ---');
+      final _point= await documentAccessor.load<Point>(point);
+      _point.log();
+    }
   }
 }
 

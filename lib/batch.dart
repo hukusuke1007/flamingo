@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'flamingo.dart';
 import 'document.dart';
+import 'flamingo.dart';
 
 class Batch {
   Batch() {
@@ -44,9 +44,45 @@ class Batch {
     }
   }
 
-  Future commit() async {
+  void saveRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) {
+    try {
+      final data = values;
+      final nowAt = Timestamp.now();
+      if (isTimestamp) {
+        data['createdAt'] = nowAt;
+        data['updatedAt'] = nowAt;
+      }
+      _writeBatch.setData(reference, data, merge: true);
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  void updateRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) {
+    try {
+      final data = values;
+      final nowAt = Timestamp.now();
+      if (isTimestamp) {
+        data['updatedAt'] = nowAt;
+      }
+      _writeBatch.updateData(reference, data);
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  void deleteWithReference(DocumentReference reference) {
+    try {
+      _writeBatch.delete(reference);
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  Future commit({Document document}) async {
     try {
       await _writeBatch.commit();
+      document?.onCompleted();
     } on Exception {
       rethrow;
     }

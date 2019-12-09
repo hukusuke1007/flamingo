@@ -2,12 +2,36 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'batch.dart';
 import 'document.dart';
+import 'model/increment.dart';
 
 class DocumentAccessor {
   Future save(Document document) async {
     try {
       final batch = Batch()..save(document);
       await batch.commit();
+      document.onCompleted();
+    } on Exception {
+      rethrow;
+    }
+  }
+
+  Future<Increment<T>> increment<T extends num>(Increment<T> entity, DocumentReference reference, {
+    num value,
+    bool isClear,
+  }) async {
+    try {
+      print(value);
+      var updateValue = value;
+      if (isClear != null && isClear) {
+        updateValue = (T.toString() == 'double') ? 0.0 as T : 0 as T;
+      }
+      final batch = Batch()..updateRaw(
+        entity.toData(updateValue, isClear: isClear),
+        reference,
+        isTimestamp: true,
+      );
+      await batch.commit();
+      return Increment(entity.fieldName, value: updateValue as T, incrementValue: null);
     } on Exception {
       rethrow;
     }
@@ -17,6 +41,7 @@ class DocumentAccessor {
     try {
       final batch = Batch()..update(document);
       await batch.commit();
+      document.onCompleted();
     } on Exception {
       rethrow;
     }
@@ -26,6 +51,7 @@ class DocumentAccessor {
     try {
       final batch = Batch()..delete(document);
       await batch.commit();
+      document.onCompleted();
     } on Exception {
       rethrow;
     }

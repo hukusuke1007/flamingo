@@ -80,12 +80,14 @@ class Document<T> extends Base implements DocumentType {
     return Flamingo.instance.rootReference.collection(modelName());
   }
 
+  /// Data for save
   Map<String, dynamic> toData() => <String, dynamic>{};
 
-  /// Data for save
+  /// Data for load
   void fromData(Map<String, dynamic> data) {}
 
-  /// Data for load
+  /// Completed create, update, delete.
+  void onCompleted() {}
 
   void setSnapshot(DocumentSnapshot documentSnapshot) {
     id = documentSnapshot.documentID;

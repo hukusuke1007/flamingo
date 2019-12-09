@@ -1,3 +1,6 @@
+## 0.1.2
+Add function of raw values for batch. Add Increment model. Add override method of onCompleted.
+
 ## 0.1.1+2
 Modified pubspec.yaml.
 
