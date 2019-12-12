@@ -6,6 +6,7 @@ import 'flamingo_test.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
   final firestore = Firestore.instance;
   final root = firestore.collection('version').document('1');
   Flamingo.configure(firestore: firestore, storage: FirebaseStorage.instance, root: root);
