@@ -1,5 +1,8 @@
+## 0.1.6
+Update environment sdk.
+
 ## 0.1.5
-Update dependence plugin .
+Update dependence plugin.
 
 ## 0.1.4
 Modified batch.
