@@ -1,3 +1,6 @@
+## 0.1.7
+Update firestore plugin.
+
 ## 0.1.6
 Update environment sdk.
 
