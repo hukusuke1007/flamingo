@@ -1,5 +1,5 @@
 ## 0.1.5
-Dependence plugin update.
+Update dependence plugin .
 
 ## 0.1.4
 Modified batch.
