@@ -100,6 +100,39 @@ class _MyAppState extends State<MyApp> {
             ),
             Padding(
               padding: const EdgeInsets.all(4),
+              child: Text('Document Raw',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.saveRaw();
+                  },
+                  child: Text('Save', style: TextStyle(color: Colors.white),),
+                ),
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.amberAccent,
+                  onPressed: () async {
+                    await test.updateRaw();
+                  },
+                  child: Text('update', style: TextStyle(color: Colors.white),),
+                ),
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.black12,
+                  onPressed: () async {
+                    await test.deleteRaw();
+                  },
+                  child: Text('Delete', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
               child: Text('Batch',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
@@ -210,6 +243,31 @@ class _MyAppState extends State<MyApp> {
                   color: Colors.black12,
                   onPressed: () async {
                     await test.deleteStorage();
+                  },
+                  child: Text('Delete', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('StorageAndDoc',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.saveStorageAndDoc();
+                  },
+                  child: Text('Save', style: TextStyle(color: Colors.white),),
+                ),
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.black12,
+                  onPressed: () async {
+                    await test.deleteStorageAndDoc();
                   },
                   child: Text('Delete', style: TextStyle(color: Colors.white),),
                 ),

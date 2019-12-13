@@ -10,9 +10,9 @@ import 'model/address.dart';
 import 'model/credit_card.dart';
 import 'model/medal.dart';
 import 'model/owner.dart';
+import 'model/point.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
-import 'model/point.dart';
 
 class FlamingoTest {
   DocumentAccessor documentAccessor = DocumentAccessor();
@@ -21,6 +21,9 @@ class FlamingoTest {
     await save();
     await update();
     await delete();
+    await saveRaw();
+    await updateRaw();
+    await deleteRaw();
     await batchSave();
     await batchUpdateDelete();
     await batchSaveRaw();
@@ -30,6 +33,8 @@ class FlamingoTest {
     await subCollection();
     await saveStorage();
     await deleteStorage();
+    await saveStorageAndDoc();
+    await deleteStorageAndDoc();
     await distributedCounter();
     await transactionSave();
     await transactionUpdate();
@@ -75,9 +80,45 @@ class FlamingoTest {
     final user = User()
       ..name = 'hoge';
     await documentAccessor.save(user);
-    user.log();
 
     await documentAccessor.delete(User(id: user.id));
+    final _user = await documentAccessor.load<User>(User(id: user.id));
+    print(_user);
+  }
+
+  Future saveRaw() async {
+    print('--- saveRaw ---');
+    final userA = User()
+      ..name = 'hoge';
+
+    await documentAccessor.saveRaw(userA.toData(), userA.reference);
+
+    final _user = await documentAccessor.load<User>(User(id: userA.id));
+    _user.log();
+  }
+
+  Future updateRaw() async {
+    print('--- updateRaw ---');
+    final user = User()
+      ..name = 'hoge';
+    await documentAccessor.saveRaw(user.toData(), user.reference);
+
+    final updateUser = User(id: user.id)
+      ..name = 'fuga';
+
+    await documentAccessor.updateRaw(updateUser.toData(), updateUser.reference);
+
+    final _user = await documentAccessor.load<User>(User(id: user.id));
+    _user.log();
+  }
+
+  Future deleteRaw() async {
+    print('--- deleteRaw ---');
+    final user = User()
+      ..name = 'hoge';
+    await documentAccessor.saveRaw(user.toData(), user.reference);
+
+    await documentAccessor.deleteWithReference(user.reference);
     final _user = await documentAccessor.load<User>(User(id: user.id));
     print(_user);
   }
@@ -286,6 +327,79 @@ class FlamingoTest {
     print('  ----get');
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
     hoge.log();
+  }
+
+  Future saveStorageAndDoc() async {
+    print('--- saveStorageAndDoc ---');
+    final post = Post();
+
+    final storage = Storage();
+    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+
+    // fetch for uploading status
+    storage.fetch();
+    storage.uploader.stream.listen((data){
+      // confirm status
+      print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
+    });
+
+    // save file metadata into firestore
+    final storageFile = await storage.saveStorageAndDoc(
+        post.reference,
+        post.folderName,
+        file,
+        mimeType: mimeTypePng,
+        metadata: {
+          'newPost': 'true'
+        },
+        additionalData: <String, dynamic>{
+          'key0': 'key',
+          'key1': 10,
+          'key2': 0.123,
+          'key3': true,
+        },
+    );
+    print(storageFile.toJson());
+    print('  ----get');
+    final hoge = await documentAccessor.load<Post>(Post(id: post.id));
+    hoge.log();
+
+    // dispose for uploading status
+    storage.dispose();
+  }
+
+  Future deleteStorageAndDoc() async {
+    print('--- deleteStorageAndDoc ---');
+    final post = Post();
+    final id = post.id;
+
+    final storage = Storage();
+    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+    final storageFile = await storage.saveStorageAndDoc(
+      post.reference,
+      post.folderName,
+      file,
+      mimeType: mimeTypePng,
+      metadata: {
+        'newPost': 'true'
+      },
+      additionalData: <String, dynamic>{
+        'key0': 'key',
+        'key1': 10,
+        'key2': 0.123,
+        'key3': true,
+      },
+    );
+
+    {
+      final post = await documentAccessor.load<Post>(Post(id: id));
+      await storage.deleteStorageAndDoc(post.reference, post.folderName, post.file, isNotNull: false);
+
+      print('  ----get');
+      final hoge = await documentAccessor.load<Post>(Post(id: post.id));
+      hoge.log();
+    }
+
   }
 
   Future distributedCounter() async {

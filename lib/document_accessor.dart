@@ -83,4 +83,30 @@ class DocumentAccessor {
       rethrow;
     }
   }
+
+  Future saveRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) async {
+    final data = values;
+    final nowAt = Timestamp.now();
+    if (isTimestamp) {
+      data['createdAt'] = nowAt;
+      data['updatedAt'] = nowAt;
+    }
+    final batch = Batch()..saveRaw(values, reference);
+    await batch.commit();
+  }
+
+  Future updateRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) async {
+    final data = values;
+    final nowAt = Timestamp.now();
+    if (isTimestamp) {
+      data['updatedAt'] = nowAt;
+    }
+    final batch = Batch()..updateRaw(values, reference);
+    await batch.commit();
+  }
+
+  Future deleteWithReference(DocumentReference reference) async {
+    final batch = Batch()..deleteWithReference(reference);
+    await batch.commit();
+  }
 }

@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'flamingo.dart';
-import 'helper/helper.dart';
-import 'model/storage_file.dart';
 
 class Storage {
   Storage() {
@@ -47,6 +46,34 @@ class Storage {
       storageFile.isDeleted = true;
     } else {
       print('StorageFile is null');
+    }
+    return;
+  }
+
+  Future<StorageFile> saveStorageAndDoc(DocumentReference reference, String folderName, File data,
+      {String fileName, String mimeType, Map<String, String> metadata, Map<String, dynamic> additionalData}) async {
+    final folderPath = '${reference.path}/$folderName';
+    final storageFile = await save(folderPath, data, fileName: fileName, mimeType: mimeType, metadata: metadata);
+    storageFile.additionalData = additionalData;
+    final documentAccessor = DocumentAccessor();
+    final values = <String, dynamic>{};
+    values['$folderName'] = storageFile.toJson();
+    await documentAccessor.saveRaw(values, reference);
+    return storageFile;
+  }
+
+  Future<void> deleteStorageAndDoc(DocumentReference reference, String folderName, StorageFile storageFile, {bool isNotNull = true}) async {
+    final folderPath = '${reference.path}/$folderName';
+    await delete(folderPath, storageFile);
+    if (storageFile.isDeleted) {
+      final values = <String, dynamic>{};
+      if (isNotNull) {
+        values['$folderName'] = FieldValue.delete();
+      } else {
+        values['$folderName'] = null;
+      }
+      final documentAccessor = DocumentAccessor();
+      await documentAccessor.updateRaw(values, reference);
     }
     return;
   }

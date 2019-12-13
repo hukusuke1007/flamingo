@@ -17,6 +17,9 @@ class StorageFile {
   @JsonKey(ignore: true)
   bool isDeleted = false;
 
+  @JsonKey(ignore: true)
+  String folderName;
+
   String name;
   String path;
   String url;

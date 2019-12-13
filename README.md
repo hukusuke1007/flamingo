@@ -549,6 +549,30 @@ await storage.delete(path, post.file);
 await documentAccessor.update(post);
 ```
 
+Alternatively, flamingo provide function to operate Cloud Storage and Firestore.
+
+```dart
+// Save storage and document of storage data.
+final storageFile = await storage.saveStorageAndDoc(
+    post.reference,
+    post.folderName,
+    file,
+    mimeType: mimeTypePng,
+    metadata: {
+      'newPost': 'true'
+    },
+    additionalData: <String, dynamic>{
+      'key0': 'key',
+      'key1': 10,
+      'key2': 0.123,
+      'key3': true,
+    },
+);
+
+// Delete storage and document of storage data.
+await storage.deleteStorageAndDoc(post.reference, post.folderName, post.file, isNotNull: true);
+```
+
 ### Increment
 
 Example, CreditCard's document has point and score field. Their fields is Increment type.

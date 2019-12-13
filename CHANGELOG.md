@@ -1,3 +1,6 @@
+## 0.1.8
+Add function of raw values for document. Add function to save and delete storage and document.
+
 ## 0.1.7
 Update firestore plugin.
 
