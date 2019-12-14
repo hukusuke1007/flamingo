@@ -553,7 +553,7 @@ Alternatively, flamingo provide function to operate Cloud Storage and Firestore.
 
 ```dart
 // Save storage and document of storage data.
-final storageFile = await storage.saveStorageAndDoc(
+final storageFile = await storage.saveWithDoc(
     post.reference,
     post.folderName,
     file,
@@ -570,7 +570,7 @@ final storageFile = await storage.saveStorageAndDoc(
 );
 
 // Delete storage and document of storage data.
-await storage.deleteStorageAndDoc(post.reference, post.folderName, post.file, isNotNull: true);
+await storage.deleteWithDoc(post.reference, post.folderName, post.file, isNotNull: true);
 ```
 
 ### Increment

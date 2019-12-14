@@ -344,7 +344,7 @@ class FlamingoTest {
     });
 
     // save file metadata into firestore
-    final storageFile = await storage.saveStorageAndDoc(
+    final storageFile = await storage.saveWithDoc(
         post.reference,
         post.folderName,
         file,
@@ -375,7 +375,7 @@ class FlamingoTest {
 
     final storage = Storage();
     final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
-    final storageFile = await storage.saveStorageAndDoc(
+    final storageFile = await storage.saveWithDoc(
       post.reference,
       post.folderName,
       file,
@@ -393,7 +393,7 @@ class FlamingoTest {
 
     {
       final post = await documentAccessor.load<Post>(Post(id: id));
-      await storage.deleteStorageAndDoc(post.reference, post.folderName, post.file, isNotNull: false);
+      await storage.deleteWithDoc(post.reference, post.folderName, post.file, isNotNull: false);
 
       print('  ----get');
       final hoge = await documentAccessor.load<Post>(Post(id: post.id));

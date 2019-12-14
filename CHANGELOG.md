@@ -1,3 +1,6 @@
+## 0.1.9
+Rename function. saveStorageAndDoc => saveWithDoc, deleteStorageAndDoc => deleteWithDoc.
+
 ## 0.1.8
 Add function of raw values for document. Add function to save and delete storage and document.
 

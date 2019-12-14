@@ -50,7 +50,7 @@ class Storage {
     return;
   }
 
-  Future<StorageFile> saveStorageAndDoc(DocumentReference reference, String folderName, File data,
+  Future<StorageFile> saveWithDoc(DocumentReference reference, String folderName, File data,
       {String fileName, String mimeType, Map<String, String> metadata, Map<String, dynamic> additionalData}) async {
     final folderPath = '${reference.path}/$folderName';
     final storageFile = await save(folderPath, data, fileName: fileName, mimeType: mimeType, metadata: metadata);
@@ -62,7 +62,7 @@ class Storage {
     return storageFile;
   }
 
-  Future<void> deleteStorageAndDoc(DocumentReference reference, String folderName, StorageFile storageFile, {bool isNotNull = true}) async {
+  Future<void> deleteWithDoc(DocumentReference reference, String folderName, StorageFile storageFile, {bool isNotNull = true}) async {
     final folderPath = '${reference.path}/$folderName';
     await delete(folderPath, storageFile);
     if (storageFile.isDeleted) {
@@ -83,6 +83,6 @@ class Storage {
   }
 
   void dispose() {
-    uploader.close();
+    uploader?.close();
   }
 }
