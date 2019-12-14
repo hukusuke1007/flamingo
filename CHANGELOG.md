@@ -1,3 +1,6 @@
+## 0.1.10
+Update environment version.
+
 ## 0.1.9
 Rename function. saveStorageAndDoc => saveWithDoc, deleteStorageAndDoc => deleteWithDoc.
 
