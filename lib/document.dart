@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'base.dart';
 import 'enum/execute_type.dart';
 import 'flamingo.dart';
@@ -45,32 +44,23 @@ class Document<T> extends Base implements DocumentType {
   }
 
   /// Field
-  @JsonKey(ignore: true)
   Timestamp createdAt;
 
-  @JsonKey(ignore: true)
   Timestamp updatedAt;
 
-  @JsonKey(ignore: true)
   String id;
 
   /// Reference
-  @JsonKey(ignore: true)
   String collectionPath;
 
-  @JsonKey(ignore: true)
   String documentPath;
 
-  @JsonKey(ignore: true)
   final CollectionReference collectionRef;
 
-  @JsonKey(ignore: true)
   DocumentReference reference;
 
-  @JsonKey(ignore: true)
   final DocumentSnapshot snapshot;
 
-  @JsonKey(ignore: true)
   final Map<String, dynamic> values;
 
   /// Public method.
