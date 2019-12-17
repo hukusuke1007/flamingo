@@ -1,3 +1,6 @@
+## 0.1.11
+Remove dependency on json_annotation #2
+
 ## 0.1.10+1
 Update example's pubspec.yaml.
 
