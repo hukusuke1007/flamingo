@@ -31,7 +31,7 @@ class User extends Document<User> {
   }
 
   void log() {
-    print('User $id $name');
+    print('User $id $name $createdAt $updatedAt ${createdAt?.toDate()} ${updatedAt?.toDate()}');
   }
 
 }

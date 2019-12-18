@@ -1,3 +1,6 @@
+## 0.1.12
+Modified mapping timestamp for algolia.
+
 ## 0.1.11
 Remove dependency on json_annotation #2
 

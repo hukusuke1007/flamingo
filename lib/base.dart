@@ -133,4 +133,15 @@ class Base {
   Increment<U> valueFromIncrement<U extends num>(Map<String, dynamic> data, String key) => Increment(key, value: data[key] as U);
 
   bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);
+
+  Timestamp timestampFromMap(dynamic data, String key) {
+    if (data != null && data[key] is Map) {
+      final rawTimestamp = Map<String, dynamic>.from(Helper.fromMap(data[key] as Map));
+      final second = rawTimestamp['_seconds'] as int;
+      final nanoseconds = rawTimestamp['_nanoseconds'] as int;
+      return Timestamp(second, nanoseconds);
+    }
+    return null;
+  }
+
 }

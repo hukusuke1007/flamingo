@@ -4,7 +4,6 @@ import 'enum/execute_type.dart';
 import 'flamingo.dart';
 import 'type/type.dart';
 
-
 class Document<T> extends Base implements DocumentType {
   /// Constructor
   Document({this.id, this.snapshot, this.values, this.collectionRef}) {
@@ -92,7 +91,18 @@ class Document<T> extends Base implements DocumentType {
 
   /// Private method
   void _fromAt(Map<String, dynamic> data) {
-    createdAt = data['createdAt'] as Timestamp;
-    updatedAt = data['updatedAt'] as Timestamp;
+    const createdAtKey = 'createdAt';
+    if (data[createdAtKey] is Map) {
+      createdAt = timestampFromMap(data, createdAtKey);
+    } else if (data[createdAtKey] is Timestamp) {
+      createdAt = data[createdAtKey] as Timestamp;
+    }
+
+    const updatedAtKey = 'updatedAt';
+    if (data[updatedAtKey] is Map) {
+      updatedAt = timestampFromMap(data, updatedAtKey);
+    } else if (data[updatedAtKey] is Timestamp) {
+      updatedAt = data[updatedAtKey] as Timestamp;
+    }
   }
 }

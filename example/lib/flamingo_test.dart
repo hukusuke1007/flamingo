@@ -5,7 +5,6 @@ import 'package:flamingo_example/model/score.dart';
 import 'package:flamingo_example/model/map_sample.dart';
 import 'package:flamingo_example/model/list_sample.dart';
 import 'package:flamingo_example/model/model_sample.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'model/address.dart';
 import 'model/credit_card.dart';
 import 'model/medal.dart';
@@ -73,6 +72,23 @@ class FlamingoTest {
 
     final _user = await documentAccessor.load<User>(User(id: user.id));
     _user.log();
+
+    print('--- timestamp test ---');
+    {
+      final data = <String, dynamic>{
+        'name': 'shohei',
+        'createdAt': {
+          '_seconds': 1575163645,
+          '_nanoseconds': 648000000
+        },
+        'updatedAt': {
+          '_seconds': 1575163645,
+          '_nanoseconds': 648000000
+        },
+      };
+      final _ = User(values: data)
+        ..log();
+    }
   }
 
   Future delete() async {

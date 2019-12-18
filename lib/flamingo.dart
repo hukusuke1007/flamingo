@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart'
     show DocumentReference, Firestore;
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 
+export 'package:cloud_firestore/cloud_firestore.dart';
+export 'package:firebase_storage/firebase_storage.dart';
+
 export 'package:flamingo/batch.dart';
 export 'package:flamingo/distributed_counter.dart';
 export 'package:flamingo/document.dart';
@@ -18,6 +21,7 @@ export 'package:flamingo/model/storage_file.dart';
 export 'package:flamingo/model/model.dart';
 export 'package:flamingo/model/increment.dart';
 export 'package:flamingo/enum/execute_type.dart';
+
 
 class Flamingo {
   static Flamingo instance = Flamingo();
