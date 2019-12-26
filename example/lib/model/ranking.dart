@@ -18,7 +18,7 @@ class Ranking extends Document<Ranking> {
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeNotNull(data, 'name', title);
+    writeNotNull(data, 'title', title);
     return data;
   }
 

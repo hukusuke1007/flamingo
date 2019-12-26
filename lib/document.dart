@@ -5,8 +5,8 @@ import 'flamingo.dart';
 import 'type/type.dart';
 
 class Document<T> extends Base implements DocumentType {
-  /// Constructor
-  Document({this.id, this.snapshot, this.values, this.collectionRef}) {
+  Document({String id, this.snapshot, this.values, this.collectionRef}) {
+    _id = id;
     CollectionReference collectionReference;
     if (collectionRef != null) {
       collectionReference = collectionRef;
@@ -15,15 +15,15 @@ class Document<T> extends Base implements DocumentType {
     }
 
     if (id != null) {
-      reference = collectionReference.document(id);
+      _reference = collectionReference.document(id);
     } else {
-      reference = collectionReference.document();
-      id = reference.documentID;
+      _reference = collectionReference.document();
+      _id = reference.documentID;
     }
 
     if (snapshot != null) {
       setSnapshot(snapshot); // setSnapshotでidが作られる
-      reference = collectionReference.document(id);
+      _reference = collectionReference.document(id);
     }
 
     if (values != null) {
@@ -31,8 +31,8 @@ class Document<T> extends Base implements DocumentType {
       fromData(values);
     }
 
-    collectionPath = collectionReference.path;
-    documentPath = reference.path;
+    _collectionPath = collectionReference.path;
+    _documentPath = reference.path;
   }
 
   static String path<T extends Document<DocumentType>>({String id}) {
@@ -44,19 +44,22 @@ class Document<T> extends Base implements DocumentType {
 
   /// Field
   Timestamp createdAt;
-
   Timestamp updatedAt;
 
-  String id;
+  String _id;
+  String get id => _id;
 
   /// Reference
-  String collectionPath;
+  String _collectionPath;
+  String get collectionPath => _collectionPath;
 
-  String documentPath;
+  String _documentPath;
+  String get documentPath => _documentPath;
 
   final CollectionReference collectionRef;
 
-  DocumentReference reference;
+  DocumentReference _reference;
+  DocumentReference get reference => _reference;
 
   final DocumentSnapshot snapshot;
 
@@ -81,7 +84,7 @@ class Document<T> extends Base implements DocumentType {
   void onCompleted(ExecuteType executeType) {}
 
   void setSnapshot(DocumentSnapshot documentSnapshot) {
-    id = documentSnapshot.documentID;
+    _id = documentSnapshot.documentID;
     if (documentSnapshot.exists) {
       final data = documentSnapshot.data;
       _fromAt(data);

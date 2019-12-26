@@ -1,3 +1,6 @@
+## 0.1.13
+Modified property access.
+
 ## 0.1.12
 Modified mapping timestamp for algolia.
 

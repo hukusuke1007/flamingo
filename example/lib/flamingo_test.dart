@@ -148,6 +148,8 @@ class FlamingoTest {
     final batch = Batch()
       ..save(userA)
       ..save(userB);
+    print(userA.id);
+    print(userB.id);
     await batch.commit();
     userA.log();
     userB.log();
@@ -250,7 +252,7 @@ class FlamingoTest {
 
   Future subCollection() async {
     print('--- subCollection ---');
-    final ranking = Ranking(id: '20201007')
+    final ranking = Ranking(id: '20201225')
       ..title = 'userRanking';
     final countA = Count(id: '0', collectionRef: ranking.count.ref)
       ..userId = '0'
@@ -272,7 +274,10 @@ class FlamingoTest {
     print('from values');
     final listB = snapshot.documents.map((item) => Count(id: item.documentID, values: item.data)).toList()
       ..forEach((item) => item.log());
-
+    {
+      final ranking = await documentAccessor.load<Ranking>(Ranking(id: '20201225'));
+      ranking.log();
+    }
     print('document');
     {
       final count1 = await documentAccessor.load<Count>(
@@ -281,8 +286,8 @@ class FlamingoTest {
       final count2 = await documentAccessor.load<Count>(
           Count(id: '1', collectionRef: ranking.count.ref)
       );
-      print('count1 ${count1.toData()}');
-      print('count2 ${count2.toData()}');
+      print('count1 ${count1.id} ${count1.toData()}');
+      print('count2 ${count2.id} ${count2.toData()}');
     }
 
   }
@@ -295,7 +300,7 @@ class FlamingoTest {
 
     // fetch for uploading status
     storage.fetch();
-    storage.uploader.stream.listen((data){
+    storage.uploader.listen((data){
       // confirm status
       print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
     });
@@ -354,7 +359,7 @@ class FlamingoTest {
 
     // fetch for uploading status
     storage.fetch();
-    storage.uploader.stream.listen((data){
+    storage.uploader.listen((data){
       // confirm status
       print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
     });
@@ -559,7 +564,7 @@ class FlamingoTest {
 
     // fetch for uploading status
     storage.fetch();
-    storage.uploader.stream.listen((data){
+    storage.uploader.listen((data){
       // confirm status
       print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
     });

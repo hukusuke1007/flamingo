@@ -5,14 +5,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'flamingo.dart';
 
 class Storage {
-  Storage() {
-    storage = storageInstance();
-  }
 
   static String fileName({int length}) => Helper.randomString(length: length);
 
-  FirebaseStorage storage;
-  StreamController<StorageTaskEvent> uploader;
+  final _storage = storageInstance();
+  FirebaseStorage get storage => _storage;
+
+  StreamController<StorageTaskEvent> _uploader;
+  Stream<StorageTaskEvent> get uploader => _uploader.stream;
 
   Future<StorageFile> save(String folderPath, File data,
       {String fileName, String mimeType, Map<String, String> metadata}) async {
@@ -23,8 +23,8 @@ class Storage {
     final uploadTask = ref.putFile(data,
         StorageMetadata(contentType: refMimeType, customMetadata: metadata));
     uploadTask.events.listen((event) {
-      if (uploader != null) {
-        uploader.sink.add(event);
+      if (_uploader != null) {
+        _uploader.add(event);
       }
     });
     final snapshot = await uploadTask.onComplete;
@@ -79,10 +79,11 @@ class Storage {
   }
 
   void fetch() {
-    uploader = StreamController<StorageTaskEvent>();
+    _uploader ??= StreamController<StorageTaskEvent>();
   }
 
   void dispose() {
-    uploader?.close();
+    _uploader.close();
+    _uploader = null;
   }
 }
