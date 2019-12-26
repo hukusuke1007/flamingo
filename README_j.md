@@ -544,7 +544,7 @@ final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg'); // flu
 storage.fetch();
 
 // Checking status
-storage.uploader.stream.listen((data){
+storage.uploader.listen((data){
   print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
 });
 
