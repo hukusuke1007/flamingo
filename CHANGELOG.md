@@ -1,3 +1,6 @@
+## 0.1.14
+Bug fix.
+
 ## 0.1.13
 Modified property access.
 

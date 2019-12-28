@@ -18,7 +18,7 @@ class Document<T> extends Base implements DocumentType {
       _reference = collectionReference.document(id);
     } else {
       _reference = collectionReference.document();
-      _id = reference.documentID;
+      _id = _reference.documentID;
     }
 
     if (snapshot != null) {
@@ -32,7 +32,7 @@ class Document<T> extends Base implements DocumentType {
     }
 
     _collectionPath = collectionReference.path;
-    _documentPath = reference.path;
+    _documentPath = _reference.path;
   }
 
   static String path<T extends Document<DocumentType>>({String id}) {
