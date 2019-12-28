@@ -15,7 +15,7 @@ class Document<T> extends Base implements DocumentType {
     }
 
     if (id != null) {
-      _reference = collectionReference.document(id);
+      _reference = collectionReference.document(_id);
     } else {
       _reference = collectionReference.document();
       _id = _reference.documentID;
@@ -23,7 +23,7 @@ class Document<T> extends Base implements DocumentType {
 
     if (snapshot != null) {
       setSnapshot(snapshot); // setSnapshotでidが作られる
-      _reference = collectionReference.document(id);
+      _reference = collectionReference.document(_id);
     }
 
     if (values != null) {
