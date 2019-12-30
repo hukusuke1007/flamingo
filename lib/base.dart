@@ -114,15 +114,30 @@ class Base {
     }
   }
 
-  U valueFromKey<U>(Map<String, dynamic> data, String key) => data[key] as U;
+  U valueFromKey<U>(Map<String, dynamic> data, String key) {
+    final dynamic value = data[key];
+    if (U.toString() == 'int') {
+      if (value is double) {
+        return value.toInt() as U;
+      }
+    } else if (U.toString() == 'double') {
+      if (value is int) {
+        return value.toDouble() as U;
+      }
+    }
+    return value as U;
+  }
+
   Map<U, V> valueMapFromKey<U, V>(Map<String, dynamic> data, String key) =>
       isVal(data, key) && data[key] != null
           ? Map<U, V>.from(Helper.fromMap(data[key] as Map))
           : null;
+
   List<U> valueListFromKey<U>(Map<String, dynamic> data, String key) =>
       data[key] != null
           ? (data[key] as List)?.map((dynamic e) => e as U)?.toList()
           : null;
+
   List<Map<U, V>> valueMapListFromKey<U, V>(
           Map<String, dynamic> data, String key) =>
       isVal(data, key) && data[key] != null
@@ -130,6 +145,7 @@ class Base {
               .map((dynamic d) => Map<U, V>.from(d as Map))
               .toList()
           : null;
+
   Increment<U> valueFromIncrement<U extends num>(Map<String, dynamic> data, String key) => Increment(key, value: data[key] as U);
 
   bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);
