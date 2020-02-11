@@ -491,7 +491,7 @@ await batch.commit();
 // Get sub collection
 final path = ranking.count.ref.path; // ※2
 final snapshot = await firestoreInstance().collection(path).getDocuments();
-final list = snapshot.documents.map((item) => Count(snapshot: item)).toList()
+final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList()
   ..forEach((count) {
     print('${count.userId}, ${count.count}');
   });

@@ -13,10 +13,36 @@ import 'model/point.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
 
+extension _Extension on FlamingoTest {
+  void assertCreateDocument(Document d1, Document d2) {
+    assert(d1.id == d2.id);
+    assert(d1.documentPath == d2.documentPath);
+    assert(d1.reference.path == d2.reference.path);
+    assert(d1.collectionRef.path == d2.collectionRef.path);
+  }
+  void assertDeleteDocument(Document d1) {
+    assert(d1 == null);
+  }
+  void assertCollection(Document item, String collectionPath) {
+    assert(item.id != null);
+    assert(item.documentPath == '$collectionPath/${item.id}');
+    assert(item.reference.path == '$collectionPath/${item.id}');
+    assert(item.collectionRef.path == collectionPath);
+  }
+  void assertStorageFile(StorageFile d1, StorageFile d2) {
+    assert(d1.name == d2.name);
+    assert(d1.path == d2.path);
+    assert(d1.url == d2.url);
+    assert(d1.mimeType == d2.mimeType);
+  }
+}
+
 class FlamingoTest {
   DocumentAccessor documentAccessor = DocumentAccessor();
 
   Future all() async {
+    print('------- start -------');
+
     await save();
     await update();
     await delete();
@@ -46,6 +72,8 @@ class FlamingoTest {
     await incrementTest1();
     await incrementTest2();
     await valueZeroTest();
+
+    print('------- finish -------');
   }
 
   Future save() async {
@@ -57,6 +85,9 @@ class FlamingoTest {
 
     final _user = await documentAccessor.load<User>(User(id: user.id));
     _user.log();
+
+    assertCreateDocument(user, _user);
+    assert(user.name == _user.name);
   }
 
   Future update() async {
@@ -71,7 +102,9 @@ class FlamingoTest {
     await documentAccessor.update(updateUser);
 
     final _user = await documentAccessor.load<User>(User(id: user.id));
-    _user.log();
+
+    assertCreateDocument(user, _user);
+    assert(user.name != _user.name);
 
     print('--- timestamp test ---');
     {
@@ -86,8 +119,9 @@ class FlamingoTest {
           '_nanoseconds': 648000000
         },
       };
-      final _ = User(values: data)
-        ..log();
+      final _user = User(values: data);
+      assert(_user.createdAt != null);
+      assert(_user.updatedAt != null);
     }
   }
 
@@ -99,18 +133,21 @@ class FlamingoTest {
 
     await documentAccessor.delete(User(id: user.id));
     final _user = await documentAccessor.load<User>(User(id: user.id));
-    print(_user);
+
+    assertDeleteDocument(_user);
   }
 
   Future saveRaw() async {
     print('--- saveRaw ---');
-    final userA = User()
+    final user = User()
       ..name = 'hoge';
 
-    await documentAccessor.saveRaw(userA.toData(), userA.reference);
+    await documentAccessor.saveRaw(user.toData(), user.reference);
 
-    final _user = await documentAccessor.load<User>(User(id: userA.id));
+    final _user = await documentAccessor.load<User>(User(id: user.id));
     _user.log();
+    assertCreateDocument(user, _user);
+    assert(user.name == _user.name);
   }
 
   Future updateRaw() async {
@@ -126,6 +163,9 @@ class FlamingoTest {
 
     final _user = await documentAccessor.load<User>(User(id: user.id));
     _user.log();
+
+    assertCreateDocument(user, _user);
+    assert(user.name != _user.name);
   }
 
   Future deleteRaw() async {
@@ -136,7 +176,7 @@ class FlamingoTest {
 
     await documentAccessor.deleteWithReference(user.reference);
     final _user = await documentAccessor.load<User>(User(id: user.id));
-    print(_user);
+    assertDeleteDocument(_user);
   }
 
   Future batchSave() async {
@@ -151,8 +191,12 @@ class FlamingoTest {
     print(userA.id);
     print(userB.id);
     await batch.commit();
-    userA.log();
-    userB.log();
+
+    final _userA = await documentAccessor.load<User>(User(id: userA.id));
+    assertCreateDocument(userA, _userA);
+
+    final _userB = await documentAccessor.load<User>(User(id: userB.id));
+    assertCreateDocument(userB, _userB);
   }
 
   Future batchSaveRaw() async {
@@ -163,10 +207,14 @@ class FlamingoTest {
       ..name = 'fuga';
     final batch = Batch()
       ..saveRaw(userA.toData(), userA.reference)
-      ..saveRaw(userB.toData(), userA.reference, isTimestamp: true);
+      ..saveRaw(userB.toData(), userB.reference, isTimestamp: true);
     await batch.commit();
-    userA.log();
-    userB.log();
+
+    final _userA = await documentAccessor.load<User>(User(id: userA.id));
+    assertCreateDocument(userA, _userA);
+
+    final _userB = await documentAccessor.load<User>(User(id: userB.id));
+    assertCreateDocument(userB, _userB);
   }
 
   Future batchUpdateDelete() async {
@@ -179,8 +227,6 @@ class FlamingoTest {
       ..save(userA)
       ..save(userB);
     await batch.commit();
-    userA.log();
-    userB.log();
     await _batchUpdateDelete(userA, userB);
   }
 
@@ -192,9 +238,12 @@ class FlamingoTest {
       ..delete(userB);
     await batch.commit();
 
+    final _hoge = await documentAccessor.load<User>(User(id: userA.id));
+    assertCreateDocument(userA, _hoge);
+    assert(userA.name != hoge.name);
+
     final _user = await documentAccessor.load<User>(User(id: userB.id));
-    hoge.log();
-    print(_user);
+    assertDeleteDocument(_user);
   }
 
   Future batchUpdateDeleteRaw() async {
@@ -218,9 +267,12 @@ class FlamingoTest {
         ..deleteWithReference(userB.reference);
       await batch.commit();
 
+      final _hoge = await documentAccessor.load<User>(User(id: userA.id));
+      assertCreateDocument(userA, _hoge);
+      assert(userA.name != hoge.name);
+
       final _user = await documentAccessor.load<User>(User(id: userB.id));
-      hoge.log();
-      print(_user);
+      assertDeleteDocument(_user);
     }
   }
 
@@ -229,25 +281,34 @@ class FlamingoTest {
     final user = User()
       ..name = 'hoge';
     await documentAccessor.save(user);
-    user.log();
 
-    final hoge = await documentAccessor.load<User>(User(id: user.id));
-    hoge.name = 'hogehoge';
-    await documentAccessor.update(hoge);
-    hoge.log();
+    user.name = 'hogehoge';
+    await documentAccessor.update(user);
+
+    final _user = await documentAccessor.load<User>(User(id: user.id));
+    assertCreateDocument(user, _user);
+    assert(user.name == _user.name);
   }
 
   Future getCollection() async {
     print('--- getCollection ---');
-    print('path ${Document.path<User>()}');
-    final snapshot = await firestoreInstance().collection(Document.path<User>()).limit(5).getDocuments();
+    final path = Document.path<User>();
+    print('path ${path}');
+    final snapshot = await firestoreInstance().collection(path).limit(5).getDocuments();
     print('from Snapshot');
-    final listA = snapshot.documents.map((item) => User(snapshot: item)).toList()
-      ..forEach((item) => item.log());
+    final listA = snapshot.documents.map((item) => User(snapshot: item)).toList();
+
+    assert(listA.isNotEmpty);
+    listA.forEach((item) {
+      assertCollection(item, path);
+    });
 
     print('from values');
-    final listB = snapshot.documents.map((item) => User(id: item.documentID, values: item.data)).toList()
-      ..forEach((item) => item.log());
+    final listB = snapshot.documents.map((item) => User(id: item.documentID, values: item.data)).toList();
+    assert(listB.isNotEmpty);
+    listB.forEach((item) {
+      assertCollection(item, path);
+    });
   }
 
   Future subCollection() async {
@@ -268,28 +329,35 @@ class FlamingoTest {
 
     final snapshot = await firestoreInstance().collection(ranking.count.ref.path).limit(5).getDocuments();
     print('from Snapshot');
-    final listA = snapshot.documents.map((item) => Count(snapshot: item)).toList()
-      ..forEach((item) => item.log());
+    final listA = snapshot.documents.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList();
+    assert(listA.isNotEmpty);
+    listA.forEach((item) {
+      assertCollection(item, ranking.count.ref.path);
+    });
 
     print('from values');
-    final listB = snapshot.documents.map((item) => Count(id: item.documentID, values: item.data)).toList()
-      ..forEach((item) => item.log());
-    {
-      final ranking = await documentAccessor.load<Ranking>(Ranking(id: '20201225'));
-      ranking.log();
-    }
-    print('document');
-    {
-      final count1 = await documentAccessor.load<Count>(
-          Count(id: '0', collectionRef: ranking.count.ref)
-      );
-      final count2 = await documentAccessor.load<Count>(
-          Count(id: '1', collectionRef: ranking.count.ref)
-      );
-      print('count1 ${count1.id} ${count1.toData()}');
-      print('count2 ${count2.id} ${count2.toData()}');
-    }
+    final listB = snapshot.documents.map((item) => Count(
+        id: item.documentID,
+        values: item.data,
+        collectionRef: ranking.count.ref
+    )).toList();
+    assert(listB.isNotEmpty);
+    listB.forEach((item) {
+      assertCollection(item, ranking.count.ref.path);
+    });
 
+    /// documentAccessor
+    final _ranking = await documentAccessor.load<Ranking>(Ranking(id: '20201225'));
+    assertCreateDocument(ranking, _ranking);
+
+    final _countA = await documentAccessor.load<Count>(
+        Count(id: '0', collectionRef: ranking.count.ref)
+    );
+    final _countB = await documentAccessor.load<Count>(
+        Count(id: '1', collectionRef: ranking.count.ref)
+    );
+    assertCreateDocument(countA, _countA);
+    assertCreateDocument(countB, _countB);
   }
 
   Future saveStorage() async {
@@ -325,9 +393,10 @@ class FlamingoTest {
     post.log();
 
     print('  ----get');
-    final hoge = await documentAccessor.load<Post>(Post(id: post.id));
-    hoge.log();
-
+    final _post = await documentAccessor.load<Post>(Post(id: post.id));
+    assertCreateDocument(post, _post);
+    assertStorageFile(post.file, _post.file);
+    _post.log();
     // dispose for uploading status
     storage.dispose();
   }
@@ -340,14 +409,18 @@ class FlamingoTest {
     final path = '${post.documentPath}/${post.folderName}';
     post.file = await storage.save(path, file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
-    post.log();
+
+    final _post = await documentAccessor.load<Post>(post);
+    assertCreateDocument(post, _post);
+    assertStorageFile(post.file, _post.file);
 
     await storage.delete(path, post.file);
     await documentAccessor.update(post);
 
     print('  ----get');
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
-    hoge.log();
+    assert(post.id == hoge.id);
+    assert(hoge.file == null);
   }
 
   Future saveStorageAndDoc() async {
@@ -365,7 +438,7 @@ class FlamingoTest {
     });
 
     // save file metadata into firestore
-    final storageFile = await storage.saveWithDoc(
+    post.file = await storage.saveWithDoc(
         post.reference,
         post.folderName,
         file,
@@ -380,10 +453,12 @@ class FlamingoTest {
           'key3': true,
         },
     );
-    print(storageFile.toJson());
     print('  ----get');
-    final hoge = await documentAccessor.load<Post>(Post(id: post.id));
-    hoge.log();
+    final _post = await documentAccessor.load<Post>(Post(id: post.id));
+    _post.log();
+
+    assertCreateDocument(post, _post);
+    assertStorageFile(post.file, _post.file);
 
     // dispose for uploading status
     storage.dispose();
@@ -412,15 +487,12 @@ class FlamingoTest {
       },
     );
 
-    {
-      final post = await documentAccessor.load<Post>(Post(id: id));
-      await storage.deleteWithDoc(post.reference, post.folderName, post.file, isNotNull: false);
+    final _post = await documentAccessor.load<Post>(Post(id: id));
+    await storage.deleteWithDoc(_post.reference, _post.folderName, _post.file, isNotNull: false);
 
-      print('  ----get');
-      final hoge = await documentAccessor.load<Post>(Post(id: post.id));
-      hoge.log();
-    }
-
+    final hoge = await documentAccessor.load<Post>(Post(id: post.id));
+    assert(post.id == hoge.id);
+    assert(hoge.file == null);
   }
 
   Future distributedCounter() async {
@@ -442,6 +514,8 @@ class FlamingoTest {
     /// Load
     final count = await distributedCounter.load(score.value);
     print('count $count ${score.value.count}');
+    assert(count == 10);
+    assert(score.value.count == 10);
   }
 
   Future transactionSave() async {
@@ -498,6 +572,13 @@ class FlamingoTest {
     {
       print('  ----get');
       final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
+      assertCreateDocument(sample1, _sample1);
+      assert(sample1.strMap['userId'] == _sample1.strMap['userId']);
+      assert(sample1.intMap['userId'] == _sample1.intMap['userId']);
+      assert(sample1.doubleMap['userId'] == _sample1.doubleMap['userId']);
+      assert(sample1.boolMap['userId'] == _sample1.boolMap['userId']);
+      assert(sample1.listStrMap.isNotEmpty);
+      assert(sample1.listStrMap.first['userId'] == _sample1.listStrMap.first['userId']);
       _sample1.log();
     }
 
@@ -512,6 +593,12 @@ class FlamingoTest {
     {
       print('  ----get delete');
       final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id));
+      assertCreateDocument(sample1, _sample1);
+      assert(!_sample1.strMap.containsKey('userId'));
+      assert(!_sample1.intMap.containsKey('userId'));
+      assert(!_sample1.doubleMap.containsKey('userId'));
+      assert(!_sample1.boolMap.containsKey('userId'));
+      assert(_sample1.listStrMap.isEmpty);
       _sample1.log();
     }
   }
@@ -534,6 +621,18 @@ class FlamingoTest {
     {
       print('  ----get');
       final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+      assertCreateDocument(sample1, _sample1);
+      assert(sample1.strList.length == _sample1.strList.length);
+      assert(sample1.intList.length == _sample1.intList.length);
+      assert(sample1.doubleList.length == _sample1.doubleList.length);
+      assert(sample1.boolList.length == _sample1.boolList.length);
+      assert(sample1.files.length == _sample1.files.length);
+
+      assert(sample1.strList.first == _sample1.strList.first);
+      assert(sample1.intList.first == _sample1.intList.first);
+      assert(sample1.doubleList.first == _sample1.doubleList.first);
+      assert(sample1.boolList.first == _sample1.boolList.first);
+      assertStorageFile(sample1.files.first, _sample1.files.first);
       _sample1.log();
     }
 
@@ -549,6 +648,11 @@ class FlamingoTest {
     {
       print('  ----get delete');
       final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+      assert(sample1.strList.length == _sample1.strList.length);
+      assert(sample1.intList.length == _sample1.intList.length);
+      assert(sample1.doubleList.length == _sample1.doubleList.length);
+      assert(sample1.boolList.length == _sample1.boolList.length);
+      assert(sample1.files.isNotEmpty);
       _sample1.log();
     }
   }
@@ -672,6 +776,15 @@ class FlamingoTest {
     print('id: ${_owner.id}, name: ${_owner.name}');
     print('address: ${_owner.id} ${_owner.address.postCode} ${_owner.address.country}');
     print('medals: ${_owner.medals.map((d) => d.name)}');
+
+    assertCreateDocument(owner, _owner);
+    assert(owner.name == _owner.name);
+    assert(owner.address.postCode == _owner.address.postCode);
+    assert(owner.address.country == _owner.address.country);
+    assert(owner.medals.length == _owner.medals.length);
+    assert(owner.medals[0].name == _owner.medals[0].name);
+    assert(owner.medals[1].name == _owner.medals[1].name);
+    assert(owner.medals[2].name == _owner.medals[2].name);
   }
 
   Future incrementTest1() async {
@@ -807,7 +920,6 @@ class FlamingoTest {
     }
   }
 
-
   Future valueZeroTest() async {
     print('--- valueZeroTest ---');
     final point = Point()
@@ -818,11 +930,11 @@ class FlamingoTest {
     print('${point.id}');
     await documentAccessor.save(point);
 
-    {
-      print('--- load ---');
-      final _point= await documentAccessor.load<Point>(point);
-      _point.log();
-    }
+    print('--- load ---');
+    final _point= await documentAccessor.load<Point>(point);
+    _point.log();
+    assertCreateDocument(point, _point);
+    assert(point.pointInt == _point.pointInt);
+    assert(point.pointDouble == _point.pointDouble);
   }
 }
-

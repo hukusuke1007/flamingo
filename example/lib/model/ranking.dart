@@ -7,7 +7,8 @@ class Ranking extends Document<Ranking> {
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values) {
+    CollectionReference collectionRef
+  }): super(id: id, snapshot: snapshot, values: values, collectionRef: collectionRef) {
     count = Collection(this, 'count');
   }
 

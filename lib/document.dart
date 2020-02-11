@@ -5,25 +5,29 @@ import 'flamingo.dart';
 import 'type/type.dart';
 
 class Document<T> extends Base implements DocumentType {
-  Document({String id, this.snapshot, this.values, this.collectionRef}) {
+  Document({
+    String id,
+    this.snapshot,
+    this.values,
+    CollectionReference collectionRef,
+  }) {
     _id = id;
-    CollectionReference collectionReference;
     if (collectionRef != null) {
-      collectionReference = collectionRef;
+      _collectionRef = collectionRef;
     } else {
-      collectionReference = collectionRootReference();
+      _collectionRef = collectionRootReference();
     }
 
     if (id != null) {
-      _reference = collectionReference.document(_id);
+      _reference = _collectionRef.document(_id);
     } else {
-      _reference = collectionReference.document();
+      _reference = _collectionRef.document();
       _id = _reference.documentID;
     }
 
     if (snapshot != null) {
       setSnapshot(snapshot); // setSnapshotでidが作られる
-      _reference = collectionReference.document(_id);
+      _reference = _collectionRef.document(_id);
     }
 
     if (values != null) {
@@ -31,7 +35,7 @@ class Document<T> extends Base implements DocumentType {
       fromData(values);
     }
 
-    _collectionPath = collectionReference.path;
+    _collectionPath = _collectionRef.path;
     _documentPath = _reference.path;
   }
 
@@ -56,13 +60,14 @@ class Document<T> extends Base implements DocumentType {
   String _documentPath;
   String get documentPath => _documentPath;
 
-  final CollectionReference collectionRef;
+  CollectionReference _collectionRef;
+  CollectionReference get collectionRef => _collectionRef;
 
   DocumentReference _reference;
   DocumentReference get reference => _reference;
 
+  /// For constructor
   final DocumentSnapshot snapshot;
-
   final Map<String, dynamic> values;
 
   /// Public method.

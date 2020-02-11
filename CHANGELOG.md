@@ -1,3 +1,6 @@
+## 0.2.0
+Update plugin and bug fix for collection reference.
+
 ## 0.1.16
 Bug fix.
 
