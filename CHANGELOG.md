@@ -1,3 +1,6 @@
+## 0.2.0+1
+Deleted unnecessary files.
+
 ## 0.2.0
 Update plugin and bug fix for collection reference.
 
