@@ -1,3 +1,6 @@
+## 0.2.1
+Update plugin.
+
 ## 0.2.0+1
 Deleted unnecessary files.
 
