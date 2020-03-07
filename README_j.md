@@ -538,7 +538,7 @@ Cloud Storageへの操作はFlamingoが提供する Storage を利用します�
 ```dart
 final post = Post();
 final storage = Storage();
-final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg'); // flutterプロジェクト内に保存されている画像を取得
+final file = ... // load image.
 
 // Fetch uploader stream
 storage.fetch();

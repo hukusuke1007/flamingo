@@ -5,6 +5,7 @@ import 'package:flamingo_example/model/score.dart';
 import 'package:flamingo_example/model/map_sample.dart';
 import 'package:flamingo_example/model/list_sample.dart';
 import 'package:flamingo_example/model/model_sample.dart';
+import 'image_helper.dart';
 import 'model/address.dart';
 import 'model/credit_card.dart';
 import 'model/medal.dart';
@@ -12,6 +13,7 @@ import 'model/owner.dart';
 import 'model/point.dart';
 import 'model/ranking.dart';
 import 'model/user.dart';
+
 
 extension _Extension on FlamingoTest {
   void assertCreateDocument(Document d1, Document d2) {
@@ -364,7 +366,7 @@ class FlamingoTest {
     print('--- saveStorage ---');
     final post = Post();
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+    final file = await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
@@ -405,7 +407,7 @@ class FlamingoTest {
     print('--- deleteStorage ---');
     final post = Post();
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+    final file = await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
     final path = '${post.documentPath}/${post.folderName}';
     post.file = await storage.save(path, file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
@@ -428,7 +430,7 @@ class FlamingoTest {
     final post = Post();
 
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+    final file = await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
@@ -470,7 +472,7 @@ class FlamingoTest {
     final id = post.id;
 
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+    final file = await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
     final storageFile = await storage.saveWithDoc(
       post.reference,
       post.folderName,
@@ -664,7 +666,7 @@ class FlamingoTest {
     item.log();
 
     final storage = Storage();
-    final file = await Helper.getImageFileFromAssets('assets', 'sample.jpg');
+    final file = await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
