@@ -1,4 +1,7 @@
-# 0.2.2
+# 0.2.3
+Set default values for metadata and additionalData(Thanks kikuchy-san). Updated plugin and modify document.
+
+## 0.2.2
 Remove path_provider plugin adn updated plugin.
 
 ## 0.2.1

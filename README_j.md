@@ -604,7 +604,6 @@ FieldValue.increment を使用する場合は、Flamingoが提供する Incremen
 例として、CreditCardのドキュメントが point と score のIncrementを持ったモデルを考えます。
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class CreditCard extends Document<CreditCard> {

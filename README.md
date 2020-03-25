@@ -64,7 +64,6 @@ Flamingo.configure(firestore: firestore, storage: storage, root: root);
 Create class that inherited **Document**. And add json mapping code into override functions.
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
 
 class User extends Document<User> {
