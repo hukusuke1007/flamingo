@@ -1,21 +1,27 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 import 'flamingo.dart';
 
 class Storage {
-
   static String fileName({int length}) => Helper.randomString(length: length);
 
   final _storage = storageInstance();
+
   FirebaseStorage get storage => _storage;
 
   StreamController<StorageTaskEvent> _uploader;
+
   Stream<StorageTaskEvent> get uploader => _uploader.stream;
 
   Future<StorageFile> save(String folderPath, File data,
-      {String fileName, String mimeType, Map<String, String> metadata}) async {
+      {String fileName,
+      String mimeType = 'application/octet-stream',
+      Map<String, String> metadata = const <String, String>{},
+      Map<String, dynamic> additionalData = const <String, dynamic>{}}) async {
     final refFileName = fileName != null ? fileName : Storage.fileName();
     final refMimeType = mimeType != null ? mimeType : '';
     final path = '$folderPath/$refFileName';
@@ -35,6 +41,7 @@ class Storage {
       path: path,
       mimeType: refMimeType,
       metadata: metadata,
+      additionalData: additionalData,
     );
   }
 
@@ -50,10 +57,15 @@ class Storage {
     return;
   }
 
-  Future<StorageFile> saveWithDoc(DocumentReference reference, String folderName, File data,
-      {String fileName, String mimeType, Map<String, String> metadata, Map<String, dynamic> additionalData}) async {
+  Future<StorageFile> saveWithDoc(
+      DocumentReference reference, String folderName, File data,
+      {String fileName,
+      String mimeType = 'application/octet-stream',
+      Map<String, String> metadata = const <String, String>{},
+      Map<String, dynamic> additionalData = const <String, dynamic>{}}) async {
     final folderPath = '${reference.path}/$folderName';
-    final storageFile = await save(folderPath, data, fileName: fileName, mimeType: mimeType, metadata: metadata);
+    final storageFile = await save(folderPath, data,
+        fileName: fileName, mimeType: mimeType, metadata: metadata);
     storageFile.additionalData = additionalData;
     final documentAccessor = DocumentAccessor();
     final values = <String, dynamic>{};
@@ -62,7 +74,9 @@ class Storage {
     return storageFile;
   }
 
-  Future<void> deleteWithDoc(DocumentReference reference, String folderName, StorageFile storageFile, {bool isNotNull = true}) async {
+  Future<void> deleteWithDoc(
+      DocumentReference reference, String folderName, StorageFile storageFile,
+      {bool isNotNull = true}) async {
     final folderPath = '${reference.path}/$folderName';
     await delete(folderPath, storageFile);
     if (storageFile.isDeleted) {

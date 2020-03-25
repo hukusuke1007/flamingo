@@ -5,9 +5,9 @@ class StorageFile {
       {this.name,
       this.path,
       this.url,
-      this.mimeType,
-      this.additionalData,
-      this.metadata});
+      this.mimeType = 'application/octet-stream',
+      this.additionalData = const <String, dynamic>{},
+      this.metadata = const <String, String>{}});
   factory StorageFile.fromJson(Map<String, dynamic> json) =>
       _$StorageFileFromJson(json);
 
