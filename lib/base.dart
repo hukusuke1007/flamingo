@@ -85,7 +85,7 @@ class Base {
   void _writeStorageList(
       Map<String, dynamic> data, String key, List<StorageFile> storageFiles,
       {bool isSetNull}) {
-    if (storageFiles != null && storageFiles.isNotEmpty) {
+    if (storageFiles != null) {
       data[key] = storageFiles
           .where((d) => d.isDeleted != true)
           .map((d) => d.toJson())
