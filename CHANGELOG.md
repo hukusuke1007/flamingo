@@ -1,4 +1,7 @@
-# 0.2.3
+# 0.2.4
+Fix: Add empty List during updation(Thanks huma11farheen-san).
+
+## 0.2.3
 Set default values for metadata and additionalData(Thanks kikuchy-san). Updated plugin and modify document.
 
 ## 0.2.2
