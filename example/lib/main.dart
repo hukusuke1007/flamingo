@@ -269,6 +269,14 @@ class _MyAppState extends State<MyApp> {
                   },
                   child: Text('Delete', style: TextStyle(color: Colors.white),),
                 ),
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.saveAndDeleteStorageDocWithDocumentAccessor();
+                  },
+                  child: Text('Save empty list.', style: TextStyle(color: Colors.white),),
+                ),
               ],
             ),
             Padding(

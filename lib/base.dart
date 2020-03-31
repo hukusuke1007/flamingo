@@ -54,43 +54,68 @@ class Base {
     data[key] = models.map((d) => d.toData()).toList();
   }
 
-  void writeStorage(
-          Map<String, dynamic> data, String key, StorageFile storageFile) =>
-      _writeStorage(data, key, storageFile, isSetNull: true);
+  void writeStorage(Map<String, dynamic> data, String key, StorageFile storageFile, {
+    bool isSetNull = true,
+  }) => _writeStorage(data, key, storageFile,
+        isNullIgnore: false,
+        isSetNull: isSetNull,
+      );
 
-  void writeStorageNotNull(
-          Map<String, dynamic> data, String key, StorageFile storageFile) =>
-      _writeStorage(data, key, storageFile, isSetNull: false);
+  void writeStorageNotNull(Map<String, dynamic> data, String key, StorageFile storageFile, {
+    bool isSetNull = false,
+  }) => _writeStorage(data, key, storageFile,
+        isNullIgnore: true,
+        isSetNull: isSetNull,
+      );
 
-  void writeStorageList(Map<String, dynamic> data, String key,
-          List<StorageFile> storageFiles) =>
-      _writeStorageList(data, key, storageFiles, isSetNull: true);
+  void writeStorageList(Map<String, dynamic> data, String key, List<StorageFile> storageFiles, {
+    bool isSetNull = true,
+  }) => _writeStorageList(data, key, storageFiles,
+        isNullIgnore: false,
+        isSetNull: isSetNull,
+      );
 
-  void writeStorageListNotNull(Map<String, dynamic> data, String key,
-          List<StorageFile> storageFiles) =>
-      _writeStorageList(data, key, storageFiles, isSetNull: false);
+  void writeStorageListNotNull(Map<String, dynamic> data, String key, List<StorageFile> storageFiles, {
+    bool isSetNull = true,
+  }) => _writeStorageList(data, key, storageFiles,
+        isNullIgnore: true,
+        isSetNull: isSetNull,
+      );
 
   void _writeStorage(
-      Map<String, dynamic> data, String key, StorageFile storageFile,
-      {bool isSetNull}) {
+      Map<String, dynamic> data, String key, StorageFile storageFile, {
+        bool isNullIgnore,
+        bool isSetNull,
+      }) {
     if (storageFile != null) {
       if (!storageFile.isDeleted) {
         data[key] = storageFile.toJson();
       } else {
         data[key] = isSetNull ? null : FieldValue.delete();
       }
+    } else {
+      if (!isNullIgnore) {
+        data[key] = isSetNull ? null : FieldValue.delete();
+      }
     }
   }
 
   void _writeStorageList(
-      Map<String, dynamic> data, String key, List<StorageFile> storageFiles,
-      {bool isSetNull}) {
+      Map<String, dynamic> data, String key, List<StorageFile> storageFiles, {
+        bool isNullIgnore,
+        bool isSetNull,
+      }) {
     if (storageFiles != null) {
-      data[key] = storageFiles
-          .where((d) => d.isDeleted != true)
-          .map((d) => d.toJson())
-          .toList();
-      if ((data[key] as List).isEmpty) {
+      if (storageFiles.isNotEmpty) {
+        data[key] = storageFiles
+            .where((d) => d.isDeleted != true)
+            .map((d) => d.toJson())
+            .toList();
+      } else {
+        data[key] = storageFiles;
+      }
+    } else {
+      if (!isNullIgnore) {
         data[key] = isSetNull ? null : FieldValue.delete();
       }
     }

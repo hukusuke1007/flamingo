@@ -376,7 +376,7 @@ class FlamingoTest {
     });
 
     // save file metadata into firestore
-    final path = '${post.documentPath}/${post.folderName}';
+    final path = '${post.documentPath}/${Post.folderFileName}';
     post.file = await storage.save(
       path,
       file,
@@ -408,7 +408,7 @@ class FlamingoTest {
     final post = Post();
     final storage = Storage();
     final file = await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
-    final path = '${post.documentPath}/${post.folderName}';
+    final path = '${post.documentPath}/${Post.folderFileName}';
     post.file = await storage.save(path, file, mimeType: mimeTypePng);
     await documentAccessor.save(post);
 
@@ -422,6 +422,7 @@ class FlamingoTest {
     print('  ----get');
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
     assert(post.id == hoge.id);
+    print(hoge.file);
     assert(hoge.file == null);
   }
 
@@ -442,7 +443,7 @@ class FlamingoTest {
     // save file metadata into firestore
     post.file = await storage.saveWithDoc(
         post.reference,
-        post.folderName,
+        Post.folderFileName,
         file,
         mimeType: mimeTypePng,
         metadata: {
@@ -475,7 +476,7 @@ class FlamingoTest {
     final file = await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
     final storageFile = await storage.saveWithDoc(
       post.reference,
-      post.folderName,
+      Post.folderFileName,
       file,
       mimeType: mimeTypePng,
       metadata: {
@@ -490,12 +491,29 @@ class FlamingoTest {
     );
 
     final _post = await documentAccessor.load<Post>(Post(id: id));
-    await storage.deleteWithDoc(_post.reference, _post.folderName, _post.file, isNotNull: false);
+    await storage.deleteWithDoc(_post.reference, Post.folderFileName, _post.file, isNotNull: false);
 
     final hoge = await documentAccessor.load<Post>(Post(id: post.id));
     assert(post.id == hoge.id);
     assert(hoge.file == null);
   }
+
+
+  Future saveAndDeleteStorageDocWithDocumentAccessor() async {
+    print('--- saveAndDeleteStorageDocWithDocumentAccessor ---');
+    final post = Post()
+      ..files = [];
+    await documentAccessor.save(post);
+
+    print('  ----get');
+    final _post = await documentAccessor.load<Post>(Post(id: post.id));
+    _post.log();
+
+    assertCreateDocument(post, _post);
+    assert(_post.files.isEmpty);
+    assert(post.files.length == _post.files.length);
+  }
+
 
   Future distributedCounter() async {
     print('--- distributedCounter ---');
@@ -612,7 +630,12 @@ class FlamingoTest {
       ..intList = [0, 1, 2,]
       ..doubleList = [0.0, 0.1, 0.2,]
       ..boolList = [true, false, true,]
-      ..files = [
+      ..filesA = [
+        StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+        StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+        StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+      ]
+      ..filesB = [
         StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
         StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
         StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
@@ -628,13 +651,19 @@ class FlamingoTest {
       assert(sample1.intList.length == _sample1.intList.length);
       assert(sample1.doubleList.length == _sample1.doubleList.length);
       assert(sample1.boolList.length == _sample1.boolList.length);
-      assert(sample1.files.length == _sample1.files.length);
+      assert(sample1.filesA.length == _sample1.filesA.length);
+      assert(sample1.filesB.length == _sample1.filesB.length);
 
       assert(sample1.strList.first == _sample1.strList.first);
       assert(sample1.intList.first == _sample1.intList.first);
       assert(sample1.doubleList.first == _sample1.doubleList.first);
       assert(sample1.boolList.first == _sample1.boolList.first);
-      assertStorageFile(sample1.files.first, _sample1.files.first);
+      for (var i = 0 ; i < sample1.filesA.length; i++) {
+        assertStorageFile(sample1.filesA[i], _sample1.filesA[i]);
+      }
+      for (var i = 0 ; i < sample1.filesB.length; i++) {
+        assertStorageFile(sample1.filesB[i], _sample1.filesB[i]);
+      }
       _sample1.log();
     }
 
@@ -644,7 +673,8 @@ class FlamingoTest {
       ..doubleList = []
       ..boolList = [];
 
-    sample1.files.forEach((d) => d.isDeleted = true);
+    sample1.filesA.forEach((d) => d.isDeleted = true);
+    sample1.filesB = [];
     await documentAccessor.save(sample1);
 
     {
@@ -654,8 +684,39 @@ class FlamingoTest {
       assert(sample1.intList.length == _sample1.intList.length);
       assert(sample1.doubleList.length == _sample1.doubleList.length);
       assert(sample1.boolList.length == _sample1.boolList.length);
-      assert(sample1.files.isNotEmpty);
+      assert(sample1.filesA.isNotEmpty);
+      assert(sample1.filesB.isEmpty);
       _sample1.log();
+    }
+
+    {
+      final sample1 = ListSample()
+        ..filesA = [
+          StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+          StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+          StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+        ]
+        ..filesB = [
+          StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+          StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+          StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+        ];
+      await documentAccessor.save(sample1);
+      {
+        final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+        assert(sample1.filesA.length == _sample1.filesA.length);
+        assert(sample1.filesB.length == _sample1.filesB.length);
+      }
+      {
+        sample1
+          ..filesA = null
+          ..filesB = null;
+        await documentAccessor.save(sample1);
+        final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
+        _sample1.log();
+        assert(sample1.filesA == _sample1.filesA);
+        assert(_sample1.filesB.isNotEmpty);
+      }
     }
   }
 

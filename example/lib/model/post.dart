@@ -7,24 +7,28 @@ class Post extends Document<Post> {
 
   /// Storage
   StorageFile file;
-  String folderName = 'file';
+  List<StorageFile> files;
+  static String get folderFileName => 'file';
+  static String get folderFilesName => 'files';
 
   /// For save data
   @override
   Map<String, dynamic> toData() {
     final data = <String, dynamic>{};
-    writeStorage(data, folderName, file);
+    writeStorage(data, folderFileName, file);
+    writeStorageList(data, folderFilesName, files);
     return data;
   }
 
   /// For load data
   @override
   void fromData(Map<String, dynamic> data) {
-    file = storageFile(data, folderName);
+    file = storageFile(data, folderFileName);
+    files = storageFiles(data, folderFilesName);
   }
 
   void log() {
-    print('$id ${file?.toJson()}');
+    print('$id ${file?.toJson()} $files');
   }
 
 }

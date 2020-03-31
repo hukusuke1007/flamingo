@@ -1,4 +1,7 @@
-# 0.2.4
+# 0.2.5
+Fix: Save empty data of storage in writeStorage feature.
+
+## 0.2.4
 Fix: Add empty List during updation(Thanks huma11farheen-san).
 
 ## 0.2.3

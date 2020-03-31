@@ -12,8 +12,11 @@ class ListSample extends Document<ListSample> {
   List<int> intList;
   List<double> doubleList;
   List<bool> boolList;
-  List<StorageFile> files;
-  String folderName = 'files';
+
+  List<StorageFile> filesA;
+  List<StorageFile> filesB;
+  static String get folderFilesAName => 'filesA';
+  static String get folderFilesBName => 'filesB';
 
   /// For save data
   @override
@@ -23,7 +26,8 @@ class ListSample extends Document<ListSample> {
     writeNotNull(data, 'intList', intList);
     writeNotNull(data, 'doubleList', doubleList);
     writeNotNull(data, 'boolList', boolList);
-    writeStorageList(data, folderName, files);
+    writeStorageList(data, folderFilesAName, filesA);
+    writeStorageListNotNull(data, folderFilesBName, filesB);
     return data;
   }
 
@@ -34,12 +38,14 @@ class ListSample extends Document<ListSample> {
     intList = valueListFromKey<int>(data, 'intList');
     doubleList = valueListFromKey<double>(data, 'doubleList');
     boolList = valueListFromKey<bool>(data, 'boolList');
-    files = storageFiles(data, folderName);
+    filesA = storageFiles(data, folderFilesAName);
+    filesB = storageFiles(data, folderFilesBName);
   }
 
   void log() {
-    print('ListSample $id $strList $intList $doubleList $boolList $files');
-    files?.forEach((d) => print(d.toJson()));
+    print('ListSample $id $strList $intList $doubleList $boolList $filesA');
+    filesA?.forEach((d) => print('filesA ${d.toJson()}'));
+    filesB?.forEach((d) => print('filesB ${d.toJson()}'));
   }
 
 }
