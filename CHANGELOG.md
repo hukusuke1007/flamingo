@@ -1,4 +1,7 @@
-# 0.2.5
+# 0.2.6
+Bug fix.
+
+## 0.2.5
 Fix: Save empty data of storage in writeStorage feature.
 
 ## 0.2.4

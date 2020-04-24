@@ -22,14 +22,13 @@ export 'package:flamingo/model/model.dart';
 export 'package:flamingo/model/increment.dart';
 export 'package:flamingo/enum/execute_type.dart';
 
-
 class Flamingo {
   static Flamingo instance = Flamingo();
   static void configure(
       {Firestore firestore, FirebaseStorage storage, DocumentReference root}) {
-    instance.firestore = firestore;
-    instance.firebaseStorage = storage;
-    instance.rootReference = root;
+    instance.firestore = firestore != null ? firestore : Firestore.instance;
+    instance.firebaseStorage = storage != null ? storage : FirebaseStorage.instance;
+    instance.rootReference = root != null ? root : instance.firestore.document('');
   }
 
   DocumentReference rootReference;

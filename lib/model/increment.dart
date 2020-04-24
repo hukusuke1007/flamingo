@@ -19,7 +19,7 @@ class Increment<T extends num> {
     } else {
       if (incrementValue != null) {
         final _value = value != null ? value + incrementValue : incrementValue;
-        result = Increment<T>(fieldName, value: _value);
+        result = Increment<T>(fieldName, value: _value as T);
       } else {
         result = Increment<T>(fieldName, value: value);
       }
