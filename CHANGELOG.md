@@ -1,4 +1,7 @@
-# 0.2.6
+# 0.3.0
+Updated flamingo root and Batch interface.
+
+## 0.2.6
 Bug fix.
 
 ## 0.2.5

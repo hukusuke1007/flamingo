@@ -1,14 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_example/model/setting.dart';
 
 class User extends Document<User> {
   User({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }): super(id: id, snapshot: snapshot, values: values) {
+    setting = Collection(this, 'setting');
+  }
 
   String name;
+  Collection<Setting> setting;
 
   /// For save data
   @override

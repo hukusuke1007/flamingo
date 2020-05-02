@@ -5,6 +5,7 @@ import 'package:flamingo_example/model/score.dart';
 import 'package:flamingo_example/model/map_sample.dart';
 import 'package:flamingo_example/model/list_sample.dart';
 import 'package:flamingo_example/model/model_sample.dart';
+import 'package:flamingo_example/model/setting.dart';
 import 'image_helper.dart';
 import 'model/address.dart';
 import 'model/credit_card.dart';
@@ -278,6 +279,49 @@ class FlamingoTest {
     }
   }
 
+  Future batchCollectionCRUD() async {
+    print('--- batchCollectionReference ---');
+    final userA = User();
+    final setting = Setting(collectionRef: userA.setting.ref)
+      ..isEnable = true;
+
+    // create
+    {
+      final batch = Batch()
+        ..save(setting, reference: userA.setting.ref.document(setting.id));
+      assert(batch.isAddedDocument == true);
+      assert(batch.addedDocumentCount == 1);
+      await batch.commit();
+
+      final _setting = await documentAccessor.load<Setting>(Setting(id: setting.id, collectionRef: userA.setting.ref));
+      assertCreateDocument(setting, _setting);
+      assert(setting.isEnable == _setting.isEnable);
+    }
+
+    // update
+    {
+      setting.isEnable = false;
+      final batch = Batch()
+        ..update(setting, reference: userA.setting.ref.document(setting.id));
+      await batch.commit();
+
+      final _setting = await documentAccessor.load<Setting>(Setting(id: setting.id, collectionRef: userA.setting.ref));
+      assertCreateDocument(setting, _setting);
+      assert(setting.isEnable == _setting.isEnable);
+    }
+
+    // delete
+    {
+      final batch = Batch()
+        ..delete(setting, reference: userA.setting.ref.document(setting.id));
+      await batch.commit();
+
+      final _setting = await documentAccessor.load<Setting>(Setting(id: setting.id, collectionRef: userA.setting.ref));
+      assert(_setting == null);
+    }
+    print('batchCollectionReference done');
+  }
+
   Future getAndUpdate() async {
     print('--- getAndUpdate ---');
     final user = User()
@@ -296,7 +340,7 @@ class FlamingoTest {
     print('--- getCollection ---');
     final path = Document.path<User>();
     print('path ${path}');
-    final snapshot = await firestoreInstance().collection(path).limit(5).getDocuments();
+    final snapshot = await firestoreInstance.collection(path).limit(5).getDocuments();
     print('from Snapshot');
     final listA = snapshot.documents.map((item) => User(snapshot: item)).toList();
 
@@ -329,7 +373,7 @@ class FlamingoTest {
       ..save(countB);
     await batch.commit();
 
-    final snapshot = await firestoreInstance().collection(ranking.count.ref.path).limit(5).getDocuments();
+    final snapshot = await firestoreInstance.collection(ranking.count.ref.path).limit(5).getDocuments();
     print('from Snapshot');
     final listA = snapshot.documents.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList();
     assert(listA.isNotEmpty);
@@ -772,7 +816,7 @@ class FlamingoTest {
 
     /// Collection
     final path = Document.path<User>();
-    final query = firestoreInstance().collection(path).limit(20);
+    final query = firestoreInstance.collection(path).limit(20);
     final collectionDispose = query.snapshots().listen((querySnapshot) {
       print('--- Listen of collection documents ---');
       for (var change in querySnapshot.documentChanges) {

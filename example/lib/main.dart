@@ -181,6 +181,23 @@ class _MyAppState extends State<MyApp> {
             ),
             Padding(
               padding: const EdgeInsets.all(4),
+              child: Text('Batch Collection',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.batchCollectionCRUD();
+                  },
+                  child: Text('CRUD', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
               child: Text('Get',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(
