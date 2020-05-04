@@ -1,4 +1,7 @@
-# 0.3.0
+# 0.4.0
+To modified modelName and collectionRootReference. 
+
+## 0.3.0
 Updated flamingo root and Batch interface.
 
 ## 0.2.6

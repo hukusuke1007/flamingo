@@ -473,6 +473,23 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('Extend document',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.extendCRUD();
+                  },
+                  child: Text('CRUD', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
           ],
         ),
       ),

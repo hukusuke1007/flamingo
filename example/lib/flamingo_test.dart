@@ -12,9 +12,9 @@ import 'model/credit_card.dart';
 import 'model/medal.dart';
 import 'model/owner.dart';
 import 'model/point.dart';
+import 'model/public/index.dart' as public;
 import 'model/ranking.dart';
 import 'model/user.dart';
-
 
 extension _Extension on FlamingoTest {
   void assertCreateDocument(Document d1, Document d2) {
@@ -1043,5 +1043,28 @@ class FlamingoTest {
     assertCreateDocument(point, _point);
     assert(point.pointInt == _point.pointInt);
     assert(point.pointDouble == _point.pointDouble);
+  }
+
+
+  Future extendCRUD() async {
+    print('--- extendCRUD ---');
+    final user = public.User()
+      ..name = 'hoge';
+    await documentAccessor.save(user);
+
+    final _user = await documentAccessor.load<public.User>(public.User(id: user.id));
+    assertCreateDocument(user, _user);
+    assert(user.name == _user.name);
+    _user.name = 'aiueo';
+    await documentAccessor.update(_user);
+
+    final _user1 = await documentAccessor.load<public.User>(public.User(id: _user.id));
+    assertCreateDocument(_user, _user1);
+    assert(_user.name == _user1.name);
+
+    await documentAccessor.delete(_user);
+    final _user2 = await documentAccessor.load<public.User>(public.User(id: _user.id));
+    assertDeleteDocument(_user2);
+    print('--- extendCRUD finish ---');
   }
 }

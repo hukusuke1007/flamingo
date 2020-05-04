@@ -15,7 +15,7 @@ class Document<T> extends Base implements DocumentType {
     if (collectionRef != null) {
       _collectionRef = collectionRef;
     } else {
-      _collectionRef = collectionRootReference();
+      _collectionRef = collectionRootReference;
     }
 
     if (id != null) {
@@ -45,6 +45,9 @@ class Document<T> extends Base implements DocumentType {
         .path;
     return id != null ? '$collectionPath/$id' : collectionPath;
   }
+  /// For constructor
+  final DocumentSnapshot snapshot;
+  final Map<String, dynamic> values;
 
   /// Field
   Timestamp createdAt;
@@ -53,7 +56,10 @@ class Document<T> extends Base implements DocumentType {
   String _id;
   String get id => _id;
 
-  /// Reference
+  /// For reference
+  String get modelName => toString().split(' ')[2].replaceAll("\'", '').toLowerCase();
+  CollectionReference get collectionRootReference => Flamingo.instance.rootReference.collection(modelName);
+
   String _collectionPath;
   String get collectionPath => _collectionPath;
 
@@ -66,28 +72,16 @@ class Document<T> extends Base implements DocumentType {
   DocumentReference _reference;
   DocumentReference get reference => _reference;
 
-  /// For constructor
-  final DocumentSnapshot snapshot;
-  final Map<String, dynamic> values;
-
-  /// Public method.
-  String modelName() {
-    return toString().split(' ')[2].replaceAll("\'", '').toLowerCase();
-  }
-
-  CollectionReference collectionRootReference() {
-    return Flamingo.instance.rootReference.collection(modelName());
-  }
-
   /// Data for save
   Map<String, dynamic> toData() => <String, dynamic>{};
 
   /// Data for load
   void fromData(Map<String, dynamic> data) {}
 
-  /// Completed create, update, delete.
+  /// Completed of create and update and delete.
   void onCompleted(ExecuteType executeType) {}
 
+  /// Set snapshot and documentId.
   void setSnapshot(DocumentSnapshot documentSnapshot) {
     _id = documentSnapshot.documentID;
     if (documentSnapshot.exists) {
