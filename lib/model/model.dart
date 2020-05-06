@@ -9,11 +9,10 @@ class Model extends Base {
 
   final Map<String, dynamic> values;
 
+  /// Data for save
   Map<String, dynamic> toData() => <String, dynamic>{};
 
-  /// Data for save
-  void fromData(Map<String, dynamic> data) {}
-
   /// Data for load
+  void fromData(Map<String, dynamic> data) {}
 
 }

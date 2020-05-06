@@ -7,34 +7,57 @@ import 'type/type.dart';
 class Document<T> extends Base implements DocumentType {
   Document({
     String id,
+    String documentPath,
+    String collectionPath,
     this.snapshot,
     this.values,
     CollectionReference collectionRef,
-  }) {
-    _id = id;
-    if (collectionRef != null) {
-      _collectionRef = collectionRef;
+  }) : assert(id == null || documentPath == null, 'Can be used only either of \'id\' or \'documentPath\'.'),
+        assert(documentPath == null || collectionPath == null, 'Can be used only either of \'documentPath\' or \'collectionPath\'.'),
+        assert(collectionPath == null || collectionRef == null, 'Can be used only either of \'collectionPath\' or \'collectionRef\'.')
+  {
+    if (documentPath != null) {
+      /// From reference path.
+      final _referenceDocument = Flamingo.instance.firestore.document(documentPath);
+      _id = _referenceDocument.documentID;
+      _collectionRef = _referenceDocument.parent();
+      _reference = _referenceDocument;
     } else {
-      _collectionRef = collectionRootReference;
+      /// From id.
+      _id = id;
+
+      /// From collectionPath or collectionRef.
+      if (collectionPath != null) {
+        _collectionRef = Flamingo.instance.firestore.collection(collectionPath);
+      } else {
+        if (collectionRef != null) {
+          _collectionRef = collectionRef;
+        } else {
+          _collectionRef = collectionRootReference;
+        }
+      }
+
+      if (id != null) {
+        _reference = _collectionRef.document(_id);
+      } else {
+        _reference = _collectionRef.document();
+        _id = _reference.documentID;
+      }
+
+      /// From snapshot.
+      if (snapshot != null) {
+        setSnapshot(snapshot); // setSnapshotでidが作られる
+        _reference = _collectionRef.document(_id);
+      }
     }
 
-    if (id != null) {
-      _reference = _collectionRef.document(_id);
-    } else {
-      _reference = _collectionRef.document();
-      _id = _reference.documentID;
-    }
-
-    if (snapshot != null) {
-      setSnapshot(snapshot); // setSnapshotでidが作られる
-      _reference = _collectionRef.document(_id);
-    }
-
+    /// From values
     if (values != null) {
       _fromAt(values);
       fromData(values);
     }
 
+    /// Set path
     _collectionPath = _collectionRef.path;
     _documentPath = _reference.path;
   }

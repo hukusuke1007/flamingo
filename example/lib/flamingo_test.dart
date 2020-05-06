@@ -6,6 +6,8 @@ import 'package:flamingo_example/model/map_sample.dart';
 import 'package:flamingo_example/model/list_sample.dart';
 import 'package:flamingo_example/model/model_sample.dart';
 import 'package:flamingo_example/model/setting.dart';
+import 'package:flamingo_example/model/shop/cart.dart';
+import 'package:flamingo_example/model/shop/shop.dart';
 import 'image_helper.dart';
 import 'model/address.dart';
 import 'model/credit_card.dart';
@@ -55,6 +57,7 @@ class FlamingoTest {
     await batchSave();
     await batchUpdateDelete();
     await batchSaveRaw();
+    await batchCollectionCRUD();
     await batchUpdateDeleteRaw();
     await getAndUpdate();
     await getCollection();
@@ -75,7 +78,8 @@ class FlamingoTest {
     await incrementTest1();
     await incrementTest2();
     await valueZeroTest();
-
+    await extendCRUD();
+    await testReferencePath();
     print('------- finish -------');
   }
 
@@ -1045,7 +1049,6 @@ class FlamingoTest {
     assert(point.pointDouble == _point.pointDouble);
   }
 
-
   Future extendCRUD() async {
     print('--- extendCRUD ---');
     final user = public.User()
@@ -1066,5 +1069,85 @@ class FlamingoTest {
     final _user2 = await documentAccessor.load<public.User>(public.User(id: _user.id));
     assertDeleteDocument(_user2);
     print('--- extendCRUD finish ---');
+  }
+
+  Future testReferencePath() async {
+    print('--- testReferencePath ---');
+    final shop = Shop();
+    shop
+      ..cart = Cart(
+        ref: shop.documentPath,
+        collectionRef: shop.collectionPath,
+      )
+      ..carts = [
+        Cart(ref: shop.documentPath,),
+        Cart(ref: shop.documentPath,),
+      ];
+
+    print('--- save ---');
+    print('${shop.id}');
+    await documentAccessor.save(shop);
+
+    print('--- load from document ---');
+    {
+      final _shop = await documentAccessor.load<Shop>(Shop(
+          documentPath: shop.cart.ref
+      ));
+      print('cart: ${_shop.cart.ref}  ${_shop.cart.collectionRef}');
+      print('carts: ${_shop.carts.map((d) => '${d.ref} ${d.collectionRef}')}');
+      assertCreateDocument(shop, _shop);
+      assert(shop.documentPath == _shop.cart?.ref);
+      assert(shop.collectionPath == _shop.cart?.collectionRef);
+      assert(shop.cart?.ref == _shop.cart?.ref);
+      assert(shop.cart?.collectionRef == _shop.cart?.collectionRef);
+      assert(shop.carts[0].ref == _shop.carts[0].ref);
+      assert(shop.carts[1].ref == _shop.carts[1].ref);
+    }
+
+    print('--- load from collectionRef ---');
+    {
+      final _shop = await documentAccessor.load<Shop>(Shop(
+          id: shop.id,
+          collectionPath: shop.cart.collectionRef,
+      ));
+      print('cart: ${_shop.cart.ref}  ${_shop.cart.collectionRef}');
+      print('carts: ${_shop.carts.map((d) => '${d.ref} ${d.collectionRef}')}');
+      assertCreateDocument(shop, _shop);
+      assert(shop.documentPath == _shop.cart?.ref);
+      assert(shop.collectionPath == _shop.cart?.collectionRef);
+      assert(shop.cart?.ref == _shop.cart?.ref);
+      assert(shop.cart?.collectionRef == _shop.cart?.collectionRef);
+      assert(shop.carts[0].ref == _shop.carts[0].ref);
+      assert(shop.carts[1].ref == _shop.carts[1].ref);
+    }
+
+    print('--- delete ---');
+    await documentAccessor.delete(Shop(documentPath: shop.cart.ref));
+    {
+      final _shop = await documentAccessor.load<Shop>(Shop(id: shop.id));
+      assertDeleteDocument(_shop);
+    }
+  }
+
+  Future testErrorCheck() async {
+    print('--- testCollectionPath ---');
+//    try {
+//      final item1 = Shop(id: 'dummy', documentPath: 'dummy');
+//    } on Exception catch(e) {
+//      print('e $e');
+////      assert(e != null);
+//    }
+//    try {
+//      final item2 = Shop(documentPath: 'dummy', collectionPath: 'dummy');
+//    } on Exception catch(e) {
+//      print('e $e');
+////      assert(e != null);
+//    }
+//    try {
+//      final item3 = Shop(collectionPath: 'dummy', collectionRef: Shop().collectionRef);
+//    } on Exception catch(e) {
+//      print('e $e');
+////      assert(e != null);
+//    }
   }
 }

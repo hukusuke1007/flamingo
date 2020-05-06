@@ -1,5 +1,8 @@
-# 0.4.0
-To modified modelName and collectionRootReference. 
+# 0.5.0
+Added documentPath and collectionPath parameter in Document class.
+
+## 0.4.0
+Modified modelName and collectionRootReference. 
 
 ## 0.3.0
 Updated flamingo root and Batch interface.

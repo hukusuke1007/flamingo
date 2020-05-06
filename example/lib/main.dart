@@ -490,6 +490,40 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('Test reference path',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.testReferencePath();
+                  },
+                  child: Text('CRUD', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: Text('Test error check',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.testErrorCheck();
+                  },
+                  child: Text('Execute', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
           ],
         ),
       ),
