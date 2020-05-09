@@ -1,4 +1,7 @@
-# 0.5.0
+# 0.5.1
+Updated environment and README.
+
+## 0.5.0
 Added documentPath and collectionPath parameter in Document class.
 
 ## 0.4.0
