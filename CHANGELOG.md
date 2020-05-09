@@ -1,4 +1,7 @@
-# 0.5.1
+# 0.5.2
+Fixed environment.
+
+## 0.5.1
 Updated environment and README.
 
 ## 0.5.0
