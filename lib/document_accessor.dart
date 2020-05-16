@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'flamingo.dart';
 
 class DocumentAccessor {
@@ -84,22 +83,29 @@ class DocumentAccessor {
     }
   }
 
-  Future saveRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) async {
+  Future saveRaw(Map<String, dynamic> values, DocumentReference reference, {
+    bool isTimestamp = false,
+    String createdFieldValueKey = documentCreatedAtKey,
+    String updatedFieldValueKey = documentUpdatedAtKey,
+  }) async {
     final data = values;
     final nowAt = Timestamp.now();
     if (isTimestamp) {
-      data['createdAt'] = nowAt;
-      data['updatedAt'] = nowAt;
+      data[createdFieldValueKey] = nowAt;
+      data[updatedFieldValueKey] = nowAt;
     }
     final batch = Batch()..saveRaw(values, reference);
     await batch.commit();
   }
 
-  Future updateRaw(Map<String, dynamic> values, DocumentReference reference, {bool isTimestamp = false}) async {
+  Future updateRaw(Map<String, dynamic> values, DocumentReference reference, {
+    bool isTimestamp = false,
+    String updatedFieldValueKey = documentUpdatedAtKey,
+  }) async {
     final data = values;
     final nowAt = Timestamp.now();
     if (isTimestamp) {
-      data['updatedAt'] = nowAt;
+      data[updatedFieldValueKey] = nowAt;
     }
     final batch = Batch()..updateRaw(values, reference);
     await batch.commit();

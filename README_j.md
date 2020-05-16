@@ -146,7 +146,7 @@ Flamingoではコレクション操作をラップしたインターフェース
 
 ```dart
 final path = Document.path<User>();
-final snapshot = await firestoreInstance().collection(path).getDocuments();
+final snapshot = await firestoreInstance.collection(path).getDocuments();
 
 // from snapshot
 final listA = snapshot.documents.map((item) => User(snapshot: item)).toList()
@@ -346,7 +346,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 ```dart
 // Listen
 final path = Document.path<User>();
-final query = firestoreInstance().collection(path).limit(20);
+final query = firestoreInstance.collection(path).limit(20);
 final dispose = query.snapshots().listen((querySnapshot) {
   for (var change in querySnapshot.documentChanges) {
     if (change.type == DocumentChangeType.added ) {
@@ -485,7 +485,7 @@ await batch.commit();
 
 // Get sub collection
 final path = ranking.count.ref.path; // ※2
-final snapshot = await firestoreInstance().collection(path).getDocuments();
+final snapshot = await firestoreInstance.collection(path).getDocuments();
 final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList()
   ..forEach((count) {
     print('${count.userId}, ${count.count}');

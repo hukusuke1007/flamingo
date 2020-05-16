@@ -506,6 +506,23 @@ class _MyAppState extends State<MyApp> {
             ),
             Padding(
               padding: const EdgeInsets.all(4),
+              child: Text('Test custom field value key.',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                  padding: const EdgeInsets.all(4),
+                  color: Colors.lightBlue,
+                  onPressed: () async {
+                    await test.testCustomFieldValueKey();
+                  },
+                  child: Text('Execute', style: TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(4),
               child: Text('Test error check',style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.left,),
             ),
             Row(

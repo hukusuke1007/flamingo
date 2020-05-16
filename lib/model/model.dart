@@ -14,5 +14,4 @@ class Model extends Base {
 
   /// Data for load
   void fromData(Map<String, dynamic> data) {}
-
 }

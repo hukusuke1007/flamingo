@@ -1,5 +1,6 @@
-# 0.5.2+1
-Updated README.
+# 0.5.3
+Updated static document path function. Added override parameter to set key of "createdAt" and "updatedAt".
+Modified README.
 
 ## 0.5.2
 Fixed environment.

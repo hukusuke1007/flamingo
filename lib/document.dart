@@ -1,8 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'base.dart';
-import 'enum/execute_type.dart';
 import 'flamingo.dart';
-import 'type/type.dart';
 
 class Document<T> extends Base implements DocumentType {
   Document({
@@ -62,12 +58,20 @@ class Document<T> extends Base implements DocumentType {
     _documentPath = _reference.path;
   }
 
-  static String path<T extends Document<DocumentType>>({String id}) {
-    final collectionPath = Flamingo.instance.rootReference
-        .collection(T.toString().toLowerCase())
-        .path;
-    return id != null ? '$collectionPath/$id' : collectionPath;
+  static String path<T extends Document<DocumentType>>({
+    String id,
+    String collectionPath,
+  }) {
+    if (collectionPath != null) {
+      return id != null ? '$collectionPath/$id' : collectionPath;
+    } else {
+      final _collectionPath = Flamingo.instance.rootReference
+          .collection(T.toString().toLowerCase())
+          .path;
+      return id != null ? '$_collectionPath/$id' : _collectionPath;
+    }
   }
+
   /// For constructor
   final DocumentSnapshot snapshot;
   final Map<String, dynamic> values;
@@ -95,6 +99,9 @@ class Document<T> extends Base implements DocumentType {
   DocumentReference _reference;
   DocumentReference get reference => _reference;
 
+  String get createdFieldValueKey => documentCreatedAtKey;
+  String get updatedFieldValueKey => documentUpdatedAtKey;
+
   /// Data for save
   Map<String, dynamic> toData() => <String, dynamic>{};
 
@@ -116,18 +123,16 @@ class Document<T> extends Base implements DocumentType {
 
   /// Private method
   void _fromAt(Map<String, dynamic> data) {
-    const createdAtKey = 'createdAt';
-    if (data[createdAtKey] is Map) {
-      createdAt = timestampFromMap(data, createdAtKey);
-    } else if (data[createdAtKey] is Timestamp) {
-      createdAt = data[createdAtKey] as Timestamp;
+    if (data[createdFieldValueKey] is Map) {
+      createdAt = timestampFromMap(data, createdFieldValueKey);
+    } else if (data[createdFieldValueKey] is Timestamp) {
+      createdAt = data[createdFieldValueKey] as Timestamp;
     }
 
-    const updatedAtKey = 'updatedAt';
-    if (data[updatedAtKey] is Map) {
-      updatedAt = timestampFromMap(data, updatedAtKey);
-    } else if (data[updatedAtKey] is Timestamp) {
-      updatedAt = data[updatedAtKey] as Timestamp;
+    if (data[updatedFieldValueKey] is Map) {
+      updatedAt = timestampFromMap(data, updatedFieldValueKey);
+    } else if (data[updatedFieldValueKey] is Timestamp) {
+      updatedAt = data[updatedFieldValueKey] as Timestamp;
     }
   }
 }

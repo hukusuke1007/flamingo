@@ -51,9 +51,11 @@ final app = await FirebaseApp.configure(
   ),
 );
 final firestore = Firestore(app: app);
-final storage = FirebaseStorage(app: app);
-final root = firestore.collection('version').document('1');
-Flamingo.configure(firestore: firestore, storage: storage, root: root);
+Flamingo.configure(
+  firestore: firestore,
+  storage: FirebaseStorage(app: app),
+  root: firestore.collection('version').document('1'),
+);
 ```
 
 Create class that inherited **Document**. And add json mapping code into override functions.
@@ -146,7 +148,7 @@ Get documents in collection.
 
 ```dart
 final path = Document.path<User>();
-final snapshot = await firestoreInstance().collection(path).getDocuments();
+final snapshot = await firestoreInstance.collection(path).getDocuments();
 
 // from snapshot
 final listA = snapshot.documents.map((item) => User(snapshot: item)).toList()
@@ -341,7 +343,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 ```dart
 // Listen
 final path = Document.path<User>();
-final query = firestoreInstance().collection(path).limit(20);
+final query = firestoreInstance.collection(path).limit(20);
 final dispose = query.snapshots().listen((querySnapshot) {
   for (var change in querySnapshot.documentChanges) {
     if (change.type == DocumentChangeType.added ) {
@@ -469,7 +471,7 @@ await batch.commit();
 
 // Get sub collection
 final path = ranking.count.ref.path;
-final snapshot = await firestoreInstance().collection(path).getDocuments();
+final snapshot = await firestoreInstance.collection(path).getDocuments();
 final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList()
   ..forEach((count) {
     print(count);

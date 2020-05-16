@@ -1,9 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
 import 'flamingo.dart';
 
 class Storage {
@@ -19,7 +15,7 @@ class Storage {
 
   Future<StorageFile> save(String folderPath, File data, {
     String fileName,
-    String mimeType = 'application/octet-stream',
+    String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {
@@ -60,7 +56,7 @@ class Storage {
 
   Future<StorageFile> saveWithDoc(DocumentReference reference, String folderName, File data, {
     String fileName,
-    String mimeType = 'application/octet-stream',
+    String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {

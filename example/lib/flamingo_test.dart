@@ -17,6 +17,7 @@ import 'model/point.dart';
 import 'model/public/index.dart' as public;
 import 'model/ranking.dart';
 import 'model/user.dart';
+import 'model/item.dart';
 
 extension _Extension on FlamingoTest {
   void assertCreateDocument(Document d1, Document d2) {
@@ -66,7 +67,7 @@ class FlamingoTest {
     await deleteStorage();
     await saveStorageAndDoc();
     await deleteStorageAndDoc();
-    await distributedCounter();
+//    await distributedCounter();
     await transactionSave();
     await transactionUpdate();
     await transactionDelete();
@@ -80,6 +81,7 @@ class FlamingoTest {
     await valueZeroTest();
     await extendCRUD();
     await testReferencePath();
+    await testCustomFieldValueKey();
     print('------- finish -------');
   }
 
@@ -114,18 +116,18 @@ class FlamingoTest {
     assert(user.name != _user.name);
 
     print('--- timestamp test ---');
+    final data = <String, dynamic>{
+      'name': 'shohei',
+      _user.createdFieldValueKey: {
+        '_seconds': 1575163645,
+        '_nanoseconds': 648000000
+      },
+      _user.updatedFieldValueKey: {
+        '_seconds': 1575163645,
+        '_nanoseconds': 648000000
+      },
+    };
     {
-      final data = <String, dynamic>{
-        'name': 'shohei',
-        'createdAt': {
-          '_seconds': 1575163645,
-          '_nanoseconds': 648000000
-        },
-        'updatedAt': {
-          '_seconds': 1575163645,
-          '_nanoseconds': 648000000
-        },
-      };
       final _user = User(values: data);
       assert(_user.createdAt != null);
       assert(_user.updatedAt != null);
@@ -1126,6 +1128,66 @@ class FlamingoTest {
     {
       final _shop = await documentAccessor.load<Shop>(Shop(id: shop.id));
       assertDeleteDocument(_shop);
+    }
+  }
+
+  Future testCustomFieldValueKey() async {
+    final item = Item()..name = 'item';
+    // document
+    await documentAccessor.save(item);
+    item.log();
+    {
+      final _item = await documentAccessor.load<Item>(item);
+      _item.log();
+    }
+
+    await documentAccessor.saveRaw(<String, dynamic>{'name': 'itemitem'}, item.reference,
+      isTimestamp: true,
+      createdFieldValueKey: item.createdFieldValueKey,
+      updatedFieldValueKey: item.updatedFieldValueKey
+    );
+
+    {
+      final _item = await documentAccessor.load<Item>(item);
+      _item.log();
+    }
+
+    // batch
+    final itemA = Item()
+      ..name = 'hoge';
+    final itemB = Item()
+      ..name = 'fuga';
+    {
+      final batch = Batch()
+        ..save(itemA)
+        ..saveRaw(<String, dynamic>{'name': 'itemitem'}, itemB.reference,
+            isTimestamp: true,
+            createdFieldValueKey: itemB.createdFieldValueKey,
+            updatedFieldValueKey: itemB.updatedFieldValueKey
+        );
+      await batch.commit();
+    }
+    {
+      final _itemA = await documentAccessor.load<Item>(itemA);
+      _itemA.log();
+      final _itemB = await documentAccessor.load<Item>(itemB);
+      _itemB.log();
+    }
+    {
+      itemA.name = 'hogehoge';
+      final batch = Batch()
+        ..update(itemA)
+        ..updateRaw(<String, dynamic>{'name': 'fugafuga'}, itemB.reference,
+            isTimestamp: true,
+            updatedFieldValueKey: itemB.updatedFieldValueKey
+        );
+      await batch.commit();
+    }
+    {
+      final _itemA = await documentAccessor.load<Item>(itemA);
+      _itemA.log();
+      final _itemB = await documentAccessor.load<Item>(itemB);
+      _itemB.log();
     }
   }
 

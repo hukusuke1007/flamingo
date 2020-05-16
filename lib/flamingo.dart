@@ -7,20 +7,23 @@ import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_storage/firebase_storage.dart';
 
-export 'package:flamingo/batch.dart';
-export 'package:flamingo/distributed_counter.dart';
-export 'package:flamingo/document.dart';
-export 'package:flamingo/document_accessor.dart';
-export 'package:flamingo/storage.dart';
-export 'package:flamingo/run_transaction.dart';
-export 'package:flamingo/helper/helper.dart';
-export 'package:flamingo/master/master.dart';
-export 'package:flamingo/model/collection.dart';
-export 'package:flamingo/model/counter.dart';
-export 'package:flamingo/model/storage_file.dart';
-export 'package:flamingo/model/model.dart';
-export 'package:flamingo/model/increment.dart';
-export 'package:flamingo/enum/execute_type.dart';
+export 'base.dart';
+export 'batch.dart';
+export 'constants.dart';
+export 'distributed_counter.dart';
+export 'document.dart';
+export 'document_accessor.dart';
+export 'enum/execute_type.dart';
+export 'helper/helper.dart';
+export 'master/master.dart';
+export 'model/collection.dart';
+export 'model/counter.dart';
+export 'model/increment.dart';
+export 'model/model.dart';
+export 'model/storage_file.dart';
+export 'run_transaction.dart';
+export 'storage.dart';
+export 'type/type.dart';
 
 class Flamingo {
   static Flamingo instance = Flamingo();

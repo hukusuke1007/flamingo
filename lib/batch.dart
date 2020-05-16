@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'document.dart';
 import 'flamingo.dart';
 
 class Batch {
@@ -17,8 +15,8 @@ class Batch {
   }) {
     final data = document.toData();
     final nowAt = Timestamp.now();
-    data['createdAt'] = nowAt;
-    data['updatedAt'] = nowAt;
+    data[document.createdFieldValueKey] = nowAt;
+    data[document.updatedFieldValueKey] = nowAt;
     document
       ..createdAt = nowAt
       ..updatedAt = nowAt;
@@ -31,7 +29,7 @@ class Batch {
   }) {
     final data = document.toData();
     final nowAt = Timestamp.now();
-    data['updatedAt'] = nowAt;
+    data[document.updatedFieldValueKey] = nowAt;
     document.updatedAt = nowAt;
     _writeBatch.updateData(reference != null ? reference : document.reference, data);
     _batchDocument.add(_BatchDocument(document, ExecuteType.update));
@@ -46,23 +44,26 @@ class Batch {
 
   void saveRaw(Map<String, dynamic> values, DocumentReference reference, {
     bool isTimestamp = false,
+    String createdFieldValueKey = documentCreatedAtKey,
+    String updatedFieldValueKey = documentUpdatedAtKey,
   }) {
     final data = values;
     final nowAt = Timestamp.now();
     if (isTimestamp) {
-      data['createdAt'] = nowAt;
-      data['updatedAt'] = nowAt;
+      data[createdFieldValueKey] = nowAt;
+      data[updatedFieldValueKey] = nowAt;
     }
     _writeBatch.setData(reference, data, merge: true);
   }
 
   void updateRaw(Map<String, dynamic> values, DocumentReference reference, {
     bool isTimestamp = false,
+    String updatedFieldValueKey = documentUpdatedAtKey,
   }) {
     final data = values;
     final nowAt = Timestamp.now();
     if (isTimestamp) {
-      data['updatedAt'] = nowAt;
+      data[updatedFieldValueKey] = nowAt;
     }
     _writeBatch.updateData(reference, data);
   }
