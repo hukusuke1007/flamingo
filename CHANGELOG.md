@@ -1,4 +1,7 @@
-# 0.5.3
+# 0.5.3+1
+Removed base.dart export.
+
+## 0.5.3
 Updated static document path function. Added override parameter to set key of "createdAt" and "updatedAt".
 Modified README.
 

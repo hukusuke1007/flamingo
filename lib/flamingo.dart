@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_storage/firebase_storage.dart';
 
-export 'base.dart';
 export 'batch.dart';
 export 'constants.dart';
 export 'distributed_counter.dart';

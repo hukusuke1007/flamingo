@@ -1,3 +1,4 @@
+import 'base.dart';
 import 'flamingo.dart';
 
 class Document<T> extends Base implements DocumentType {
