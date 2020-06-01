@@ -6,7 +6,7 @@ class MapSample extends Document<MapSample> {
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
   Map<String, String> strMap;
   Map<String, int> intMap;
@@ -39,5 +39,4 @@ class MapSample extends Document<MapSample> {
   void log() {
     print('MapSample $id $strMap $intMap $doubleMap $boolMap $listStrMap');
   }
-
 }
