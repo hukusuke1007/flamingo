@@ -52,10 +52,14 @@ class FieldValueGenerator extends Generator {
 
   /// For save
   String _fieldForSave(_AnnotatedElement f) {
-    if (f.annotation.read('isWriteNotNull').boolValue) {
-      return """Helper.writeNotNull(data, \'${f.element.name}\', doc.${f.element.name});""";
+    if (f.elementType.toString().contains('Increment<')) {
+      return '''Helper.writeIncrement(data, doc.${f.element.name});''';
     } else {
-      return """Helper.write(data, \'${f.element.name}\', doc.${f.element.name});""";
+      if (f.annotation.read('isWriteNotNull').boolValue) {
+        return """Helper.writeNotNull(data, \'${f.element.name}\', doc.${f.element.name});""";
+      } else {
+        return """Helper.write(data, \'${f.element.name}\', doc.${f.element.name});""";
+      }
     }
   }
 
@@ -97,32 +101,40 @@ class FieldValueGenerator extends Generator {
 
   /// For load
   String _fieldForLoad(_AnnotatedElement f) {
-    if (f.elementType.isDartCoreList) {
-      if (f.elementType.toString().contains('Map')) {
-        final mapValueType =
-            f.elementType.toString().split(', ')[1].replaceAll('>', '');
-        return """doc.${f.element.name} = Helper.valueMapListFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
-      }
-      return """doc.${f.element.name} = Helper.valueListFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');""";
+    if (f.elementType.toString().contains('Increment<')) {
+      final _type = f.elementType
+          .toString()
+          .replaceAll('Increment<', '')
+          .replaceAll('>', '');
+      return '''doc.${f.element.name} = Helper.valueFromIncrement<$_type>(data, doc.${f.element.name}.fieldName);''';
     } else {
-      if (f.elementType.isDartCoreMap) {
-        final mapValueType =
-            f.elementType.toString().split(', ')[1].replaceAll('>', '');
-        return """doc.${f.element.name} = Helper.valueMapFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
+      if (f.elementType.isDartCoreList) {
+        if (f.elementType.toString().contains('Map')) {
+          final mapValueType =
+              f.elementType.toString().split(', ')[1].replaceAll('>', '');
+          return """doc.${f.element.name} = Helper.valueMapListFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
+        }
+        return """doc.${f.element.name} = Helper.valueListFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');""";
+      } else {
+        if (f.elementType.isDartCoreMap) {
+          final mapValueType =
+              f.elementType.toString().split(', ')[1].replaceAll('>', '');
+          return """doc.${f.element.name} = Helper.valueMapFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
+        }
+        return """doc.${f.element.name} = Helper.valueFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');""";
       }
-      return """doc.${f.element.name} = Helper.valueFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');""";
     }
   }
 
   String _modelFieldForLoad(_AnnotatedElement f) {
     if (f.elementType.isDartCoreList) {
       final local = '_${f.element.name}';
-      final modelType =
+      final _type =
           f.elementType.toString().replaceAll('List<', '').replaceAll('>', '');
       return """
       final $local = Helper.valueMapListFromKey<String, dynamic>(data, \'${f.element.name}\');
       if ($local != null) {
-        doc.${f.element.name} = $local.where((d) => d != null).map((d) => $modelType(values: d)).toList();
+        doc.${f.element.name} = $local.where((d) => d != null).map((d) => $_type(values: d)).toList();
       } else {
         doc.${f.element.name} = null;
       }

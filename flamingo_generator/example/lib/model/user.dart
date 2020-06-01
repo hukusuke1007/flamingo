@@ -24,6 +24,12 @@ class User extends Document<User> {
   @Field()
   List<Map<String, int>> listIntMap;
 
+  @Field()
+  Increment<int> point = Increment('point');
+
+  @Field()
+  Increment<double> score = Increment('score');
+
   @ModelField()
   Cart cartA;
 
