@@ -15,6 +15,9 @@ dependencies:
   analyzer: ^0.39.4
   source_gen: ^0.9.5
   code_builder: ^3.2.1
+  # TODO
+  flamingo_annotation:
+    path: ../flamingo_annotation/
 
 dev_dependencies:
   flutter_test:

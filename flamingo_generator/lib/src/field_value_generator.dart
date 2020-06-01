@@ -4,9 +4,8 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
 import 'package:code_builder/code_builder.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart' as annotation;
 import 'package:source_gen/source_gen.dart';
-
-import 'annotations.dart' as annotation;
 
 class FieldValueGenerator extends Generator {
   final TypeChecker hasFieldValue =

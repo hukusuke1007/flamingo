@@ -1,31 +1,28 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
 import 'package:flamingo_example/model/setting.dart';
+
+part 'user.value.g.dart';
 
 class User extends Document<User> {
   User({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values) {
+  }) : super(id: id, snapshot: snapshot, values: values) {
     setting = Collection(this, 'setting');
   }
 
+  @Field()
   String name;
+
   Collection<Setting> setting;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', name);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
   /// For completed create, update, delete.
   @override
@@ -34,9 +31,9 @@ class User extends Document<User> {
   }
 
   void log() {
-    print('User $id ${reference.path} $name $createdFieldValueKey $updatedFieldValueKey '
+    print(
+        'User $id ${reference.path} $name $createdFieldValueKey $updatedFieldValueKey '
         '${createdAt?.toDate()} '
         '${updatedAt?.toDate()}');
   }
-
 }

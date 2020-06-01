@@ -1,5 +1,5 @@
 # 1.0.0
-Added json mapping generator.
+Added flamingo generator and flamingo annotation.
 
 ## 0.5.3+1
 Removed base.dart export.

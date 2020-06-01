@@ -232,6 +232,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  flamingo_annotation:
+    dependency: "direct main"
+    description:
+      path: "../../flamingo_annotation"
+      relative: true
+    source: path
+    version: "0.0.1"
   flamingo_generator:
     dependency: "direct dev"
     description:

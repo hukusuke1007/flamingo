@@ -1,0 +1,19 @@
+name: flamingo_annotation
+description: This is flamingo annotation.
+version: 0.0.1
+homepage: https://twitter.com/hobbydevelop
+repository: https://github.com/hukusuke1007/flamingo
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pedantic_mono: any
+

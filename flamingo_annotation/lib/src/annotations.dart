@@ -1,8 +1,3 @@
-class Value {
-  const Value(this.value) : assert(value != null);
-  final String value;
-}
-
 class Field {
   const Field({this.isWriteNotNull = true});
   final bool isWriteNotNull;

@@ -1,5 +1,5 @@
 import 'package:flamingo/flamingo.dart';
-import 'package:flamingo_generator/flamingo_generator.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
 
 part 'cart.value.g.dart';
 
