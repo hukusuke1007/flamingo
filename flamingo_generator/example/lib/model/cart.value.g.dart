@@ -6,6 +6,29 @@ part of 'cart.dart';
 // FieldValueGenerator
 // **************************************************************************
 
+/// FieldValueKey
+enum CartFieldValueKey {
+  itemA,
+  itemB,
+  itemC,
+}
+
+extension CartFieldValueKeyExtension on CartFieldValueKey {
+  String get value {
+    switch (this) {
+      case CartFieldValueKey.itemA:
+        return 'itemA';
+      case CartFieldValueKey.itemB:
+        return 'itemB';
+      case CartFieldValueKey.itemC:
+        return 'itemC';
+
+      default:
+        return toString();
+    }
+  }
+}
+
 /// For save data
 Map<String, dynamic> _$toData(Cart doc) {
   final data = <String, dynamic>{};

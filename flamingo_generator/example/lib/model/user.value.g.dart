@@ -6,6 +6,61 @@ part of 'user.dart';
 // FieldValueGenerator
 // **************************************************************************
 
+/// FieldValueKey
+enum UserFieldValueKey {
+  name,
+  profile,
+  intMap,
+  listIntMap,
+  point,
+  score,
+  cartA,
+  cartB,
+  carts,
+  fileA,
+  fileB,
+  filesA,
+  filesB,
+}
+
+extension UserFieldValueKeyExtension on UserFieldValueKey {
+  String get value {
+    switch (this) {
+      case UserFieldValueKey.name:
+        return 'name';
+      case UserFieldValueKey.profile:
+        return 'profile';
+      case UserFieldValueKey.intMap:
+        return 'intMap';
+      case UserFieldValueKey.listIntMap:
+        return 'listIntMap';
+      case UserFieldValueKey.point:
+        return 'point';
+      case UserFieldValueKey.score:
+        return 'score';
+
+      case UserFieldValueKey.cartA:
+        return 'cartA';
+      case UserFieldValueKey.cartB:
+        return 'cartB';
+      case UserFieldValueKey.carts:
+        return 'carts';
+
+      case UserFieldValueKey.fileA:
+        return 'fileA';
+      case UserFieldValueKey.fileB:
+        return 'fileB';
+      case UserFieldValueKey.filesA:
+        return 'filesA';
+      case UserFieldValueKey.filesB:
+        return 'filesB';
+
+      default:
+        return toString();
+    }
+  }
+}
+
 /// For save data
 Map<String, dynamic> _$toData(User doc) {
   final data = <String, dynamic>{};

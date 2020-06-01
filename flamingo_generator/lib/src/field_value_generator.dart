@@ -25,7 +25,36 @@ class FieldValueGenerator extends Generator {
   }
 
   String _code(ClassElement class$) {
+    final enumName = '${class$.name}FieldValueKey';
     return """
+     /// FieldValueKey
+     enum $enumName {
+       ${class$.annotatedWith(hasFieldValue).map((f) => """${f.element.name}, """).join()}
+       ${class$.annotatedWith(hasModelFieldValue).map((f) => """${f.element.name}, """).join()}
+       ${class$.annotatedWith(hasStorageFieldValue).map((f) => """${f.element.name}, """).join()}
+     }
+     
+     extension ${enumName}Extension on $enumName {
+       String get value {
+          switch (this) {
+          ${class$.annotatedWith(hasFieldValue).map((f) => """
+            case $enumName.${f.element.name}:
+              return \'${f.element.name}\';
+          """).join()}
+          ${class$.annotatedWith(hasModelFieldValue).map((f) => """
+            case $enumName.${f.element.name}:
+              return \'${f.element.name}\';
+          """).join()}
+          ${class$.annotatedWith(hasStorageFieldValue).map((f) => """
+            case $enumName.${f.element.name}:
+              return \'${f.element.name}\';
+          """).join()}
+            default:
+              return toString();
+          }
+       }
+     }
+     
      /// For save data
      Map<String, dynamic> _\$toData(${class$.name} doc) {
       final data = <String, dynamic>{};
