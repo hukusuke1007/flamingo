@@ -1,10 +1,10 @@
 import Flutter
 import UIKit
 
-public class SwiftFlamingogeneratorPlugin: NSObject, FlutterPlugin {
+public class SwiftFlamingoGeneratorPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flamingogenerator", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlamingogeneratorPlugin()
+    let channel = FlutterMethodChannel(name: "flamingo_generator", binaryMessenger: registrar.messenger())
+    let instance = SwiftFlamingoGeneratorPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
 

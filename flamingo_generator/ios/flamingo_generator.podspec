@@ -1,13 +1,13 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint flamingogenerator.podspec' to validate before publishing.
+# Run `pod lib lint flamingo_generator.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'flamingogenerator'
+  s.name             = 'flamingo_generator'
   s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin.'
+  s.summary          = 'This is flamingo generator'
   s.description      = <<-DESC
-A new Flutter plugin.
+This is flamingo generator
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }

@@ -1,4 +1,4 @@
-group 'com.gmail.hukusuke1007.flamingogenerator'
+group 'com.gmail.hukusuke1007.flamingo_generator'
 version '1.0-SNAPSHOT'
 
 buildscript {

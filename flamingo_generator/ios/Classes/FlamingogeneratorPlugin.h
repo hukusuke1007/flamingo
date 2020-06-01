@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface FlamingogeneratorPlugin : NSObject<FlutterPlugin>
+@interface FlamingoGeneratorPlugin : NSObject<FlutterPlugin>
 @end

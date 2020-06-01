@@ -1,6 +1,6 @@
-# flamingogenerator_example
+# flamingo_generator_example
 
-Demonstrates how to use the flamingogenerator plugin.
+Demonstrates how to use the flamingo_generator plugin.
 
 ## Getting Started
 

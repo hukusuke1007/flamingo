@@ -169,7 +169,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.11"
-  flamingogenerator:
+  flamingo_generator:
     dependency: "direct dev"
     description:
       path: ".."

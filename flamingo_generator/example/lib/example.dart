@@ -1,9 +1,9 @@
-import 'package:flamingogenerator/flamingogenerator.dart';
+import 'package:flamingo_generator/flamingo_generator.dart';
 
 part 'example.value.g.dart';
 
 enum JapanesePrefecture {
-// 北海道・東北
+  // 北海道・東北
   @Value('北海道')
   hokkaido,
   @Value('青森')

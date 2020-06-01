@@ -1,6 +1,6 @@
-# flamingogenerator
+# flamingo_generator
 
-A new Flutter plugin.
+This is flamingo generator
 
 ## Getting Started
 

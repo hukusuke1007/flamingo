@@ -1,12 +1,12 @@
 targets:
   $default:
     builders:
-      flamingogenerator|generator:
+      flamingo_generator|generator:
         enabled: true
 
 builders:
   generator:
-    import: "package:flamingogenerator/flamingogenerator.dart"
+    import: "package:flamingo_generator/flamingo_generator.dart"
     builder_factories: ["enumHasValueBuilder"]
     build_extensions: {".dart": [".value.g.dart"]}
     auto_apply: dependents
