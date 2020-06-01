@@ -235,17 +235,17 @@ packages:
   flamingo_annotation:
     dependency: "direct main"
     description:
-      path: "../../flamingo_annotation"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: flamingo_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   flamingo_generator:
     dependency: "direct dev"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.1.0"
   flutter:
     dependency: "direct main"
     description: flutter

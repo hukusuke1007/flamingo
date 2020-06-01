@@ -1,3 +1,5 @@
-## 0.0.1
+## 0.1.0
+Added SubCollection
 
-* TODO: Describe initial release.
+## 0.0.1
+Initial release.

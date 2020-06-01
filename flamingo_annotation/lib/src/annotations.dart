@@ -20,3 +20,7 @@ class ModelField {
   });
   final bool isWriteNotNull;
 }
+
+class SubCollection {
+  const SubCollection();
+}

@@ -11,8 +11,8 @@ dependencies:
   cupertino_icons: ^0.1.3
   flamingo:
     path: ../../flamingo
-  flamingo_annotation:
-    path: ../../flamingo_annotation/
+  flamingo_annotation: ^0.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
