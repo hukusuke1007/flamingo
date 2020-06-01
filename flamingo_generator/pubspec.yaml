@@ -1,0 +1,22 @@
+name: flamingogenerator
+description: This is flamingo generatorn.
+version: 0.0.1
+homepage: https://twitter.com/hobbydevelop
+repository: https://github.com/hukusuke1007/flamingo
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  build: ^1.2.2
+  analyzer: ^0.39.4
+  source_gen: ^0.9.5
+  code_builder: ^3.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  pedantic_mono: any

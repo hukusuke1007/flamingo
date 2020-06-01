@@ -32,8 +32,10 @@ class Flamingo {
     DocumentReference root,
   }) {
     instance.firestore = firestore != null ? firestore : Firestore.instance;
-    instance.firebaseStorage = storage != null ? storage : FirebaseStorage.instance;
-    instance.rootReference = root != null ? root : instance.firestore.document('');
+    instance.firebaseStorage =
+        storage != null ? storage : FirebaseStorage.instance;
+    instance.rootReference =
+        root != null ? root : instance.firestore.document('');
   }
 
   DocumentReference rootReference;
@@ -44,4 +46,5 @@ class Flamingo {
 DocumentReference get rootReference => Flamingo.instance.rootReference;
 Firestore get firestoreInstance => Flamingo.instance.firestore;
 FirebaseStorage get storageInstance => Flamingo.instance.firebaseStorage;
-CollectionReference collectionReference(String path) => Flamingo.instance.rootReference.collection(path);
+CollectionReference collectionReference(String path) =>
+    Flamingo.instance.rootReference.collection(path);
