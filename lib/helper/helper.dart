@@ -1,7 +1,8 @@
 import 'dart:math';
 
 class Helper {
-  static Map<String, dynamic> fromMap(Map map) => Map<String, dynamic>.from(map);
+  static Map<String, dynamic> fromMap(Map map) =>
+      Map<String, dynamic>.from(map);
 
   static String randomString({int length}) {
     const _randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

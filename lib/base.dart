@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'flamingo.dart';
 import 'model/model.dart';
 
@@ -54,39 +55,69 @@ class Base {
     data[key] = models.map((d) => d.toData()).toList();
   }
 
-  void writeStorage(Map<String, dynamic> data, String key, StorageFile storageFile, {
+  void writeStorage(
+    Map<String, dynamic> data,
+    String key,
+    StorageFile storageFile, {
     bool isSetNull = true,
-  }) => _writeStorage(data, key, storageFile,
+  }) =>
+      _writeStorage(
+        data,
+        key,
+        storageFile,
         isNullIgnore: false,
         isSetNull: isSetNull,
       );
 
-  void writeStorageNotNull(Map<String, dynamic> data, String key, StorageFile storageFile, {
+  void writeStorageNotNull(
+    Map<String, dynamic> data,
+    String key,
+    StorageFile storageFile, {
     bool isSetNull = false,
-  }) => _writeStorage(data, key, storageFile,
+  }) =>
+      _writeStorage(
+        data,
+        key,
+        storageFile,
         isNullIgnore: true,
         isSetNull: isSetNull,
       );
 
-  void writeStorageList(Map<String, dynamic> data, String key, List<StorageFile> storageFiles, {
+  void writeStorageList(
+    Map<String, dynamic> data,
+    String key,
+    List<StorageFile> storageFiles, {
     bool isSetNull = true,
-  }) => _writeStorageList(data, key, storageFiles,
+  }) =>
+      _writeStorageList(
+        data,
+        key,
+        storageFiles,
         isNullIgnore: false,
         isSetNull: isSetNull,
       );
 
-  void writeStorageListNotNull(Map<String, dynamic> data, String key, List<StorageFile> storageFiles, {
+  void writeStorageListNotNull(
+    Map<String, dynamic> data,
+    String key,
+    List<StorageFile> storageFiles, {
     bool isSetNull = true,
-  }) => _writeStorageList(data, key, storageFiles,
+  }) =>
+      _writeStorageList(
+        data,
+        key,
+        storageFiles,
         isNullIgnore: true,
         isSetNull: isSetNull,
       );
 
   void _writeStorage(
-      Map<String, dynamic> data, String key, StorageFile storageFile, {
-        bool isNullIgnore,
-        bool isSetNull,
-      }) {
+    Map<String, dynamic> data,
+    String key,
+    StorageFile storageFile, {
+    bool isNullIgnore,
+    bool isSetNull,
+  }) {
     if (storageFile != null) {
       if (!storageFile.isDeleted) {
         data[key] = storageFile.toJson();
@@ -101,10 +132,12 @@ class Base {
   }
 
   void _writeStorageList(
-      Map<String, dynamic> data, String key, List<StorageFile> storageFiles, {
-        bool isNullIgnore,
-        bool isSetNull,
-      }) {
+    Map<String, dynamic> data,
+    String key,
+    List<StorageFile> storageFiles, {
+    bool isNullIgnore,
+    bool isSetNull,
+  }) {
     if (storageFiles != null) {
       if (storageFiles.isNotEmpty) {
         data[key] = storageFiles
@@ -171,18 +204,20 @@ class Base {
               .toList()
           : null;
 
-  Increment<U> valueFromIncrement<U extends num>(Map<String, dynamic> data, String key) => Increment(key, value: data[key] as U);
+  Increment<U> valueFromIncrement<U extends num>(
+          Map<String, dynamic> data, String key) =>
+      Increment(key, value: data[key] as U);
 
   bool isVal(Map<String, dynamic> data, String key) => data.containsKey(key);
 
   Timestamp timestampFromMap(dynamic data, String key) {
     if (data != null && data[key] is Map) {
-      final rawTimestamp = Map<String, dynamic>.from(Helper.fromMap(data[key] as Map));
+      final rawTimestamp =
+          Map<String, dynamic>.from(Helper.fromMap(data[key] as Map));
       final second = rawTimestamp['_seconds'] as int;
       final nanoseconds = rawTimestamp['_nanoseconds'] as int;
       return Timestamp(second, nanoseconds);
     }
     return null;
   }
-
 }

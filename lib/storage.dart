@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'flamingo.dart';
 
 class Storage {
@@ -13,7 +14,9 @@ class Storage {
 
   Stream<StorageTaskEvent> get uploader => _uploader.stream;
 
-  Future<StorageFile> save(String folderPath, File data, {
+  Future<StorageFile> save(
+    String folderPath,
+    File data, {
     String fileName,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
@@ -54,7 +57,10 @@ class Storage {
     return;
   }
 
-  Future<StorageFile> saveWithDoc(DocumentReference reference, String folderName, File data, {
+  Future<StorageFile> saveWithDoc(
+    DocumentReference reference,
+    String folderName,
+    File data, {
     String fileName,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
@@ -71,7 +77,10 @@ class Storage {
     return storageFile;
   }
 
-  Future<void> deleteWithDoc(DocumentReference reference, String folderName, StorageFile storageFile, {
+  Future<void> deleteWithDoc(
+    DocumentReference reference,
+    String folderName,
+    StorageFile storageFile, {
     bool isNotNull = true,
   }) async {
     final folderPath = '${reference.path}/$folderName';

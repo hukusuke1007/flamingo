@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'flamingo.dart';
 
 class DocumentAccessor {
@@ -12,7 +13,9 @@ class DocumentAccessor {
     }
   }
 
-  Future<Increment<T>> increment<T extends num>(Increment<T> entity, DocumentReference reference, {
+  Future<Increment<T>> increment<T extends num>(
+    Increment<T> entity,
+    DocumentReference reference, {
     num value,
     bool isClear,
   }) async {
@@ -22,13 +25,15 @@ class DocumentAccessor {
       if (isClear != null && isClear) {
         updateValue = (T.toString() == 'double') ? 0.0 as T : 0 as T;
       }
-      final batch = Batch()..updateRaw(
-        entity.toData(updateValue, isClear: isClear),
-        reference,
-        isTimestamp: true,
-      );
+      final batch = Batch()
+        ..updateRaw(
+          entity.toData(updateValue, isClear: isClear),
+          reference,
+          isTimestamp: true,
+        );
       await batch.commit();
-      return Increment(entity.fieldName, value: updateValue as T, incrementValue: null);
+      return Increment(entity.fieldName,
+          value: updateValue as T, incrementValue: null);
     } on Exception {
       rethrow;
     }
@@ -83,7 +88,9 @@ class DocumentAccessor {
     }
   }
 
-  Future saveRaw(Map<String, dynamic> values, DocumentReference reference, {
+  Future saveRaw(
+    Map<String, dynamic> values,
+    DocumentReference reference, {
     bool isTimestamp = false,
     String createdFieldValueKey = documentCreatedAtKey,
     String updatedFieldValueKey = documentUpdatedAtKey,
@@ -98,7 +105,9 @@ class DocumentAccessor {
     await batch.commit();
   }
 
-  Future updateRaw(Map<String, dynamic> values, DocumentReference reference, {
+  Future updateRaw(
+    Map<String, dynamic> values,
+    DocumentReference reference, {
     bool isTimestamp = false,
     String updatedFieldValueKey = documentUpdatedAtKey,
   }) async {

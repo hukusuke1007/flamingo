@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/type/type.dart';
+
 import '../document.dart';
 
 class Collection<T extends Document<DocumentType>> {

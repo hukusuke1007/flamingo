@@ -1,4 +1,7 @@
-# 0.5.3+1
+# 1.0.0
+Added json mapping generator.
+
+## 0.5.3+1
 Removed base.dart export.
 
 ## 0.5.3

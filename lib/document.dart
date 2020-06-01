@@ -9,13 +9,16 @@ class Document<T> extends Base implements DocumentType {
     this.snapshot,
     this.values,
     CollectionReference collectionRef,
-  }) : assert(id == null || documentPath == null, 'Can be used only either of \'id\' or \'documentPath\'.'),
-        assert(documentPath == null || collectionPath == null, 'Can be used only either of \'documentPath\' or \'collectionPath\'.'),
-        assert(collectionPath == null || collectionRef == null, 'Can be used only either of \'collectionPath\' or \'collectionRef\'.')
-  {
+  })  : assert(id == null || documentPath == null,
+            'Can be used only either of \'id\' or \'documentPath\'.'),
+        assert(documentPath == null || collectionPath == null,
+            'Can be used only either of \'documentPath\' or \'collectionPath\'.'),
+        assert(collectionPath == null || collectionRef == null,
+            'Can be used only either of \'collectionPath\' or \'collectionRef\'.') {
     if (documentPath != null) {
       /// From reference path.
-      final _referenceDocument = Flamingo.instance.firestore.document(documentPath);
+      final _referenceDocument =
+          Flamingo.instance.firestore.document(documentPath);
       _id = _referenceDocument.documentID;
       _collectionRef = _referenceDocument.parent();
       _reference = _referenceDocument;
@@ -85,8 +88,10 @@ class Document<T> extends Base implements DocumentType {
   String get id => _id;
 
   /// For reference
-  String get modelName => toString().split(' ')[2].replaceAll("\'", '').toLowerCase();
-  CollectionReference get collectionRootReference => Flamingo.instance.rootReference.collection(modelName);
+  String get modelName =>
+      toString().split(' ')[2].replaceAll("\'", '').toLowerCase();
+  CollectionReference get collectionRootReference =>
+      Flamingo.instance.rootReference.collection(modelName);
 
   String _collectionPath;
   String get collectionPath => _collectionPath;

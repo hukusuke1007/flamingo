@@ -8,8 +8,8 @@ class Increment<T extends num> {
   bool isClearValue = false;
 
   Map<String, dynamic> toData(num value, {bool isClear}) => <String, dynamic>{
-    fieldName: isClear != true ? FieldValue.increment(value) : value,
-  };
+        fieldName: isClear != true ? FieldValue.increment(value) : value,
+      };
 
   Increment<T> onRefresh() {
     Increment<T> result;
