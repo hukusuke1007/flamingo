@@ -70,12 +70,6 @@ class User extends Document<User> {
 
   @override
   void fromData(Map<String, dynamic> data) => _$fromData(this, data);
-
-  /// For completed create, update, delete.
-  @override
-  void onCompleted(ExecuteType executeType) {
-    print('onCompleted $executeType');
-  }
 }
 ```
 
@@ -163,7 +157,7 @@ Firestoreへ次のように保存されます。
 DocumentAccessor documentAccessor = DocumentAccessor();
 await documentAccessor.saveRaw(
   <String, dynamic>{ UserKey.name.value: 'hogehoge' },
-  item.reference,
+  user.reference,
 );
 ```
 

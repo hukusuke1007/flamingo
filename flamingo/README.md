@@ -3,7 +3,7 @@
 Flamingo is a firebase firestore model framework library.
 
 [https://pub.dev/packages/flamingo](https://pub.dev/packages/flamingo)
-  
+
 [日本語ドキュメント](../README_j.md)
 
 ## Example code
@@ -90,12 +90,6 @@ class User extends Document<User> {
 
   @override
   void fromData(Map<String, dynamic> data) => _$fromData(this, data);
-
-  /// For completed create, update, delete.
-  @override
-  void onCompleted(ExecuteType executeType) {
-    print('onCompleted $executeType');
-  }
 }
 ```
 
@@ -203,7 +197,7 @@ And can be used field value key and save data by specific key.
 DocumentAccessor documentAccessor = DocumentAccessor();
 await documentAccessor.saveRaw(
   <String, dynamic>{ UserKey.name.value: 'hogehoge' },
-  item.reference,
+  user.reference,
 );
 ```
 

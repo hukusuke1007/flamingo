@@ -1,5 +1,8 @@
-# 1.0.0
-Added flamingo generator and flamingo annotation.
+# 1.0.0+1
+Updated README.
+
+## 1.0.0
+Added feature of automatically generate code.
 
 ## 0.5.3+1
 Removed base.dart export.
