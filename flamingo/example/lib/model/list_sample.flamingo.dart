@@ -46,8 +46,8 @@ Map<String, dynamic> _$toData(ListSample doc) {
   Helper.writeNotNull(data, 'doubleList', doc.doubleList);
   Helper.writeNotNull(data, 'boolList', doc.boolList);
 
-  Helper.writeStorageListNotNull(data, 'filesA', doc.filesA, isSetNull: true);
-  Helper.writeStorageList(data, 'filesB', doc.filesB, isSetNull: true);
+  Helper.writeStorageList(data, 'filesA', doc.filesA, isSetNull: true);
+  Helper.writeStorageListNotNull(data, 'filesB', doc.filesB, isSetNull: true);
 
   return data;
 }

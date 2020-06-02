@@ -22,10 +22,10 @@ class ListSample extends Document<ListSample> {
   @Field()
   List<bool> boolList;
 
-  @StorageField()
+  @StorageField(isWriteNotNull: false)
   List<StorageFile> filesA;
 
-  @StorageField(isWriteNotNull: false)
+  @StorageField()
   List<StorageFile> filesB;
 
   @override

@@ -71,7 +71,7 @@ class FlamingoTest {
     await deleteStorage();
     await saveStorageAndDoc();
     await deleteStorageAndDoc();
-//    await distributedCounter();
+    await distributedCounter();
     await transactionSave();
     await transactionUpdate();
     await transactionDelete();
