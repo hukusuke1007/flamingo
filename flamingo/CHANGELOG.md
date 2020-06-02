@@ -1,4 +1,7 @@
-# 1.0.0+1
+# 1.1.0
+Added interface classes. Added CollectionDataSource for getting collection documents.
+
+## 1.0.0+1
 Updated README.
 
 ## 1.0.0

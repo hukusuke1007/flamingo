@@ -2,7 +2,35 @@ import 'dart:async';
 
 import 'flamingo.dart';
 
-class DocumentAccessor {
+abstract class DocumentAccessorRepository {
+  Future save(Document document);
+  Future<Increment<T>> increment<T extends num>(
+    Increment<T> entity,
+    DocumentReference reference, {
+    num value,
+    bool isClear,
+  });
+  Future update(Document document);
+  Future delete(Document document);
+  Future saveRaw(
+    Map<String, dynamic> values,
+    DocumentReference reference, {
+    bool isTimestamp = false,
+    String createdFieldValueKey = documentCreatedAtKey,
+    String updatedFieldValueKey = documentUpdatedAtKey,
+  });
+  Future updateRaw(
+    Map<String, dynamic> values,
+    DocumentReference reference, {
+    bool isTimestamp = false,
+    String updatedFieldValueKey = documentUpdatedAtKey,
+  });
+  Future deleteWithReference(DocumentReference reference);
+  Future<T> load<T extends Document<T>>(Document document, {Source source});
+}
+
+class DocumentAccessor implements DocumentAccessorRepository {
+  @override
   Future save(Document document) async {
     try {
       final batch = Batch()..save(document);
@@ -13,6 +41,7 @@ class DocumentAccessor {
     }
   }
 
+  @override
   Future<Increment<T>> increment<T extends num>(
     Increment<T> entity,
     DocumentReference reference, {
@@ -39,6 +68,7 @@ class DocumentAccessor {
     }
   }
 
+  @override
   Future update(Document document) async {
     try {
       final batch = Batch()..update(document);
@@ -49,6 +79,7 @@ class DocumentAccessor {
     }
   }
 
+  @override
   Future delete(Document document) async {
     try {
       final batch = Batch()..delete(document);
@@ -59,6 +90,7 @@ class DocumentAccessor {
     }
   }
 
+  @override
   Future<T> load<T extends Document<T>>(Document document,
       {Source source}) async {
     try {
@@ -88,6 +120,7 @@ class DocumentAccessor {
     }
   }
 
+  @override
   Future saveRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
@@ -105,6 +138,7 @@ class DocumentAccessor {
     await batch.commit();
   }
 
+  @override
   Future updateRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
@@ -120,6 +154,7 @@ class DocumentAccessor {
     await batch.commit();
   }
 
+  @override
   Future deleteWithReference(DocumentReference reference) async {
     final batch = Batch()..deleteWithReference(reference);
     await batch.commit();

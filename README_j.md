@@ -17,7 +17,7 @@ dependencies:
   flamingo_annotation: ^0.3.0
 
 dev_dependencies:
-  build_runner: ^1.7.1
+  build_runner: ^1.10.0
   flamingo_generator: ^0.3.2
 ```
 
@@ -952,6 +952,16 @@ await documentAccessor.save(sample1);
 /// Load
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
+
+## 依存注入
+
+インターフェースクラスを用意しています。テストをする際はご利用ください。
+
+- DocumentAccessorRepository
+- BatchRepository
+- StorageRepository
+- DistributedCounterRepository
+- CollectionRepository
 
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)

@@ -3,17 +3,50 @@ import 'dart:io';
 
 import 'flamingo.dart';
 
-class Storage {
+abstract class StorageRepository {
+  FirebaseStorage get storage;
+  Stream<StorageTaskEvent> get uploader;
+  Future<StorageFile> save(
+    String folderPath,
+    File data, {
+    String fileName,
+    String mimeType = mimeTypeApplicationOctetStream,
+    Map<String, String> metadata = const <String, String>{},
+    Map<String, dynamic> additionalData = const <String, dynamic>{},
+  });
+  Future<void> delete(String folderPath, StorageFile storageFile);
+  Future<StorageFile> saveWithDoc(
+    DocumentReference reference,
+    String folderName,
+    File data, {
+    String fileName,
+    String mimeType = mimeTypeApplicationOctetStream,
+    Map<String, String> metadata = const <String, String>{},
+    Map<String, dynamic> additionalData = const <String, dynamic>{},
+  });
+  Future<void> deleteWithDoc(
+    DocumentReference reference,
+    String folderName,
+    StorageFile storageFile, {
+    bool isNotNull = true,
+  });
+  void fetch();
+  void dispose();
+}
+
+class Storage implements StorageRepository {
   static String fileName({int length}) => Helper.randomString(length: length);
 
   final _storage = storageInstance;
-
-  FirebaseStorage get storage => _storage;
-
   StreamController<StorageTaskEvent> _uploader;
 
+  @override
+  FirebaseStorage get storage => _storage;
+
+  @override
   Stream<StorageTaskEvent> get uploader => _uploader.stream;
 
+  @override
   Future<StorageFile> save(
     String folderPath,
     File data, {
@@ -45,6 +78,7 @@ class Storage {
     );
   }
 
+  @override
   Future<void> delete(String folderPath, StorageFile storageFile) async {
     if (storageFile != null) {
       final path = '$folderPath/${storageFile.name}';
@@ -57,6 +91,7 @@ class Storage {
     return;
   }
 
+  @override
   Future<StorageFile> saveWithDoc(
     DocumentReference reference,
     String folderName,
@@ -77,6 +112,7 @@ class Storage {
     return storageFile;
   }
 
+  @override
   Future<void> deleteWithDoc(
     DocumentReference reference,
     String folderName,
@@ -98,10 +134,12 @@ class Storage {
     return;
   }
 
+  @override
   void fetch() {
     _uploader ??= StreamController<StorageTaskEvent>();
   }
 
+  @override
   void dispose() {
     _uploader.close();
     _uploader = null;

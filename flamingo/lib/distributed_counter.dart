@@ -1,17 +1,25 @@
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'flamingo.dart';
 import 'model/counter.dart';
 
-class DistributedCounter {
+abstract class DistributedCounterRepository {
+  Future create(Counter counter);
+  Future increment(Counter counter, {int count});
+  Future<int> load(Counter counter);
+}
+
+class DistributedCounter implements DistributedCounterRepository {
+  @override
   Future create(Counter counter) async =>
       _create(counter.parentRef, counter.collectionName, counter.numShards);
 
+  @override
   Future increment(Counter counter, {int count}) async =>
       _increment(counter.parentRef, counter.collectionName, counter.numShards,
           count: count);
 
+  @override
   Future<int> load(Counter counter) async {
     final count = await _load(counter.parentRef, counter.collectionName);
     counter.count = count;
