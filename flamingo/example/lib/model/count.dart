@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'count.flamingo.dart';
 
 class Count extends Document<Count> {
   Count({
@@ -7,29 +9,25 @@ class Count extends Document<Count> {
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
     CollectionReference collectionRef,
-  }): super(id: id, snapshot: snapshot, values: values, collectionRef: collectionRef);
+  }) : super(
+            id: id,
+            snapshot: snapshot,
+            values: values,
+            collectionRef: collectionRef);
 
+  @Field()
   String userId;
+
+  @Field()
   int count = 0;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'userId', userId);
-    writeNotNull(data, 'count', count);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    userId = valueFromKey<String>(data, 'userId');
-    count = valueFromKey<int>(data, 'count');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
   void log() {
     print('$id $userId $count');
   }
-
 }

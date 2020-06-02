@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'map_sample.flamingo.dart';
 
 class MapSample extends Document<MapSample> {
   MapSample({
@@ -8,33 +10,26 @@ class MapSample extends Document<MapSample> {
     Map<String, dynamic> values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
+  @Field()
   Map<String, String> strMap;
+
+  @Field()
   Map<String, int> intMap;
+
+  @Field()
   Map<String, double> doubleMap;
+
+  @Field()
   Map<String, bool> boolMap;
+
+  @Field()
   List<Map<String, String>> listStrMap;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'strMap', strMap);
-    writeNotNull(data, 'intMap', intMap);
-    writeNotNull(data, 'doubleMap', doubleMap);
-    writeNotNull(data, 'boolMap', boolMap);
-    writeNotNull(data, 'listStrMap', listStrMap);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    strMap = valueMapFromKey<String, String>(data, 'strMap');
-    intMap = valueMapFromKey<String, int>(data, 'intMap');
-    doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
-    boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
-    listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
   void log() {
     print('MapSample $id $strMap $intMap $doubleMap $boolMap $listStrMap');

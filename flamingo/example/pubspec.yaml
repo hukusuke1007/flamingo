@@ -13,17 +13,14 @@ dependencies:
   cupertino_icons: ^0.1.2
   flamingo:
     path: ../
-
-  flamingo_annotation:
-    path: ../../flamingo_annotation/
+  flamingo_annotation: ^0.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   build_runner: ^1.7.1
-  flamingo_generator:
-    path: ../../flamingo_generator/
+  flamingo_generator: ^0.3.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

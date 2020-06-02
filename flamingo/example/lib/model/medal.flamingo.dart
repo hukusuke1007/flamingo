@@ -1,22 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'medal.dart';
 
 // **************************************************************************
 // FieldValueGenerator
 // **************************************************************************
 
-/// FieldValueKey
-enum UserFieldValueKey {
+/// Field value key
+enum MedalKey {
   name,
 }
 
-extension UserFieldValueKeyExtension on UserFieldValueKey {
+extension MedalKeyExtension on MedalKey {
   String get value {
     switch (this) {
-      case UserFieldValueKey.name:
+      case MedalKey.name:
         return 'name';
-
       default:
         return toString();
     }
@@ -24,7 +23,7 @@ extension UserFieldValueKeyExtension on UserFieldValueKey {
 }
 
 /// For save data
-Map<String, dynamic> _$toData(User doc) {
+Map<String, dynamic> _$toData(Medal doc) {
   final data = <String, dynamic>{};
   Helper.writeNotNull(data, 'name', doc.name);
 
@@ -32,6 +31,6 @@ Map<String, dynamic> _$toData(User doc) {
 }
 
 /// For load data
-void _$fromData(User doc, Map<String, dynamic> data) {
+void _$fromData(Medal doc, Map<String, dynamic> data) {
   doc.name = Helper.valueFromKey<String>(data, 'name');
 }

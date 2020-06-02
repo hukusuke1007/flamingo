@@ -1,5 +1,9 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
 import 'cart.dart';
+
+part 'shop.flamingo.dart';
 
 class Shop extends Document<Shop> {
   Shop({
@@ -9,42 +13,27 @@ class Shop extends Document<Shop> {
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
     CollectionReference collectionRef,
-  }): super(
-      id: id,
-      documentPath: documentPath,
-      collectionPath: collectionPath,
-      snapshot: snapshot,
-      values: values,
-      collectionRef: collectionRef,
-  );
+  }) : super(
+          id: id,
+          documentPath: documentPath,
+          collectionPath: collectionPath,
+          snapshot: snapshot,
+          values: values,
+          collectionRef: collectionRef,
+        );
 
+  @Field()
   String name;
+
+  @ModelField()
   Cart cart;
+
+  @ModelField()
   List<Cart> carts;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', name);
-    writeModelNotNull(data, 'cart', cart);
-    writeModelListNotNull(data, 'carts', carts);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-    cart = Cart(values: valueMapFromKey<String, dynamic>(data, 'cart'));
-    final _carts = valueMapListFromKey<String, dynamic>(data, 'carts');
-    if (_carts != null) {
-      carts = _carts
-          .where((d) => d != null)
-          .map((d) => Cart(values: d))
-          .toList();
-    }
-
-  }
-
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }

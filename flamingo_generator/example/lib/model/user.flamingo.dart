@@ -6,10 +6,11 @@ part of 'user.dart';
 // FieldValueGenerator
 // **************************************************************************
 
-/// FieldValueKey
-enum UserFieldValueKey {
+/// Field value key
+enum UserKey {
   name,
   profile,
+  strList,
   intMap,
   listIntMap,
   point,
@@ -24,36 +25,38 @@ enum UserFieldValueKey {
   item,
 }
 
-extension UserFieldValueKeyExtension on UserFieldValueKey {
+extension UserKeyExtension on UserKey {
   String get value {
     switch (this) {
-      case UserFieldValueKey.name:
+      case UserKey.name:
         return 'name';
-      case UserFieldValueKey.profile:
+      case UserKey.profile:
         return 'profile';
-      case UserFieldValueKey.intMap:
+      case UserKey.strList:
+        return 'strList';
+      case UserKey.intMap:
         return 'intMap';
-      case UserFieldValueKey.listIntMap:
+      case UserKey.listIntMap:
         return 'listIntMap';
-      case UserFieldValueKey.point:
+      case UserKey.point:
         return 'point';
-      case UserFieldValueKey.score:
+      case UserKey.score:
         return 'score';
-      case UserFieldValueKey.cartA:
+      case UserKey.cartA:
         return 'cartA';
-      case UserFieldValueKey.cartB:
+      case UserKey.cartB:
         return 'cartB';
-      case UserFieldValueKey.carts:
+      case UserKey.carts:
         return 'carts';
-      case UserFieldValueKey.fileA:
+      case UserKey.fileA:
         return 'fileA';
-      case UserFieldValueKey.fileB:
+      case UserKey.fileB:
         return 'fileB';
-      case UserFieldValueKey.filesA:
+      case UserKey.filesA:
         return 'filesA';
-      case UserFieldValueKey.filesB:
+      case UserKey.filesB:
         return 'filesB';
-      case UserFieldValueKey.item:
+      case UserKey.item:
         return 'item';
       default:
         return toString();
@@ -66,6 +69,7 @@ Map<String, dynamic> _$toData(User doc) {
   final data = <String, dynamic>{};
   Helper.writeNotNull(data, 'name', doc.name);
   Helper.write(data, 'profile', doc.profile);
+  Helper.writeNotNull(data, 'strList', doc.strList);
   Helper.writeNotNull(data, 'intMap', doc.intMap);
   Helper.writeNotNull(data, 'listIntMap', doc.listIntMap);
   Helper.writeIncrement(data, doc.point);
@@ -75,10 +79,10 @@ Map<String, dynamic> _$toData(User doc) {
   Helper.writeModel(data, 'cartB', doc.cartB);
   Helper.writeModelListNotNull(data, 'carts', doc.carts);
 
-  Helper.writeStorageNotNull(data, 'fileA', doc.fileA, isSetNull: false);
-  Helper.writeStorage(data, 'image', doc.fileB, isSetNull: false);
-  Helper.writeStorageListNotNull(data, 'filesA', doc.filesA, isSetNull: false);
-  Helper.writeStorageList(data, 'filesB', doc.filesB, isSetNull: false);
+  Helper.writeStorageNotNull(data, 'fileA', doc.fileA, isSetNull: true);
+  Helper.writeStorage(data, 'image', doc.fileB, isSetNull: true);
+  Helper.writeStorageListNotNull(data, 'filesA', doc.filesA, isSetNull: true);
+  Helper.writeStorageList(data, 'filesB', doc.filesB, isSetNull: true);
 
   return data;
 }
@@ -87,6 +91,7 @@ Map<String, dynamic> _$toData(User doc) {
 void _$fromData(User doc, Map<String, dynamic> data) {
   doc.name = Helper.valueFromKey<String>(data, 'name');
   doc.profile = Helper.valueFromKey<String>(data, 'profile');
+  doc.strList = Helper.valueListFromKey<String>(data, 'strList');
   doc.intMap = Helper.valueMapFromKey<String, int>(data, 'intMap');
   doc.listIntMap = Helper.valueMapListFromKey<String, int>(data, 'listIntMap');
   doc.point = Helper.valueFromIncrement<int>(data, doc.point.fieldName);

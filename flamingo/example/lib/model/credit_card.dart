@@ -1,34 +1,29 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'credit_card.flamingo.dart';
 
 class CreditCard extends Document<CreditCard> {
   CreditCard({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values) {
-    point = Increment('point');
-    score = Increment('score');
+  }) : super(id: id, snapshot: snapshot, values: values) {
+    point = Increment(CreditCardKey.point.value);
+    score = Increment(CreditCardKey.score.value);
   }
 
+  @Field()
   Increment<int> point;
+
+  @Field()
   Increment<double> score;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeIncrement(data, point);
-    writeIncrement(data, score);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    point = valueFromIncrement<int>(data, point.fieldName);
-    score = valueFromIncrement<double>(data, score.fieldName);
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
   /// Call after create, update, delete.
   @override
@@ -41,5 +36,4 @@ class CreditCard extends Document<CreditCard> {
     print('$id ${point.value} ${score.value}');
     // print('${point.incrementValue} ${score.incrementValue}');
   }
-
 }

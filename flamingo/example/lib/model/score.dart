@@ -1,35 +1,31 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'score.flamingo.dart';
 
 class Score extends Document<Score> {
   Score({
     String id,
-  }): super(id: id) {
-    value = Counter(this, 'shards', numShards);
+  }) : super(id: id) {
+    counter = Counter(this, ScoreKey.counter.value, numShards);
   }
 
-  /// Document
+  @Field()
   String userId;
 
   /// DistributedCounter
+  @SubCollection()
+  Counter counter;
+
   int numShards = 10;
-  Counter value;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'userId', userId);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    userId = valueFromKey<String>(data, 'userId');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
   void log() {
-    print('$id $userId ${value.count}');
+    print('$id $userId ${counter.count}');
   }
-
 }

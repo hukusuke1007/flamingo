@@ -1,13 +1,16 @@
 import 'package:flamingo/flamingo.dart';
-import 'package:flamingo_example/model/setting.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'item.flamingo.dart';
 
 class Item extends Document<Item> {
   Item({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
+  @Field()
   String name;
 
   /// Custom field key of createdAt and updatedAt.
@@ -18,21 +21,15 @@ class Item extends Document<Item> {
   String get updatedFieldValueKey => 'updatedDate';
 
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', name);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
   void log() {
-    print('Item $id ${reference.path} $name $createdFieldValueKey $updatedFieldValueKey '
+    print(
+        'Item $id ${reference.path} $name $createdFieldValueKey $updatedFieldValueKey '
         '${createdAt?.toDate()} '
         '${updatedAt?.toDate()}');
   }
-
 }

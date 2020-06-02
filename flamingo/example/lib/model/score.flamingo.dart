@@ -1,21 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'item.dart';
+part of 'score.dart';
 
 // **************************************************************************
 // FieldValueGenerator
 // **************************************************************************
 
 /// Field value key
-enum ItemKey {
-  name,
+enum ScoreKey {
+  userId,
+
+  counter,
 }
 
-extension ItemKeyExtension on ItemKey {
+extension ScoreKeyExtension on ScoreKey {
   String get value {
     switch (this) {
-      case ItemKey.name:
-        return 'name';
+      case ScoreKey.userId:
+        return 'userId';
+      case ScoreKey.counter:
+        return 'counter';
       default:
         return toString();
     }
@@ -23,14 +27,14 @@ extension ItemKeyExtension on ItemKey {
 }
 
 /// For save data
-Map<String, dynamic> _$toData(Item doc) {
+Map<String, dynamic> _$toData(Score doc) {
   final data = <String, dynamic>{};
-  Helper.writeNotNull(data, 'name', doc.name);
+  Helper.writeNotNull(data, 'userId', doc.userId);
 
   return data;
 }
 
 /// For load data
-void _$fromData(Item doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String>(data, 'name');
+void _$fromData(Score doc, Map<String, dynamic> data) {
+  doc.userId = Helper.valueFromKey<String>(data, 'userId');
 }

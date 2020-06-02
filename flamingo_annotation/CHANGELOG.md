@@ -1,4 +1,7 @@
-# 0.2.0
+# 0.3.0
+Modified parameter.
+
+## 0.2.0
 Added description.
 
 ## 0.1.0

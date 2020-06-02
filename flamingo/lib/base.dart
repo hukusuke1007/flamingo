@@ -31,7 +31,7 @@ class Base {
     StorageFile storageFile, {
     bool isSetNull = true,
   }) =>
-      Helper.writeStorage(data, key, storageFile);
+      Helper.writeStorage(data, key, storageFile, isSetNull: isSetNull);
 
   void writeStorageNotNull(
     Map<String, dynamic> data,
@@ -39,7 +39,7 @@ class Base {
     StorageFile storageFile, {
     bool isSetNull = false,
   }) =>
-      Helper.writeStorageNotNull(data, key, storageFile);
+      Helper.writeStorageNotNull(data, key, storageFile, isSetNull: isSetNull);
 
   void writeStorageList(
     Map<String, dynamic> data,
@@ -47,7 +47,7 @@ class Base {
     List<StorageFile> storageFiles, {
     bool isSetNull = true,
   }) =>
-      Helper.writeStorageList(data, key, storageFiles);
+      Helper.writeStorageList(data, key, storageFiles, isSetNull: isSetNull);
 
   void writeStorageListNotNull(
     Map<String, dynamic> data,
@@ -55,7 +55,8 @@ class Base {
     List<StorageFile> storageFiles, {
     bool isSetNull = true,
   }) =>
-      Helper.writeStorageListNotNull(data, key, storageFiles);
+      Helper.writeStorageListNotNull(data, key, storageFiles,
+          isSetNull: isSetNull);
 
   StorageFile storageFile(Map<String, dynamic> data, String folderName) =>
       Helper.storageFile(data, folderName);

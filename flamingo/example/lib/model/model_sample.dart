@@ -1,44 +1,38 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'model_sample.flamingo.dart';
 
 class ModelSample extends Document<ModelSample> {
   ModelSample({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
+  @Field(isWriteNotNull: false)
   String name;
+
+  @Field(isWriteNotNull: false)
   List<String> strList;
+
+  @Field(isWriteNotNull: false)
   Map<String, String> strMap;
+
+  @Field(isWriteNotNull: false)
   List<Map<String, String>> listStrMap;
+
+  @StorageField(isWriteNotNull: false)
   StorageFile file;
-  String folderName = 'file';
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    write(data, 'name', name);
-    write(data, 'strList', strList);
-    write(data, 'strMap', strMap);
-    write(data, 'listStrMap', listStrMap);
-    writeStorage(data, folderName, file);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-    strList = valueListFromKey<String>(data, 'strList');
-    strMap = valueMapFromKey<String, String>(data, 'strMap');
-    listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
-    file = storageFile(data, folderName);
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
   void log() {
-    print('ModelSample $id $name $strList $strMap $listStrMap ${file?.toJson()}');
+    print(
+        'ModelSample $id $name $strList $strMap $listStrMap ${file?.toJson()}');
   }
-
 }

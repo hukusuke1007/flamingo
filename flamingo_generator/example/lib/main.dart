@@ -1,8 +1,6 @@
-import 'package:flamingo_generator_example/model/index.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  final a = UserFieldValueKey.cartA.value;
   runApp(MyApp());
 }
 

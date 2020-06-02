@@ -1,29 +1,24 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'cart.flamingo.dart';
 
 class Cart extends Model {
   Cart({
     this.ref,
     this.collectionRef,
     Map<String, dynamic> values,
-  }): super(values: values);
+  }) : super(values: values);
 
+  @Field()
   String ref;
+
+  @Field()
   String collectionRef;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'ref', ref);
-    writeNotNull(data, 'collectionRef', collectionRef);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    ref = valueFromKey<String>(data, 'ref');
-    collectionRef = valueFromKey<String>(data, 'collectionRef');
-  }
-
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }

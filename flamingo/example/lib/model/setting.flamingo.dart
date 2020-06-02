@@ -1,21 +1,21 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'item.dart';
+part of 'setting.dart';
 
 // **************************************************************************
 // FieldValueGenerator
 // **************************************************************************
 
 /// Field value key
-enum ItemKey {
-  name,
+enum SettingKey {
+  isEnable,
 }
 
-extension ItemKeyExtension on ItemKey {
+extension SettingKeyExtension on SettingKey {
   String get value {
     switch (this) {
-      case ItemKey.name:
-        return 'name';
+      case SettingKey.isEnable:
+        return 'isEnable';
       default:
         return toString();
     }
@@ -23,14 +23,14 @@ extension ItemKeyExtension on ItemKey {
 }
 
 /// For save data
-Map<String, dynamic> _$toData(Item doc) {
+Map<String, dynamic> _$toData(Setting doc) {
   final data = <String, dynamic>{};
-  Helper.writeNotNull(data, 'name', doc.name);
+  Helper.writeNotNull(data, 'isEnable', doc.isEnable);
 
   return data;
 }
 
 /// For load data
-void _$fromData(Item doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String>(data, 'name');
+void _$fromData(Setting doc, Map<String, dynamic> data) {
+  doc.isEnable = Helper.valueFromKey<bool>(data, 'isEnable');
 }

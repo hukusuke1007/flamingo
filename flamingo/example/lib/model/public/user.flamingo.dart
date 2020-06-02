@@ -1,21 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'item.dart';
+part of 'user.dart';
 
 // **************************************************************************
 // FieldValueGenerator
 // **************************************************************************
 
 /// Field value key
-enum ItemKey {
+enum UserKey {
   name,
+
+  setting,
 }
 
-extension ItemKeyExtension on ItemKey {
+extension UserKeyExtension on UserKey {
   String get value {
     switch (this) {
-      case ItemKey.name:
+      case UserKey.name:
         return 'name';
+      case UserKey.setting:
+        return 'setting';
       default:
         return toString();
     }
@@ -23,7 +27,7 @@ extension ItemKeyExtension on ItemKey {
 }
 
 /// For save data
-Map<String, dynamic> _$toData(Item doc) {
+Map<String, dynamic> _$toData(User doc) {
   final data = <String, dynamic>{};
   Helper.writeNotNull(data, 'name', doc.name);
 
@@ -31,6 +35,6 @@ Map<String, dynamic> _$toData(Item doc) {
 }
 
 /// For load data
-void _$fromData(Item doc, Map<String, dynamic> data) {
+void _$fromData(User doc, Map<String, dynamic> data) {
   doc.name = Helper.valueFromKey<String>(data, 'name');
 }

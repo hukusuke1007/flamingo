@@ -15,12 +15,12 @@ class Field {
 ///   This is field name for Firestore and Cloud Storage.
 /// [isSetNull]
 ///   true: It's will be set to null if data is null.
-///   false: It's not will be set to nul if data is null.
+///   false: It's will be execute FieldValue.delete() if data is null.
 class StorageField {
   const StorageField({
     this.isWriteNotNull = true,
     this.folderName,
-    this.isSetNull = false,
+    this.isSetNull = true,
   });
   final bool isWriteNotNull;
   final String folderName;

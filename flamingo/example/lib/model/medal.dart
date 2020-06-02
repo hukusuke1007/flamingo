@@ -1,25 +1,20 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'medal.flamingo.dart';
 
 class Medal extends Model {
   Medal({
     this.name,
     Map<String, dynamic> values,
-  }): super(values: values);
+  }) : super(values: values);
 
+  @Field()
   String name;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', name);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-  }
-
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }

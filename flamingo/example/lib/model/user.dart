@@ -2,7 +2,7 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_annotation/flamingo_annotation.dart';
 import 'package:flamingo_example/model/setting.dart';
 
-part 'user.value.g.dart';
+part 'user.flamingo.dart';
 
 class User extends Document<User> {
   User({
@@ -10,12 +10,13 @@ class User extends Document<User> {
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
   }) : super(id: id, snapshot: snapshot, values: values) {
-    setting = Collection(this, 'setting');
+    setting = Collection(this, UserKey.setting.value);
   }
 
   @Field()
   String name;
 
+  @SubCollection()
   Collection<Setting> setting;
 
   @override

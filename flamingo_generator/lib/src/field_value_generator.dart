@@ -25,9 +25,9 @@ class FieldValueGenerator extends Generator {
   }
 
   String _code(ClassElement class$) {
-    final enumName = '${class$.name}FieldValueKey';
+    final enumName = '${class$.name}Key';
     return """
-     /// FieldValueKey
+     /// Field value key
      enum $enumName {
        ${class$.annotatedWith(hasFieldValue).map((f) => """${f.element.name}, """).join()}
        ${class$.annotatedWith(hasModelFieldValue).map((f) => """${f.element.name}, """).join()}
@@ -144,7 +144,11 @@ class FieldValueGenerator extends Generator {
               f.elementType.toString().split(', ')[1].replaceAll('>', '');
           return """doc.${f.element.name} = Helper.valueMapListFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
         }
-        return """doc.${f.element.name} = Helper.valueListFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');""";
+        final _type = f.elementType
+            .toString()
+            .replaceAll('List<', '')
+            .replaceAll('>', '');
+        return """doc.${f.element.name} = Helper.valueListFromKey<$_type>(data, \'${f.element.name}\');""";
       } else {
         if (f.elementType.isDartCoreMap) {
           final mapValueType =

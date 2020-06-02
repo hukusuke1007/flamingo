@@ -12,7 +12,7 @@ class User extends Document<User> {
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
   }) : super(id: id, snapshot: snapshot, values: values) {
-    item = Collection(this, UserFieldValueKey.item.value);
+    item = Collection(this, UserKey.item.value);
   }
 
   @Field()
@@ -20,6 +20,9 @@ class User extends Document<User> {
 
   @Field(isWriteNotNull: false)
   String profile;
+
+  @Field()
+  List<String> strList;
 
   @Field()
   Map<String, int> intMap;
