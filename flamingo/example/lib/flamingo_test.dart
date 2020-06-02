@@ -1194,13 +1194,11 @@ class FlamingoTest {
       final _item = await documentAccessor.load<Item>(item);
       _item.log();
     }
-
     await documentAccessor.saveRaw(
-        <String, dynamic>{'name': 'itemitem'}, item.reference,
+        <String, dynamic>{ItemKey.name.value: 'hogehoge'}, item.reference,
         isTimestamp: true,
         createdFieldValueKey: item.createdFieldValueKey,
         updatedFieldValueKey: item.updatedFieldValueKey);
-
     {
       final _item = await documentAccessor.load<Item>(item);
       _item.log();

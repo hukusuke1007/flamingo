@@ -14,7 +14,13 @@ pubspec.yamlへFlamingoをインストールします。
 ```
 dependencies:
   flamingo:
+  flamingo_annotation: ^0.3.0
+
+dev_dependencies:
+  build_runner: ^1.7.1
+  flamingo_generator: ^0.3.2
 ```
+
 
 ## 使い方
 
@@ -32,48 +38,102 @@ void main() {
 }
 ```
 
+
 ### モデルクラスの作成
 
 Userのモデルクラスを作成します。
 
 Firestoreへ書き込みするデータを設定するオーバーライドメソッド（toData）と、Firestoreからデータを取得してモデルクラスのフィールドへマッピングするオーバーライドメソッド（fromData）を実装します。
 
+手動で実装もできますが、ここはflamingo_generatorを使ってマッピングコードの自動生成します。
+
+まずは次のようにモデルクラスを作ります。
+
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'user.flamingo.dart';
 
 class User extends Document<User> {
   User({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
+  @Field()
   String name;
 
-  // For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', name);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  // For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
-  // Call after create, update, delete.
+  /// For completed create, update, delete.
   @override
   void onCompleted(ExecuteType executeType) {
-    print('$executeType');
+    print('onCompleted $executeType');
   }
 }
 ```
 
-toDataとfromDataを実装しなければFirestoreへの読み書きができないので実装は必須です。
+自動生成したいフィールドに対してはアノテーションを付与します。
+
+- @Field()
+- @StorageField()
+- @ModelField()
+- @SubCollection()
+
+モデルクラスを実装後、ターミナルから次のコマンドを実行してコードを自動生成します。
+
+```
+flutter pub run build_runner build
+```
+
+自動生成されたコードは *.flamingo.dart のファイル名で作成されます。
+
+```dart
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'user.dart';
+
+// **************************************************************************
+// FieldValueGenerator
+// **************************************************************************
+
+/// Field value key
+enum UserKey {
+  name,
+}
+
+extension UserKeyExtension on UserKey {
+  String get value {
+    switch (this) {
+      case UserKey.name:
+        return 'name';
+      default:
+        return toString();
+    }
+  }
+}
+
+/// For save data
+Map<String, dynamic> _$toData(User doc) {
+  final data = <String, dynamic>{};
+  Helper.writeNotNull(data, 'name', doc.name);
+
+  return data;
+}
+
+/// For load data
+void _$fromData(User doc, Map<String, dynamic> data) {
+  doc.name = Helper.valueFromKey<String>(data, 'name');
+}
+
+```
+
 
 ### CRUD
 
@@ -96,6 +156,16 @@ Firestoreへ次のように保存されます。
 
 <a href="https://imgur.com/tlmwnrr"><img src="https://i.imgur.com/tlmwnrr.png" width="90%" /></a>
 
+
+また、特定のフィールドKeyに対して保存することもできます。
+
+```dart
+DocumentAccessor documentAccessor = DocumentAccessor();
+await documentAccessor.saveRaw(
+  <String, dynamic>{ UserKey.name.value: 'hogehoge' },
+  item.reference,
+);
+```
 
 #### 読み込み
 
@@ -188,97 +258,88 @@ Mapオブジェクトのモデルクラスを作成できます。
 実装例は次の通りです。
 
 ```dart
+import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+import 'address.dart';
+import 'medal.dart';
+
+part 'owner.flamingo.dart';
+
 class Owner extends Document<Owner> {
   Owner({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
+  @Field()
   String name;
 
-  // Model of map object
+  @ModelField()
   Address address;
+
+  @ModelField()
   List<Medal> medals;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', name);
-    writeModelNotNull(data, 'address', address);  // For model.
-    writeModelListNotNull(data, 'medals', medals); // For model list.
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-    address = Address(values: valueMapFromKey<String, String>(data, 'address')); // For model
-    medals = valueMapListFromKey<String, String>(data, 'medals') // For model list.
-        .where((d) => d != null)
-        .map((d) => Medal(values: d))
-        .toList();
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
 Mapオブジェクトを管理するモデルクラスを作成します。
 
 ```dart
+import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'address.flamingo.dart';
+
 class Address extends Model {
   Address({
     this.postCode,
     this.country,
     Map<String, dynamic> values,
-  }): super(values: values);
+  }) : super(values: values);
 
+  @Field()
   String postCode;
+
+  @Field()
   String country;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'postCode', postCode);
-    writeNotNull(data, 'country', country);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    postCode = valueFromKey<String>(data, 'postCode');
-    country = valueFromKey<String>(data, 'country');
-  }
-
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
 
 ```dart
+import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'medal.flamingo.dart';
+
 class Medal extends Model {
   Medal({
     this.name,
     Map<String, dynamic> values,
-  }): super(values: values);
+  }) : super(values: values);
 
+  @Field()
   String name;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', name);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    name = valueFromKey<String>(data, 'name');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
@@ -391,36 +452,38 @@ Sub Collectionにしたいフィールドを Collection の型で指定します
 また、Sub Collectionに親のリファレンスとコレクション名を指定する必要があるため、Rankingのコンストラクタ内でCollectionの初期化をします（※2）。
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
 import 'count.dart';
 
+part 'ranking.flamingo.dart';
+
 class Ranking extends Document<Ranking> {
-  Ranking({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values) {
-    // ※2 Must be create instance of Collection and set collection name.
-    count = Collection(this, 'count');
+  Ranking(
+      {String id,
+      DocumentSnapshot snapshot,
+      Map<String, dynamic> values,
+      CollectionReference collectionRef})
+      : super(
+            id: id,
+            snapshot: snapshot,
+            values: values,
+            collectionRef: collectionRef) {
+    count = Collection(this, RankingKey.count.value);
   }
 
+  @Field()
   String title;
-  Collection<Count> count; // ※1
 
-  // For save data
-  @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'name', title);
-    return data;
-  }
+  @SubCollection()
+  Collection<Count> count;
 
-  // For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    title = valueFromKey<String>(data, 'title');
-  }
+  Map<String, dynamic> toData() => _$toData(this);
+
+  @override
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
@@ -428,35 +491,34 @@ Countのモデルクラスは次の通りです。
 Sub Collectionされる場合はコンストラクタにCollectionReferenceのパラメータを設定できるようにします（※1）。
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'count.flamingo.dart';
 
 class Count extends Document<Count> {
   Count({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-    CollectionReference collectionRef, // ※1 Need to set a CollectionReference parameter.
-  }): super(id: id, snapshot: snapshot, values: values, collectionRef: collectionRef);
+    CollectionReference collectionRef,
+  }) : super(
+            id: id,
+            snapshot: snapshot,
+            values: values,
+            collectionRef: collectionRef);
 
+  @Field()
   String userId;
+
+  @Field()
   int count = 0;
 
-  // For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'userId', userId);
-    writeNotNull(data, 'count', count);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  // For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    userId = valueFromKey<String>(data, 'userId');
-    count = valueFromKey<int>(data, 'count');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
@@ -500,31 +562,25 @@ Flamingoを使えばCloud Storageへの保存と、保存されたURLなどの�
 対象となるフィールドを StorageFile 型で定義します。
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'post.flamingo.dart';
 
 class Post extends Document<Post> {
-  Post({
-    String id
-  }): super(id: id);
+  Post({String id}) : super(id: id);
 
-  // Storage
+  @StorageField()
   StorageFile file;
-  String folderName = 'file';
 
-  // For save data
-  @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeStorage(data, folderName, file);
-    return data;
-  }
+  @StorageField()
+  List<StorageFile> files;
 
-  // For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    file = storageFile(data, folderName);
-  }
+  Map<String, dynamic> toData() => _$toData(this);
+
+  @override
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
@@ -544,15 +600,8 @@ storage.uploader.listen((data){
 });
 
 // Upload file into firebase storage and save file metadata into firestore
-final path = '${post.documentPath}/${post.folderName}';
-post.file = await storage.save(
-  path,
-  file,
-  mimeType: mimeTypePng, // 'mimeType' is defined in master/master.dart
-  metadata: {
-    'newPost': 'true'
-  }
-);
+final path = '${post.documentPath}/${PostKey.file.value}';
+post.file = await storage.save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'}); // 'mimeType' is defined in master/master.dart
 await documentAccessor.save(post);
 
 // Dispose uploader stream
@@ -562,7 +611,8 @@ storage.dispose();
 削除は次の通りです。保存されたCloud Storage内のファイルとFirestoreへ保存されているStorageFileのフィールドを削除します。
 
 ```dart
-final path = '${post.documentPath}/${post.folderName}';
+// delete file in firebase storage and delete file metadata in firestore
+final path = '${post.documentPath}/${PostKey.file.value}';
 await storage.delete(path, post.file);
 await documentAccessor.update(post);
 ```
@@ -573,7 +623,7 @@ await documentAccessor.update(post);
 // Save storage and document of storage data.
 final storageFile = await storage.saveWithDoc(
     post.reference,
-    post.folderName,
+    PostKey.file.value,
     file,
     mimeType: mimeTypePng,
     metadata: {
@@ -588,9 +638,8 @@ final storageFile = await storage.saveWithDoc(
 );
 
 // Delete storage and document of storage data.
-await storage.deleteWithDoc(post.reference, post.folderName, post.file, isNotNull: true);
+await storage.deleteWithDoc(post.reference, PostKey.file.value, post.file, isNotNull: true);
 ```
-
 
 ### Increment
 
@@ -600,37 +649,33 @@ FieldValue.increment を使用する場合は、Flamingoが提供する Incremen
 
 ```dart
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'credit_card.flamingo.dart';
 
 class CreditCard extends Document<CreditCard> {
   CreditCard({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values) {
-    point = Increment('point'); // Set field name of point
-    score = Increment('score'); // Set field name of score
+  }) : super(id: id, snapshot: snapshot, values: values) {
+    point = Increment(CreditCardKey.point.value);
+    score = Increment(CreditCardKey.score.value);
   }
 
+  @Field()
   Increment<int> point;
+
+  @Field()
   Increment<double> score;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeIncrement(data, point);
-    writeIncrement(data, score);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    point = valueFromIncrement<int>(data, point.fieldName);
-    score = valueFromIncrement<double>(data, score.fieldName);
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 
-  /// Call after create, update, delete
+  /// Call after create, update, delete.
   @override
   void onCompleted(ExecuteType executeType) {
     point = point.onRefresh();
@@ -642,7 +687,6 @@ class CreditCard extends Document<CreditCard> {
 point と score のインクリメント、デクリメント、クリアする実装は次の通りです。
 
 ```dart
-
 // Increment
 final card = CreditCard()
   ..point.incrementValue = 1
@@ -711,36 +755,32 @@ Flamingoが提供する DistributedCounter を使えば簡単に分散カウン�
 対象となるフィールドを Counter 型で定義します。
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'score.flamingo.dart';
 
 class Score extends Document<Score> {
   Score({
     String id,
-  }): super(id: id) {
-    value = Counter(this, 'shards', numShards);
+  }) : super(id: id) {
+    counter = Counter(this, ScoreKey.counter.value, numShards);
   }
 
-  // Document
+  @Field()
   String userId;
 
-  // DistributedCounter
+  /// DistributedCounter
+  @SubCollection()
+  Counter counter;
+
   int numShards = 10;
-  Counter value;
 
-  // For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'userId', userId);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  // For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    userId = valueFromKey<String>(data, 'userId');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
@@ -749,22 +789,22 @@ DistributedCounter を使った実装は次の通りです。
 例では 10カウントアップさせています。
 
 ```dart
-// Create document before set distributed counter.
+/// Create
 final score = Score()
   ..userId = '0001';
 await documentAccessor.save(score);
 
 final distributedCounter = DistributedCounter();
-await distributedCounter.create(score.value);
+await distributedCounter.create(score.counter);
 
-// Increment
+/// Increment
 for (var i = 0; i < 10; i++) {
-  await distributedCounter.increment(score.value, count: 1);
+  await distributedCounter.increment(score.counter, count: 1);
 }
 
-// Load
-final count = await distributedCounter.load(score.value);
-print('count $count ${score.value.count}');
+/// Load
+final count = await distributedCounter.load(score.counter);
+print('count $count ${score.counter.count}');
 ```
 
 ### トランザクション
@@ -794,45 +834,39 @@ RunTransaction.scope((transaction) async {
 
 #### Map
 
-
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'map_sample.flamingo.dart';
 
 class MapSample extends Document<MapSample> {
   MapSample({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
+  @Field()
   Map<String, String> strMap;
+
+  @Field()
   Map<String, int> intMap;
+
+  @Field()
   Map<String, double> doubleMap;
+
+  @Field()
   Map<String, bool> boolMap;
+
+  @Field()
   List<Map<String, String>> listStrMap;
 
-  /// For save data
   @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'strMap', strMap);
-    writeNotNull(data, 'intMap', intMap);
-    writeNotNull(data, 'doubleMap', doubleMap);
-    writeNotNull(data, 'boolMap', boolMap);
-    writeNotNull(data, 'listStrMap', listStrMap);
-    return data;
-  }
+  Map<String, dynamic> toData() => _$toData(this);
 
-  /// For load data
   @override
-  void fromData(Map<String, dynamic> data) {
-    strMap = valueMapFromKey<String, String>(data, 'strMap');
-    intMap = valueMapFromKey<String, int>(data, 'intMap');
-    doubleMap = valueMapFromKey<String, double>(data, 'doubleMap');
-    boolMap = valueMapFromKey<String, bool>(data, 'boolMap');
-    listStrMap = valueMapListFromKey<String, String>(data, 'listStrMap');
-  }
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
@@ -856,61 +890,72 @@ final _sample1 = await documentAccessor.load<MapSample>(MapSample(id: sample1.id
 #### List
 
 ```dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_annotation/flamingo_annotation.dart';
+
+part 'list_sample.flamingo.dart';
 
 class ListSample extends Document<ListSample> {
   ListSample({
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }): super(id: id, snapshot: snapshot, values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
+  @Field()
   List<String> strList;
+
+  @Field()
   List<int> intList;
+
+  @Field()
   List<double> doubleList;
+
+  @Field()
   List<bool> boolList;
-  List<StorageFile> files;
-  String folderName = 'files';
 
-  /// For save data
-  @override
-  Map<String, dynamic> toData() {
-    final data = <String, dynamic>{};
-    writeNotNull(data, 'strList', strList);
-    writeNotNull(data, 'intList', intList);
-    writeNotNull(data, 'doubleList', doubleList);
-    writeNotNull(data, 'boolList', boolList);
-    writeStorageList(data, folderName, files);
-    return data;
-  }
+  @StorageField(isWriteNotNull: false)
+  List<StorageFile> filesA;
 
-  /// For load data
+  @StorageField()
+  List<StorageFile> filesB;
+
   @override
-  void fromData(Map<String, dynamic> data) {
-    strList = valueListFromKey<String>(data, 'strList');
-    intList = valueListFromKey<int>(data, 'intList');
-    doubleList = valueListFromKey<double>(data, 'doubleList');
-    boolList = valueListFromKey<bool>(data, 'boolList');
-    files = storageFiles(data, folderName);
-  }
+  Map<String, dynamic> toData() => _$toData(this);
+
+  @override
+  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
 }
 ```
 
+保存と取得。
 
 ```dart
+/// Save
 final sample1 = ListSample()
   ..strList = ['userId1', 'userId2', 'userId3',]
   ..intList = [0, 1, 2,]
   ..doubleList = [0.0, 0.1, 0.2,]
   ..boolList = [true, false, true,]
-  ..files = [
-    StorageFile(name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
-    StorageFile(name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
-    StorageFile(name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+  ..filesA = [
+    StorageFile(
+        name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+    StorageFile(
+        name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+    StorageFile(
+        name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
+  ]
+  ..filesB = [
+    StorageFile(
+        name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
+    StorageFile(
+        name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
+    StorageFile(
+        name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
   ];
 await documentAccessor.save(sample1);
 
+/// Load
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
 
