@@ -4,7 +4,7 @@ Flamingo is a firebase firestore model framework library.
 
 [https://pub.dev/packages/flamingo](https://pub.dev/packages/flamingo)
 
-[日本語ドキュメント](../README_j.md)
+[日本語ドキュメント](https://github.com/hukusuke1007/flamingo/blob/master/README_j.md)
 
 ## Example code
 See the example directory for a complete sample app using flamingo.
