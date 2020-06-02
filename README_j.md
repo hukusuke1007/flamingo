@@ -548,6 +548,26 @@ final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRe
   });
 ```
 
+また、CollectionDataSourceからも取得できます。
+
+```dart
+import 'package:flamingo/collection_data_source.dart';
+
+...
+
+final ref = User().collectionRef;
+final snapshot = await CollectionDataSource().loadDocuments(
+    ref.path,
+    limit: 20,
+    order: 'createdAt',
+    descending: true,
+    whereList: [
+      Where('age', isEqualTo: 20),
+      Where('gender', isEqualTo: 'man'),
+    ],
+);
+final users = snapshot.documents.map((item) => User(snapshot: item, collectionRef: ref)).toList();
+```
 
 ### Cloud Storageへの保存
 
@@ -953,15 +973,15 @@ await documentAccessor.save(sample1);
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
 
-## 依存注入
+## 依存注入（DI）
 
-インターフェースクラスを用意しています。テストをする際はご利用ください。
+インターフェースクラスを提供しています。
 
 - DocumentAccessorRepository
 - BatchRepository
+- CollectionRepository
 - StorageRepository
 - DistributedCounterRepository
-- CollectionRepository
 
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)

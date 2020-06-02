@@ -506,7 +506,7 @@ class Count extends Document<Count> {
 }
 ```
 
-#### Save and Get sub collection.
+#### Save and Get Sub Collection.
 
 ```dart
 final ranking = Ranking(id: '20201007')
@@ -533,6 +533,28 @@ final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRe
     print(count);
   });
 ```
+
+Can be also used CollectionDataSource for getting documents.
+
+```dart
+import 'package:flamingo/collection_data_source.dart';
+
+...
+
+final ref = User().collectionRef;
+final snapshot = await CollectionDataSource().loadDocuments(
+    ref.path,
+    limit: 20,
+    order: 'createdAt',
+    descending: true,
+    whereList: [
+      Where('age', isEqualTo: 20),
+      Where('gender', isEqualTo: 'man'),
+    ],
+);
+final users = snapshot.documents.map((item) => User(snapshot: item, collectionRef: ref)).toList();
+```
+
 
 ### File
 Can operation into Firebase Storage and upload and delete storage file. Using StorageFile and Storage class.
@@ -940,13 +962,13 @@ final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.
 
 ## Dependency Injection
 
-Provide interface classes. Can be injected for test.
+Provide interface classes.
 
 - DocumentAccessorRepository
 - BatchRepository
+- CollectionRepository
 - StorageRepository
 - DistributedCounterRepository
-- CollectionRepository
 
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)
