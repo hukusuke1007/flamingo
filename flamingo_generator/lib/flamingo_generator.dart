@@ -4,4 +4,4 @@ import 'package:source_gen/source_gen.dart';
 import 'src/field_value_generator.dart';
 
 Builder fieldValueBuilder(BuilderOptions options) =>
-    PartBuilder([FieldValueGenerator()], '.value.g.dart');
+    PartBuilder([FieldValueGenerator()], '.flamingo.dart');

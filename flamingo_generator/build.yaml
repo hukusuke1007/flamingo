@@ -1,24 +1,14 @@
 targets:
   $default:
     builders:
-#      flamingo_generator|generator:
-#        enabled: true
       flamingo_generator|field_value_generator:
         enabled: true
 
 builders:
-#  generator:
-#    import: "package:flamingo_generator/flamingo_generator.dart"
-#    builder_factories: ["enumHasValueBuilder"]
-#    build_extensions: {".dart": [".value.g.dart"]}
-#    auto_apply: dependents
-#    build_to: source
-#    applies_builders: ["source_gen|combining_builder"]
-
   field_value_generator:
     import: "package:flamingo_generator/flamingo_generator.dart"
     builder_factories: ["fieldValueBuilder"]
-    build_extensions: {".dart": [".value.g.dart"]}
+    build_extensions: {".dart": [".flamingo.dart"]}
     auto_apply: dependents
     build_to: source
     applies_builders: ["source_gen|combining_builder"]

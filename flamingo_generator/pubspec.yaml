@@ -1,6 +1,6 @@
 name: flamingo_generator
-description: This is flamingo generator.
-version: 0.1.0
+description: Automatically generate code for converting flamingo JSON by annotating Dart classes.
+version: 0.2.0
 homepage: https://twitter.com/hobbydevelop
 repository: https://github.com/hukusuke1007/flamingo
 
@@ -15,7 +15,7 @@ dependencies:
   analyzer: ^0.39.4
   source_gen: ^0.9.5
   code_builder: ^3.2.1
-  flamingo_annotation: ^0.1.0
+  flamingo_annotation: ^0.2.0
 
 dev_dependencies:
   flutter_test:

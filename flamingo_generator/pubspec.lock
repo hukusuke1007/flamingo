@@ -126,7 +126,7 @@ packages:
       name: flamingo_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   flutter:
     dependency: "direct main"
     description: flutter

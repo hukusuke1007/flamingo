@@ -22,7 +22,6 @@ extension CartFieldValueKeyExtension on CartFieldValueKey {
         return 'itemB';
       case CartFieldValueKey.itemC:
         return 'itemC';
-
       default:
         return toString();
     }

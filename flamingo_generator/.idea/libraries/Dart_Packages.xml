@@ -236,7 +236,7 @@
         <entry key="flamingo_annotation">
           <value>
             <list>
-              <option value="$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flamingo_annotation-0.1.0/lib" />
+              <option value="$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flamingo_annotation-0.2.0/lib" />
             </list>
           </value>
         </entry>
@@ -605,7 +605,7 @@
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-0.1.1+2/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-3.1.6/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/fixnum-0.10.11/lib" />
-      <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flamingo_annotation-0.1.0/lib" />
+      <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/flamingo_annotation-0.2.0/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/glob-1.2.0/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/graphs-0.2.0/lib" />
       <root url="file://$USER_HOME$/Library/flutter/.pub-cache/hosted/pub.dartlang.org/html-0.14.0+3/lib" />

@@ -1,21 +1,17 @@
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_annotation/flamingo_annotation.dart';
 
-part 'cart.flamingo.dart';
+part 'item.flamingo.dart';
 
-class Cart extends Model {
-  Cart({
+class Item extends Document<Item> {
+  Item({
+    String id,
+    DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }) : super(values: values);
+  }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  String itemA;
-
-  @Field()
-  int itemB;
-
-  @Field()
-  double itemC;
+  String name;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

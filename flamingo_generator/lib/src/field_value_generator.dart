@@ -14,7 +14,8 @@ class FieldValueGenerator extends Generator {
       const TypeChecker.fromRuntime(annotation.ModelField);
   final TypeChecker hasStorageFieldValue =
       const TypeChecker.fromRuntime(annotation.StorageField);
-
+  final TypeChecker hasSubCollectionValue =
+      const TypeChecker.fromRuntime(annotation.SubCollection);
   @override
   FutureOr<String> generate(LibraryReader library, BuildStep buildStep) {
     final lib = Library(
@@ -31,6 +32,7 @@ class FieldValueGenerator extends Generator {
        ${class$.annotatedWith(hasFieldValue).map((f) => """${f.element.name}, """).join()}
        ${class$.annotatedWith(hasModelFieldValue).map((f) => """${f.element.name}, """).join()}
        ${class$.annotatedWith(hasStorageFieldValue).map((f) => """${f.element.name}, """).join()}
+       ${class$.annotatedWith(hasSubCollectionValue).map((f) => """${f.element.name}, """).join()}
      }
      
      extension ${enumName}Extension on $enumName {
@@ -39,16 +41,16 @@ class FieldValueGenerator extends Generator {
           ${class$.annotatedWith(hasFieldValue).map((f) => """
             case $enumName.${f.element.name}:
               return \'${f.element.name}\';
-          """).join()}
-          ${class$.annotatedWith(hasModelFieldValue).map((f) => """
+          """).join()}${class$.annotatedWith(hasModelFieldValue).map((f) => """
             case $enumName.${f.element.name}:
               return \'${f.element.name}\';
-          """).join()}
-          ${class$.annotatedWith(hasStorageFieldValue).map((f) => """
+          """).join()}${class$.annotatedWith(hasStorageFieldValue).map((f) => """
             case $enumName.${f.element.name}:
               return \'${f.element.name}\';
-          """).join()}
-            default:
+          """).join()}${class$.annotatedWith(hasSubCollectionValue).map((f) => """
+            case $enumName.${f.element.name}:
+              return \'${f.element.name}\';
+          """).join()}default:
               return toString();
           }
        }

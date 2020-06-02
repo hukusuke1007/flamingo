@@ -21,6 +21,7 @@ enum UserFieldValueKey {
   fileB,
   filesA,
   filesB,
+  item,
 }
 
 extension UserFieldValueKeyExtension on UserFieldValueKey {
@@ -38,14 +39,12 @@ extension UserFieldValueKeyExtension on UserFieldValueKey {
         return 'point';
       case UserFieldValueKey.score:
         return 'score';
-
       case UserFieldValueKey.cartA:
         return 'cartA';
       case UserFieldValueKey.cartB:
         return 'cartB';
       case UserFieldValueKey.carts:
         return 'carts';
-
       case UserFieldValueKey.fileA:
         return 'fileA';
       case UserFieldValueKey.fileB:
@@ -54,7 +53,8 @@ extension UserFieldValueKeyExtension on UserFieldValueKey {
         return 'filesA';
       case UserFieldValueKey.filesB:
         return 'filesB';
-
+      case UserFieldValueKey.item:
+        return 'item';
       default:
         return toString();
     }
