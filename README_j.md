@@ -975,6 +975,49 @@ await documentAccessor.save(sample1);
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
 
+## ユニットテスト
+
+次のプラグインをインストールします。
+
+- [test](https://pub.dev/packages/test)
+- [cloud_firestore_mocks](https://pub.dev/packages/cloud_firestore_mocks)
+- [firebase_storage_mocks](https://pub.dev/packages/firebase_storage_mocks)
+
+```
+dev_dependencies:
+  ...
+
+  test: ^1.14.4
+  cloud_firestore_mocks: ^0.4.4
+  firebase_storage_mocks: ^0.1.0
+```
+
+FirestoreとCloud StorageのMockインスタンスを設定します。
+
+```dart
+import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
+import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
+import 'package:flamingo/flamingo.dart';
+import 'package:test/test.dart';
+
+void main() {
+  final firestore = MockFirestoreInstance();
+  final storage = MockFirebaseStorage();
+  Flamingo.configure(
+      firestore: firestore,
+      storage: storage,
+      root: firestore.document('test/v1'));
+  ...
+}
+```
+
+Mockの設定が終わると、テストコードを書くだけです。
+
+サンプルコードはこちらです。
+
+[sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/test/example_test.dart)
+
+
 ## 依存注入（DI）
 
 インターフェースクラスを提供しています。

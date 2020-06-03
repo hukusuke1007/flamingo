@@ -977,7 +977,7 @@ dev_dependencies:
   firebase_storage_mocks: ^0.1.0
 ```
 
-Set firestore and cloud storage mock instance.
+Set Firestore and Cloud Storage mock instance.
 
 ```dart
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
@@ -986,7 +986,6 @@ import 'package:flamingo/flamingo.dart';
 import 'package:test/test.dart';
 
 void main() {
-  /// Configure
   final firestore = MockFirestoreInstance();
   final storage = MockFirebaseStorage();
   Flamingo.configure(
@@ -997,7 +996,7 @@ void main() {
 }
 ```
 
-[sample code]()
+[sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/test/example_test.dart)
 
 
 ## Dependency Injection

@@ -45,7 +45,6 @@ void main() {
         .map((e) => User(snapshot: e, collectionRef: collectionRef))
         .toList();
     for (var user in users) {
-      expect(user.id, isNotNull);
       expect(user.name, isNotNull);
     }
   });
