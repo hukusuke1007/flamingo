@@ -1,6 +1,8 @@
 # Flamingo
 
-Flamingoを利用したサンプルコードは[こちら](https://github.com/hukusuke1007/flamingo/tree/master/example)です。
+Flamingoを利用したサンプルコードはこちらです。
+
+[example](https://github.com/hukusuke1007/flamingo/tree/master/flamingo/example)
 
 ## 事前準備
 予め利用するプロジェクトへFirebaseの設定を行います。公式リファレンスのステップ１〜ステップ３までを実施してください。

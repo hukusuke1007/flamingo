@@ -106,7 +106,7 @@ Execute build runner to generate data mapping JSON.
 flutter pub run build_runner build
 ```
 
-Generate the following code.
+It will be generated the following code.
 
 ```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND

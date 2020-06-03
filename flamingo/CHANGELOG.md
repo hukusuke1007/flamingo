@@ -1,4 +1,7 @@
-# 1.1.0+1
+# 1.1.1
+Added Unit Test description to README and added sample code.
+
+## 1.1.0+1
 Updated README.
 
 ## 1.1.0

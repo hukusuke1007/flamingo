@@ -9,7 +9,7 @@ Flamingo is a firebase firestore model framework library.
 ## Example code
 See the example directory for a complete sample app using flamingo.
 
-[https://github.com/hukusuke1007/flamingo/tree/master/example](https://github.com/hukusuke1007/flamingo/tree/master/example)
+[example](https://github.com/hukusuke1007/flamingo/tree/master/flamingo/example)
 
 ## Installation
 
@@ -106,7 +106,7 @@ Execute build runner to generate data mapping JSON.
 flutter pub run build_runner build
 ```
 
-Generate the following code.
+It will be generated the following code.
 
 ```dart
 // GENERATED CODE - DO NOT MODIFY BY HAND
@@ -959,6 +959,46 @@ await documentAccessor.save(sample1);
 /// Load
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
+
+## Unit Test
+
+Install packages for unit test.
+
+- [test](https://pub.dev/packages/test)
+- [cloud_firestore_mocks](https://pub.dev/packages/cloud_firestore_mocks)
+- [firebase_storage_mocks](https://pub.dev/packages/firebase_storage_mocks)
+
+```
+dev_dependencies:
+  ...
+
+  test: ^1.14.4
+  cloud_firestore_mocks: ^0.4.4
+  firebase_storage_mocks: ^0.1.0
+```
+
+Set firestore and cloud storage mock instance.
+
+```dart
+import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
+import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
+import 'package:flamingo/flamingo.dart';
+import 'package:test/test.dart';
+
+void main() {
+  /// Configure
+  final firestore = MockFirestoreInstance();
+  final storage = MockFirebaseStorage();
+  Flamingo.configure(
+      firestore: firestore,
+      storage: storage,
+      root: firestore.document('test/v1'));
+  ...
+}
+```
+
+[sample code]()
+
 
 ## Dependency Injection
 
