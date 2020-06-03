@@ -26,8 +26,14 @@ class User extends Public<User> {
   Collection<Setting> setting;
 
   @override
-  Map<String, dynamic> toData() => _$toData(this);
+  Map<String, dynamic> toData() => <String, dynamic>{
+        ...super.toData(),
+        ..._$toData(this),
+      };
 
   @override
-  void fromData(Map<String, dynamic> data) => _$fromData(this, data);
+  void fromData(Map<String, dynamic> data) {
+    super.fromData(data);
+    _$fromData(this, data);
+  }
 }

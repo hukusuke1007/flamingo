@@ -1108,6 +1108,7 @@ class FlamingoTest {
     final _user =
         await documentAccessor.load<public.User>(public.User(id: user.id));
     assertCreateDocument(user, _user);
+    assert(user.domain == _user.domain);
     assert(user.name == _user.name);
     _user.name = 'aiueo';
     await documentAccessor.update(_user);
@@ -1115,6 +1116,7 @@ class FlamingoTest {
     final _user1 =
         await documentAccessor.load<public.User>(public.User(id: _user.id));
     assertCreateDocument(_user, _user1);
+    assert(_user.domain == _user1.domain);
     assert(_user.name == _user1.name);
 
     await documentAccessor.delete(_user);
