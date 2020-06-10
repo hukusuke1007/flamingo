@@ -49,11 +49,13 @@ extension _Extension on FlamingoTest {
 
 class FlamingoTest {
   FlamingoTest() {
-    _collectionPaging = CollectionPaging(
+    _collectionPaging = CollectionPaging<User>(
       query: firestoreInstance
-          .collection(User().reference.path)
+          .collection(User().collectionPath)
           .orderBy('createdAt', descending: true),
       limit: 20,
+      decode: (snap, collectionRef) =>
+          User(snapshot: snap, collectionRef: collectionRef),
     );
   }
   final DocumentAccessor documentAccessor = DocumentAccessor();
@@ -1282,18 +1284,16 @@ class FlamingoTest {
   }
 
   Future<List<User>> loadUsers() async {
-    final users = await _collectionPaging.load<User>();
-    for (var user in users) {
-      print('${user.id} ${user.reference} ${user.toData()}');
+    final documents = await _collectionPaging.load<User>();
+    for (var doc in documents) {
+      print('${doc.id} ${doc.toData()}');
     }
-    return users;
   }
 
   Future<List<User>> loadMoreUsers() async {
-    final users = await _collectionPaging.loadMore<User>(isAll: true);
-    for (var user in users) {
-      print('${user.id} ${user.reference} ${user.toData()}');
+    final documents = await _collectionPaging.loadMore<User>(isAll: false);
+    for (var doc in documents) {
+      print('${doc.id} ${doc.toData()}');
     }
-    return users;
   }
 }

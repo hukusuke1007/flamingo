@@ -1,47 +1,44 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/document.dart';
 import 'package:flutter/foundation.dart';
 
-import 'document.dart';
-
-class CollectionPagingModel<T> {
-  const CollectionPagingModel({
-    @required this.documents,
-    @required this.count,
-  });
-  final List<T> documents;
-  final int count;
-}
-
-class CollectionPaging {
+class CollectionPaging<T extends Document<T>> {
   CollectionPaging({
     @required this.query,
     @required this.limit,
+    @required this.decode,
   });
 
   final Query query;
   final int limit;
+  final T Function(DocumentSnapshot, CollectionReference) decode;
   DocumentSnapshot _startAfterDocument;
-  List<Document> _documents = [];
+  List<DocumentSnapshot> _documents = [];
 
-  Future<List<T>> load<T extends Document<T>>({
+  Future<List<D>> load<D extends Document<D>>({
     Source source = Source.serverAndCache,
-  }) =>
-      _load<T>(source: source);
+  }) async {
+    final documents = await _load(source: source);
+    return documents
+        .map((e) => decode(e, query.reference()))
+        .cast<D>()
+        .toList();
+  }
 
-  Future<List<T>> loadMore<T extends Document<T>>({
+  Future<List<D>> loadMore<D extends Document<D>>({
     bool isAll = false,
     Source source = Source.serverAndCache,
   }) async {
-    final documents =
-        await _load<T>(source: source, startAfterDocument: _startAfterDocument);
-    if (isAll) {
-      return _documents as List<T>;
-    } else {
-      return documents;
-    }
+    final documents = await _load(
+        isAll: isAll, source: source, startAfterDocument: _startAfterDocument);
+    return documents
+        .map((e) => decode(e, query.reference()))
+        .cast<D>()
+        .toList();
   }
 
-  Future<List<T>> _load<T extends Document<T>>({
+  Future<List<DocumentSnapshot>> _load({
+    bool isAll = false,
     Source source = Source.serverAndCache,
     DocumentSnapshot startAfterDocument,
   }) async {
@@ -50,19 +47,20 @@ class CollectionPaging {
       dataSource = dataSource.startAfterDocument(startAfterDocument);
     }
     final result = await dataSource.getDocuments(source: source);
-    final documents = result.documents
-        .map((e) =>
-            Document<T>(snapshot: e, collectionRef: dataSource.reference())
-                as T)
-        .toList();
+    final documents = result.documents.toList();
+
     if (documents.isNotEmpty) {
-      _startAfterDocument = documents.last.snapshot;
+      _startAfterDocument = documents.last;
     }
     if (_startAfterDocument == null) {
       _documents = documents;
     } else {
       _documents.addAll(documents);
     }
-    return _documents as List<T>;
+    if (isAll) {
+      return _documents;
+    } else {
+      return documents;
+    }
   }
 }
