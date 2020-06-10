@@ -550,27 +550,6 @@ final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRe
   });
 ```
 
-また、CollectionDataSourceからも取得できます。
-
-```dart
-import 'package:flamingo/collection_data_source.dart';
-
-...
-
-final ref = User().collectionRef;
-final snapshot = await CollectionDataSource().loadDocuments(
-    ref.path,
-    limit: 20,
-    order: 'createdAt',
-    descending: true,
-    whereList: [
-      Where('age', isEqualTo: 20),
-      Where('gender', isEqualTo: 'man'),
-    ],
-);
-final users = snapshot.documents.map((item) => User(snapshot: item, collectionRef: ref)).toList();
-```
-
 ### Cloud Storageへの保存
 
 Flamingoを使えばCloud Storageへの保存と、保存されたURLなどの情報をFirestoreへ簡単に保存することができます。
@@ -1017,16 +996,6 @@ Mockの設定が終わると後はテストコードを書くだけです。
 
 [sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/test/example_test.dart)
 
-
-## 依存注入（DI）
-
-インターフェースクラスを提供しています。
-
-- DocumentAccessorRepository
-- BatchRepository
-- CollectionRepository
-- StorageRepository
-- DistributedCounterRepository
 
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)

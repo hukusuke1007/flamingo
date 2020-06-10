@@ -48,7 +48,17 @@ extension _Extension on FlamingoTest {
 }
 
 class FlamingoTest {
-  DocumentAccessor documentAccessor = DocumentAccessor();
+  FlamingoTest() {
+    _collectionPaging = CollectionPaging(
+      query: firestoreInstance
+          .collection(User().reference.path)
+          .orderBy('createdAt', descending: true),
+      limit: 20,
+    );
+  }
+  final DocumentAccessor documentAccessor = DocumentAccessor();
+
+  CollectionPaging _collectionPaging;
 
   Future all() async {
     print('------- start -------');
@@ -1102,14 +1112,21 @@ class FlamingoTest {
 
   Future extendCRUD() async {
     print('--- extendCRUD ---');
+
+    /// Save
     final user = public.User()..name = 'hoge';
     await documentAccessor.save(user);
 
+    /// Load
     final _user =
         await documentAccessor.load<public.User>(public.User(id: user.id));
     assertCreateDocument(user, _user);
+    print(user.toData());
+
     assert(user.domain == _user.domain);
     assert(user.name == _user.name);
+
+    /// Update
     _user.name = 'aiueo';
     await documentAccessor.update(_user);
 
@@ -1119,6 +1136,7 @@ class FlamingoTest {
     assert(_user.domain == _user1.domain);
     assert(_user.name == _user1.name);
 
+    /// Delete
     await documentAccessor.delete(_user);
     final _user2 =
         await documentAccessor.load<public.User>(public.User(id: _user.id));
@@ -1261,5 +1279,21 @@ class FlamingoTest {
 //      print('e $e');
 ////      assert(e != null);
 //    }
+  }
+
+  Future<List<User>> loadUsers() async {
+    final users = await _collectionPaging.load<User>();
+    for (var user in users) {
+      print('${user.id} ${user.reference} ${user.toData()}');
+    }
+    return users;
+  }
+
+  Future<List<User>> loadMoreUsers() async {
+    final users = await _collectionPaging.loadMore<User>(isAll: true);
+    for (var user in users) {
+      print('${user.id} ${user.reference} ${user.toData()}');
+    }
+    return users;
   }
 }

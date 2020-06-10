@@ -535,26 +535,6 @@ final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRe
   });
 ```
 
-Can be also used CollectionDataSource for getting documents.
-
-```dart
-import 'package:flamingo/collection_data_source.dart';
-
-...
-
-final ref = User().collectionRef;
-final snapshot = await CollectionDataSource().loadDocuments(
-    ref.path,
-    limit: 20,
-    order: 'createdAt',
-    descending: true,
-    whereList: [
-      Where('age', isEqualTo: 20),
-      Where('gender', isEqualTo: 'man'),
-    ],
-);
-final users = snapshot.documents.map((item) => User(snapshot: item, collectionRef: ref)).toList();
-```
 
 ### File
 Can operation into Firebase Storage and upload and delete storage file. Using StorageFile and Storage class.
@@ -998,16 +978,6 @@ void main() {
 
 [sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/test/example_test.dart)
 
-
-## Dependency Injection
-
-Provide interface classes.
-
-- DocumentAccessorRepository
-- BatchRepository
-- CollectionRepository
-- StorageRepository
-- DistributedCounterRepository
 
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)

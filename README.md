@@ -4,12 +4,12 @@ Flamingo is a firebase firestore model framework library.
 
 [https://pub.dev/packages/flamingo](https://pub.dev/packages/flamingo)
 
-[日本語ドキュメント](./README_j.md)
+[日本語ドキュメント](https://github.com/hukusuke1007/flamingo/blob/master/README_j.md)
 
 ## Example code
 See the example directory for a complete sample app using flamingo.
 
-[https://github.com/hukusuke1007/flamingo/tree/master/example](https://github.com/hukusuke1007/flamingo/tree/master/example)
+[example](https://github.com/hukusuke1007/flamingo/tree/master/flamingo/example)
 
 ## Installation
 
@@ -145,6 +145,7 @@ Map<String, dynamic> _$toData(User doc) {
 void _$fromData(User doc, Map<String, dynamic> data) {
   doc.name = Helper.valueFromKey<String>(data, 'name');
 }
+
 ```
 
 
@@ -532,27 +533,6 @@ final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRe
   ..forEach((count) {
     print(count);
   });
-```
-
-Can be also used CollectionDataSource for getting documents.
-
-```dart
-import 'package:flamingo/collection_data_source.dart';
-
-...
-
-final ref = User().collectionRef;
-final snapshot = await CollectionDataSource().loadDocuments(
-    ref.path,
-    limit: 20,
-    order: 'createdAt',
-    descending: true,
-    whereList: [
-      Where('age', isEqualTo: 20),
-      Where('gender', isEqualTo: 'man'),
-    ],
-);
-final users = snapshot.documents.map((item) => User(snapshot: item, collectionRef: ref)).toList();
 ```
 
 
@@ -998,15 +978,6 @@ void main() {
 
 [sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/test/example_test.dart)
 
-## Dependency Injection
-
-Provide interface classes.
-
-- DocumentAccessorRepository
-- BatchRepository
-- CollectionRepository
-- StorageRepository
-- DistributedCounterRepository
 
 ## Reference
 - [Firebase for Flutter](https://firebase.google.com/docs/flutter/setup)
