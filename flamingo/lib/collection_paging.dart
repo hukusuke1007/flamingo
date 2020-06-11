@@ -13,7 +13,6 @@ class CollectionPaging<T extends Document<T>> {
   final int limit;
   final T Function(DocumentSnapshot, CollectionReference) decode;
   DocumentSnapshot _startAfterDocument;
-  List<DocumentSnapshot> _documents = [];
 
   Future<List<D>> load<D extends Document<D>>({
     Source source = Source.serverAndCache,
@@ -26,11 +25,10 @@ class CollectionPaging<T extends Document<T>> {
   }
 
   Future<List<D>> loadMore<D extends Document<D>>({
-    bool isAll = false,
     Source source = Source.serverAndCache,
   }) async {
-    final documents = await _load(
-        isAll: isAll, source: source, startAfterDocument: _startAfterDocument);
+    final documents =
+        await _load(source: source, startAfterDocument: _startAfterDocument);
     return documents
         .map((e) => decode(e, query.reference()))
         .cast<D>()
@@ -52,15 +50,6 @@ class CollectionPaging<T extends Document<T>> {
     if (documents.isNotEmpty) {
       _startAfterDocument = documents.last;
     }
-    if (_startAfterDocument == null) {
-      _documents = documents;
-    } else {
-      _documents.addAll(documents);
-    }
-    if (isAll) {
-      return _documents;
-    } else {
-      return documents;
-    }
+    return documents;
   }
 }

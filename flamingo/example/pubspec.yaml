@@ -9,8 +9,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  path_provider: ^1.6.0
   cupertino_icons: ^0.1.2
+
+  path_provider: ^1.6.0
+  pull_to_refresh: ^1.5.8
+
   flamingo:
     path: ../
   flamingo_annotation: ^0.3.0

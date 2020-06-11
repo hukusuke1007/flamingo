@@ -1,4 +1,7 @@
-# 1.1.1
+# 1.2.1
+Added CollectionPaging. Removed CollectionRepository and CollectionDataSource.
+
+## 1.1.1
 Added Unit Test description to README and added sample code.
 
 ## 1.1.0+1

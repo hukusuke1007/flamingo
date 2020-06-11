@@ -1291,7 +1291,7 @@ class FlamingoTest {
   }
 
   Future<List<User>> loadMoreUsers() async {
-    final documents = await _collectionPaging.loadMore<User>(isAll: false);
+    final documents = await _collectionPaging.loadMore<User>();
     for (var doc in documents) {
       print('${doc.id} ${doc.toData()}');
     }
