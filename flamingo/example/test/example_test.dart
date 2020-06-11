@@ -35,16 +35,5 @@ void main() {
     expect(_userA.name, userA.name);
     expect(_userB.id, _userB.id);
     expect(_userB.name, _userB.name);
-
-//    final collectionRef = User().collectionRef;
-//    final collectionDataSource = CollectionDataSource();
-//    final snapshot =
-//        await collectionDataSource.loadDocuments(collectionRef.path);
-//    final users = snapshot.documents
-//        .map((e) => User(snapshot: e, collectionRef: collectionRef))
-//        .toList();
-//    for (var user in users) {
-//      expect(user.name, isNotNull);
-//    }
   });
 }

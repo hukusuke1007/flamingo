@@ -206,9 +206,9 @@ final batch = Batch()
 await batch.commit();
 ```
 
-### Collection
+### Get Documents
 
-Flamingoではコレクション操作をラップしたインターフェースは作っていません。そのため、Flamingoに設定したFirestoreインスタンス経由でCollection操作を行います。
+Collection内のドキュメントを取得します。
 
 ```dart
 final path = Document.path<User>();
@@ -227,8 +227,122 @@ final listB = snapshot.documents.map((item) => User(id: item.documentID, values:
   });
 ```
 
-コレクションから取得した DocumentSnapshot をモデルクラスのパラメータに渡すことでマッピングされます。また、**Algolia**などの外部サービスを使うことを考慮してMap<String, dynamic>型のvaluesもマッピングできるようにしています。
+Collectionから取得した DocumentSnapshot をモデルクラスのパラメータに渡すことでマッピングされます。また、**Algolia**などの外部サービスを使うことを考慮してMap<String, dynamic>型のvaluesもマッピングできるようにしています。
 
+
+#### CollectionPaging
+CollectionPagingを使えばドキュメントのページング取得ができます。
+
+
+```dart
+final collectionPaging = CollectionPaging<User>(
+  query: User().collectionRef.orderBy('createdAt', descending: true),
+  limit: 20,
+  decode: (snap, collectionRef) =>
+      User(snapshot: snap, collectionRef: collectionRef),
+);
+
+List<User> items = [];
+
+// Load 
+final _items = await collectionPaging.load<User>();
+items = _items;
+
+// LoadMore
+final _items = await collectionPaging.loadMore<User>();
+items.addAll(_items);
+```
+
+CollectionGroupを使う場合は次のようにQueryを設定します。
+
+```dart
+collectionPaging = CollectionPaging<User>(
+  query: firestoreInstance
+    .collectionGroup('user')
+    .orderBy('createdAt', descending: true),
+  limit: 20,
+  decode: (snap, collectionRef) =>
+      User(snapshot: snap, collectionRef: collectionRef),
+);
+```
+
+CollectionPagingとSmartRefresherを使ったサンプルコードです。
+上部のスクロールで最新の20件を取得し、下部のスクロールでページング取得をしてリスト表示します。
+
+[sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_page.dart)
+
+### Snapshot Listener
+
+モデルクラスの reference を用いることでドキュメントの作成、更新、削除のイベントを監視できます。
+
+```dart
+// Listen
+final user = User(id: '0')
+  ..name = 'hoge';
+
+final disposer = user.reference.snapshots().listen((snap) {
+  final user = User(snapshot: snap);
+  print('${user.id}, ${user.name}');
+});
+
+// Save, update, delete
+DocumentAccessor documentAccessor = DocumentAccessor();
+await documentAccessor.save(user);
+
+user.name = 'fuga';
+await documentAccessor.update(user);
+
+await documentAccessor.delete(user);
+
+await disposer.cancel();
+```
+
+コレクションのスナップショットも監視することができます。
+
+DocumentChangeType を利用する場合は cloud_firestore をインポートしてください。
+
+```
+import 'package:cloud_firestore/cloud_firestore.dart';
+```
+
+```dart
+// Listen
+final path = Document.path<User>();
+final query = firestoreInstance.collection(path).limit(20);
+final dispose = query.snapshots().listen((querySnapshot) {
+  for (var change in querySnapshot.documentChanges) {
+    if (change.type == DocumentChangeType.added ) {
+      print('added ${change.document.documentID}');
+    }
+    if (change.type == DocumentChangeType.modified) {
+      print('modified ${change.document.documentID}');
+    }
+    if (change.type == DocumentChangeType.removed) {
+      print('removed ${change.document.documentID}');
+    }
+  }
+  final _ = querySnapshot.documents.map((item) => User(snapshot: item)).toList()
+    ..forEach((item) => print('${item.id}, ${item.name}'));
+});
+
+// Save, update, delete
+final user = User(id: '0')
+  ..name = 'hoge';
+
+DocumentAccessor documentAccessor = DocumentAccessor();
+await documentAccessor.save(user);
+
+user.name = 'fuga';
+await documentAccessor.update(user);
+
+await documentAccessor.delete(user);
+
+await dispose.cancel();
+```
+
+#### CollectionPagingListener
+
+Coming soon...
 
 ### Mapのモデル
 
@@ -365,76 +479,6 @@ print('medals: ${_owner.medals.map((d) => d.name)}');
 ```
 
 <a href="https://imgur.com/O9f1LOb"><img src="https://i.imgur.com/O9f1LOb.png" width="90%" /></a>
-
-### Snapshot Listener
-
-モデルクラスの reference を用いることでドキュメントの作成、更新、削除のイベントを監視できます。
-
-```dart
-// Listen
-final user = User(id: '0')
-  ..name = 'hoge';
-
-final disposer = user.reference.snapshots().listen((snap) {
-  final user = User(snapshot: snap);
-  print('${user.id}, ${user.name}');
-});
-
-// Save, update, delete
-DocumentAccessor documentAccessor = DocumentAccessor();
-await documentAccessor.save(user);
-
-user.name = 'fuga';
-await documentAccessor.update(user);
-
-await documentAccessor.delete(user);
-
-await disposer.cancel();
-```
-
-コレクションのスナップショットも監視することができます。
-
-DocumentChangeType を利用する場合は cloud_firestore をインポートしてください。
-
-```
-import 'package:cloud_firestore/cloud_firestore.dart';
-```
-
-```dart
-// Listen
-final path = Document.path<User>();
-final query = firestoreInstance.collection(path).limit(20);
-final dispose = query.snapshots().listen((querySnapshot) {
-  for (var change in querySnapshot.documentChanges) {
-    if (change.type == DocumentChangeType.added ) {
-      print('added ${change.document.documentID}');
-    }
-    if (change.type == DocumentChangeType.modified) {
-      print('modified ${change.document.documentID}');
-    }
-    if (change.type == DocumentChangeType.removed) {
-      print('removed ${change.document.documentID}');
-    }
-  }
-  final _ = querySnapshot.documents.map((item) => User(snapshot: item)).toList()
-    ..forEach((item) => print('${item.id}, ${item.name}'));
-});
-
-// Save, update, delete
-final user = User(id: '0')
-  ..name = 'hoge';
-
-DocumentAccessor documentAccessor = DocumentAccessor();
-await documentAccessor.save(user);
-
-user.name = 'fuga';
-await documentAccessor.update(user);
-
-await documentAccessor.delete(user);
-
-await dispose.cancel();
-```
-
 
 ### Sub Collection
 

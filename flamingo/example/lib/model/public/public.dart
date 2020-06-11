@@ -8,7 +8,13 @@ class Public<T> extends Document<T> {
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }) : super(id: id, snapshot: snapshot, values: values);
+    CollectionReference collectionRef,
+  }) : super(
+          id: id,
+          snapshot: snapshot,
+          values: values,
+          collectionRef: collectionRef,
+        );
 
   @override
   CollectionReference get collectionRootReference =>
