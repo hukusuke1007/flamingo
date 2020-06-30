@@ -1,4 +1,7 @@
-# 1.3.0
+# 1.3.0+1
+Updated pubspec.yaml
+
+## 1.3.0
 Updated cloud firestore plugin.
 
 ## 1.2.1

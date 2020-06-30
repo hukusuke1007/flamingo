@@ -1,4 +1,7 @@
-# 0.3.2
+# 0.3.2+1
+Updated pubspec.yaml
+
+## 0.3.2
 Bug fix.
 
 ## 0.3.1
