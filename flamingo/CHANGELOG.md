@@ -1,4 +1,7 @@
-# 1.2.1
+# 1.3.0
+Updated cloud firestore plugin.
+
+## 1.2.1
 Added CollectionPaging. Removed CollectionRepository and CollectionDataSource.
 
 ## 1.1.1

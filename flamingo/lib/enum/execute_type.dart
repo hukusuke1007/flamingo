@@ -1,3 +1,1 @@
-enum ExecuteType {
-  create, update, delete
-}
+enum ExecuteType { create, update, delete }

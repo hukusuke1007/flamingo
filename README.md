@@ -257,7 +257,7 @@ items.addAll(_items);
 Query of CollectionGroup.
 
 ```dart
-collectionPaging = CollectionPaging<User>(
+final collectionPaging = CollectionPaging<User>(
   query: firestoreInstance
     .collectionGroup('user')
     .orderBy('createdAt', descending: true),
