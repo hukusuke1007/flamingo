@@ -1,7 +1,7 @@
 library flamingo;
 
 import 'package:cloud_firestore/cloud_firestore.dart'
-    show DocumentReference, CollectionReference, Firestore;
+    show CollectionReference, DocumentReference, FirebaseFirestore;
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,24 +28,24 @@ export 'type/type.dart';
 class Flamingo {
   static Flamingo instance = Flamingo();
   static void configure({
-    Firestore firestore,
+    FirebaseFirestore firestore,
     FirebaseStorage storage,
     DocumentReference root,
   }) {
-    instance.firestore = firestore != null ? firestore : Firestore.instance;
+    instance.firestore =
+        firestore != null ? firestore : FirebaseFirestore.instance;
     instance.firebaseStorage =
         storage != null ? storage : FirebaseStorage.instance;
-    instance.rootReference =
-        root != null ? root : instance.firestore.document('');
+    instance.rootReference = root != null ? root : instance.firestore.doc('');
   }
 
   DocumentReference rootReference;
-  Firestore firestore;
+  FirebaseFirestore firestore;
   FirebaseStorage firebaseStorage;
 }
 
 DocumentReference get rootReference => Flamingo.instance.rootReference;
-Firestore get firestoreInstance => Flamingo.instance.firestore;
+FirebaseFirestore get firestoreInstance => Flamingo.instance.firestore;
 FirebaseStorage get storageInstance => Flamingo.instance.firebaseStorage;
 CollectionReference collectionReference(String path) =>
     Flamingo.instance.rootReference.collection(path);

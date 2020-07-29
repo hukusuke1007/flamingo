@@ -17,10 +17,9 @@ class Document<T> extends Base implements DocumentType {
             'Can be used only either of \'collectionPath\' or \'collectionRef\'.') {
     if (documentPath != null) {
       /// From reference path.
-      final _referenceDocument =
-          Flamingo.instance.firestore.document(documentPath);
-      _id = _referenceDocument.documentID;
-      _collectionRef = _referenceDocument.parent();
+      final _referenceDocument = Flamingo.instance.firestore.doc(documentPath);
+      _id = _referenceDocument.id;
+      _collectionRef = _referenceDocument.parent;
       _reference = _referenceDocument;
     } else {
       /// From id.
@@ -38,16 +37,16 @@ class Document<T> extends Base implements DocumentType {
       }
 
       if (id != null) {
-        _reference = _collectionRef.document(_id);
+        _reference = _collectionRef.doc(_id);
       } else {
-        _reference = _collectionRef.document();
-        _id = _reference.documentID;
+        _reference = _collectionRef.doc();
+        _id = _reference.id;
       }
 
       /// From snapshot.
       if (snapshot != null) {
         setSnapshot(snapshot); // setSnapshotでidが作られる
-        _reference = _collectionRef.document(_id);
+        _reference = _collectionRef.doc(_id);
       }
     }
 
@@ -119,9 +118,9 @@ class Document<T> extends Base implements DocumentType {
 
   /// Set snapshot and documentId.
   void setSnapshot(DocumentSnapshot documentSnapshot) {
-    _id = documentSnapshot.documentID;
+    _id = documentSnapshot.id;
     if (documentSnapshot.exists) {
-      final data = documentSnapshot.data;
+      final data = documentSnapshot.data();
       _fromAt(data);
       fromData(data);
     }

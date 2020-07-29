@@ -341,22 +341,22 @@ class FlamingoTest {
     print('--- getCollection ---');
     final path = Document.path<User>();
     print('path ${path}');
-    final snapshot =
-        await firestoreInstance.collection(path).limit(5).getDocuments();
+    final snapshot = await firestoreInstance.collection(path).limit(5).get();
     print('from Snapshot');
-    final listA =
-        snapshot.documents.map((item) => User(snapshot: item)).toList();
+    final listA = snapshot.docs.map((item) => User(snapshot: item)).toList();
 
     assert(listA.isNotEmpty);
+    // ignore: avoid_function_literals_in_foreach_calls
     listA.forEach((item) {
       assertCollection(item, path);
     });
 
     print('from values');
-    final listB = snapshot.documents
-        .map((item) => User(id: item.documentID, values: item.data))
+    final listB = snapshot.docs
+        .map((item) => User(id: item.id, values: item.data()))
         .toList();
     assert(listB.isNotEmpty);
+    // ignore: avoid_function_literals_in_foreach_calls
     listB.forEach((item) {
       assertCollection(item, path);
     });
@@ -377,9 +377,9 @@ class FlamingoTest {
     final snapshot = await firestoreInstance
         .collection(ranking.count.ref.path)
         .limit(5)
-        .getDocuments();
+        .get();
     print('from Snapshot');
-    final listA = snapshot.documents
+    final listA = snapshot.docs
         .map((item) => Count(snapshot: item, collectionRef: ranking.count.ref))
         .toList();
     assert(listA.isNotEmpty);
@@ -388,11 +388,9 @@ class FlamingoTest {
     });
 
     print('from values');
-    final listB = snapshot.documents
+    final listB = snapshot.docs
         .map((item) => Count(
-            id: item.documentID,
-            values: item.data,
-            collectionRef: ranking.count.ref))
+            id: item.id, values: item.data(), collectionRef: ranking.count.ref))
         .toList();
     assert(listB.isNotEmpty);
     listB.forEach((item) {
@@ -522,7 +520,7 @@ class FlamingoTest {
     final storage = Storage();
     final file =
         await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
-    final storageFile = await storage.saveWithDoc(
+    await storage.saveWithDoc(
       post.reference,
       PostKey.file.value,
       file,
@@ -583,9 +581,9 @@ class FlamingoTest {
 
   Future transactionSave() async {
     print('--- transactionSave ---');
-    RunTransaction.scope((transaction) async {
+    await RunTransaction.scope<void>((transaction) async {
       final user = User()..name = 'transaction';
-      await transaction.set(user.reference, user.toData());
+      transaction.set(user.reference, user.toData());
       user.log();
     });
   }
@@ -596,9 +594,9 @@ class FlamingoTest {
     await documentAccessor.save(hoge);
     hoge.log();
 
-    RunTransaction.scope((transaction) async {
+    await RunTransaction.scope<void>((transaction) async {
       final user = User(id: hoge.id)..name = 'transactionAA';
-      await transaction.update(user.reference, user.toData());
+      transaction.update(user.reference, user.toData());
     });
   }
 
@@ -608,8 +606,8 @@ class FlamingoTest {
     await documentAccessor.save(hoge);
     hoge.log();
 
-    RunTransaction.scope((transaction) async {
-      await transaction.delete(User(id: hoge.id).reference);
+    await RunTransaction.scope<void>((transaction) async {
+      transaction.delete(User(id: hoge.id).reference);
     });
   }
 
@@ -763,6 +761,7 @@ class FlamingoTest {
       ..doubleList = []
       ..boolList = [];
 
+    // ignore: avoid_function_literals_in_foreach_calls
     sample1.filesA.forEach((d) => d.isDeleted = true);
     sample1.filesB = [];
     await documentAccessor.save(sample1);
@@ -872,21 +871,19 @@ class FlamingoTest {
     final query = firestoreInstance.collection(path).limit(20);
     final collectionDispose = query.snapshots().listen((querySnapshot) {
       print('--- Listen of collection documents ---');
-      for (var change in querySnapshot.documentChanges) {
+      for (var change in querySnapshot.docChanges) {
         if (change.type == DocumentChangeType.added) {
-          print('added ${change.document.documentID}');
+          print('added ${change.doc.id}');
         }
         if (change.type == DocumentChangeType.modified) {
-          print('modified ${change.document.documentID}');
+          print('modified ${change.doc.id}');
         }
         if (change.type == DocumentChangeType.removed) {
-          print('removed ${change.document.documentID}');
+          print('removed ${change.doc.id}');
         }
       }
-      final _ = querySnapshot.documents
-          .map((item) => User(snapshot: item))
-          .toList()
-            ..forEach((item) => print('${item.id}, ${item.name}'));
+      final _ = querySnapshot.docs.map((item) => User(snapshot: item)).toList()
+        ..forEach((item) => print('${item.id}, ${item.name}'));
     });
 
     /// Document
@@ -894,7 +891,7 @@ class FlamingoTest {
 
     final dispose = user.reference.snapshots().listen((snap) {
       print('--- Listen of document ---');
-      print('snap: ${snap.documentID} ${snap.data}');
+      print('snap: ${snap.id} ${snap.data}');
       final user = User(snapshot: snap);
       print('${user.id}, ${user.name}');
     });
@@ -1288,6 +1285,7 @@ class FlamingoTest {
     for (var doc in documents) {
       print('${doc.id} ${doc.toData()}');
     }
+    return documents;
   }
 
   Future<List<User>> loadMoreUsers() async {
@@ -1295,5 +1293,6 @@ class FlamingoTest {
     for (var doc in documents) {
       print('${doc.id} ${doc.toData()}');
     }
+    return documents;
   }
 }
