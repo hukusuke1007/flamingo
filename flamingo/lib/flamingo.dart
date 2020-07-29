@@ -1,7 +1,7 @@
 library flamingo;
 
 import 'package:cloud_firestore/cloud_firestore.dart'
-    show CollectionReference, DocumentReference, FirebaseFirestore;
+    show CollectionReference, DocumentReference, FirebaseFirestore, Settings;
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,7 +31,11 @@ class Flamingo {
     FirebaseFirestore firestore,
     FirebaseStorage storage,
     DocumentReference root,
+    Settings settings,
   }) {
+    if (settings != null) {
+      FirebaseFirestore.instance.settings = settings;
+    }
     instance.firestore =
         firestore != null ? firestore : FirebaseFirestore.instance;
     instance.firebaseStorage =
