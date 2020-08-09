@@ -1,4 +1,7 @@
-# 1.4.0-dev.1
+# 1.4.0-dev.2
+Bug fix.
+
+## 1.4.0-dev.1
 Upgrade Firebase Plugins.
 
 ## 1.3.0+3

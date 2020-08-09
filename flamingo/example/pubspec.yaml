@@ -29,7 +29,7 @@ dev_dependencies:
   flamingo_generator:
 
   test: ^1.14.4
-#  cloud_firestore_mocks: ^0.4.4
+#  cloud_firestore_mocks: ^0.4.6+1
 #  firebase_storage_mocks: ^0.1.0
 
 
