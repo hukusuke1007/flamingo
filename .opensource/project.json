@@ -1,0 +1,8 @@
+{
+  "name": "flamingo",
+  "type": "library",
+  "platforms": ["Android", "iOS"],
+  "content": "README.md",
+  "pages" : [],
+  "related": []
+}

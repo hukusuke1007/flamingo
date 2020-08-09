@@ -18,11 +18,14 @@ Add this to your package's pubspec.yaml file:
 ```
 dependencies:
   flamingo:
-  flamingo_annotation: ^0.3.0
+  flamingo_annotation:
 
 dev_dependencies:
-  build_runner: ^1.10.0
-  flamingo_generator: ^0.3.2
+  build_runner: ^1.10.1
+  # If occur analyzer error, please set build_resolvers.
+  # build_resolvers: ^1.3.10
+
+  flamingo_generator:
 ```
 
 
@@ -148,6 +151,23 @@ void _$fromData(User doc, Map<String, dynamic> data) {
 
 ```
 
+#### [Option] build.yaml
+
+If you set build.yaml in the root of the project, the automatic generation will be faster.
+
+https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/build.yaml
+
+
+```yaml
+targets:
+  $default:
+    builders:
+      flamingo_generator|field_value_generator:
+        generate_for:
+          include:
+            - lib/model/*.dart
+            - lib/model/**/*.dart
+```
 
 ### CRUD
 
