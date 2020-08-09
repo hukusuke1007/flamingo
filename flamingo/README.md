@@ -22,6 +22,7 @@ dependencies:
 
 dev_dependencies:
   build_runner: ^1.10.1
+  build_resolvers: ^1.3.10
   flamingo_generator:
 ```
 
