@@ -16,11 +16,11 @@ pubspec.yamlへFlamingoをインストールします。
 ```
 dependencies:
   flamingo:
-  flamingo_annotation: ^0.3.0
+  flamingo_annotation:
 
 dev_dependencies:
-  build_runner: ^1.10.0
-  flamingo_generator: ^0.3.2
+  build_runner: ^1.10.1
+  flamingo_generator:
 ```
 
 
@@ -128,6 +128,24 @@ void _$fromData(User doc, Map<String, dynamic> data) {
   doc.name = Helper.valueFromKey<String>(data, 'name');
 }
 
+```
+
+#### [Option] build.yaml
+
+build.yaml をプロジェクトのrootに設置すると、自動生成対象のディレクトリを指定できるようになるため自動生成が速くなります。
+
+https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/build.yaml
+
+
+```yaml
+targets:
+  $default:
+    builders:
+      flamingo_generator|field_value_generator:
+        generate_for:
+          include:
+            - lib/model/*.dart
+            - lib/model/**/*.dart
 ```
 
 

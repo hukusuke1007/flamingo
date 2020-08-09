@@ -16,15 +16,14 @@ dependencies:
 
   flamingo:
     path: ../
-  flamingo_annotation: ^0.3.0
+  flamingo_annotation:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^1.10.0
-  flamingo_generator: ^0.3.4
-#    path: ../../flamingo_generator/
+  build_runner: ^1.10.1
+  flamingo_generator:
 
   test: ^1.14.4
   cloud_firestore_mocks: ^0.4.4
