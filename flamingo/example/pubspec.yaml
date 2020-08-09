@@ -23,8 +23,8 @@ dev_dependencies:
     sdk: flutter
 
   build_runner: ^1.10.0
-  flamingo_generator:
-    path: ../../flamingo_generator/
+  flamingo_generator: ^0.3.4
+#    path: ../../flamingo_generator/
 
   test: ^1.14.4
   cloud_firestore_mocks: ^0.4.4

@@ -1,4 +1,7 @@
-# 0.3.3
+# 0.3.4
+Fixed plugins
+
+## 0.3.3
 Updated plugins
 
 ## 0.3.2+1
