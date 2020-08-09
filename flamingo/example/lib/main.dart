@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'flamingo_test.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Flamingo.configure();
+  await Flamingo.configure();
   runApp(MyApp());
 }
 
