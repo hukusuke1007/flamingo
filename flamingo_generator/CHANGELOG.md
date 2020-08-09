@@ -1,4 +1,7 @@
-# 0.3.2+1
+# 0.3.3
+Updated plugins
+
+## 0.3.2+1
 Updated pubspec.yaml
 
 ## 0.3.2

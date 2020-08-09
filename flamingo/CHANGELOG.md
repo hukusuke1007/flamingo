@@ -1,4 +1,7 @@
-# 1.3.0+1
+# 1.3.0+2
+Updated README.md about build.yaml.
+
+## 1.3.0+1
 Updated pubspec.yaml
 
 ## 1.3.0
