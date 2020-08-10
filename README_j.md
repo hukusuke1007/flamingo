@@ -36,9 +36,9 @@ dev_dependencies:
 ```dart
 import 'package:flamingo/flamingo.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Flamingo.configure();
+  await Flamingo.configure();
   ...
 }
 ```
@@ -1044,10 +1044,10 @@ import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flamingo/flamingo.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
   final firestore = MockFirestoreInstance();
   final storage = MockFirebaseStorage();
-  Flamingo.configure(
+  await Flamingo.configure(
       firestore: firestore,
       storage: storage,
       root: firestore.document('test/v1'));

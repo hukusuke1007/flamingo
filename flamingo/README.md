@@ -42,9 +42,9 @@ Adding a configure code to main.dart.
 ```dart
 import 'package:flamingo/flamingo.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Flamingo.configure();
+  await Flamingo.configure();
   ...
 }
 ```
@@ -60,7 +60,7 @@ final app = await FirebaseApp.configure(
   ),
 );
 final firestore = Firestore(app: app);
-Flamingo.configure(
+await Flamingo.configure(
   firestore: firestore,
   storage: FirebaseStorage(app: app),
   root: firestore.collection('version').document('1'),
@@ -1029,10 +1029,10 @@ import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flamingo/flamingo.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
   final firestore = MockFirestoreInstance();
   final storage = MockFirebaseStorage();
-  Flamingo.configure(
+  await Flamingo.configure(
       firestore: firestore,
       storage: storage,
       root: firestore.document('test/v1'));
