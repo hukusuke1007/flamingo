@@ -1,8 +1,6 @@
-# 1.4.0-dev.2
-Bug fix.
-
-## 1.4.0-dev.1
+# 1.4.0
 Upgrade Firebase Plugins.
+Renamed "configure" name to "initializeApp" name.
 
 ## 1.3.0+3
 Updated README.
