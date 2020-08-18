@@ -28,7 +28,7 @@ export 'type/type.dart';
 
 class Flamingo {
   static Flamingo instance = Flamingo();
-  static Future<void> configure({
+  static Future<void> initializeApp({
     String name,
     FirebaseOptions options,
     FirebaseFirestore firestore,

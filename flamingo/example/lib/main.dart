@@ -6,7 +6,7 @@ import 'flamingo_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flamingo.configure();
+  await Flamingo.initializeApp();
   runApp(MyApp());
 }
 
