@@ -1,9 +1,9 @@
 import 'flamingo.dart';
 
 class RunTransaction {
-  static void scope(TransactionHandler transactionHandler,
+  static Future<T> scope<T>(TransactionHandler<T> transactionHandler,
       {Duration timeout = const Duration(seconds: 5)}) {
-    Flamingo.instance.firestore
-        .runTransaction(transactionHandler, timeout: timeout);
+    return Flamingo.instance.firestore
+        .runTransaction<T>(transactionHandler, timeout: timeout);
   }
 }

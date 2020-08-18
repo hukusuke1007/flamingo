@@ -28,11 +28,13 @@ class DistributedCounter implements DistributedCounterRepository {
 
   Future<void> _create(
       DocumentReference ref, String collectionName, int numShards) async {
-    final batch = Firestore().batch()
-      ..setData(ref, <String, dynamic>{'numShards': numShards}, merge: true);
+    final batch = firestoreInstance.batch()
+      ..set(ref, <String, dynamic>{'numShards': numShards},
+          SetOptions(merge: true));
     for (var i = 0; i < numShards; i++) {
-      final shardRef = ref.collection(collectionName).document(i.toString());
-      batch.setData(shardRef, <String, dynamic>{'count': 0}, merge: true);
+      final shardRef = ref.collection(collectionName).doc(i.toString());
+      batch.set(
+          shardRef, <String, dynamic>{'count': 0}, SetOptions(merge: true));
     }
     await batch.commit();
     return;
@@ -42,9 +44,8 @@ class DistributedCounter implements DistributedCounterRepository {
       DocumentReference ref, String collectionName, int numShards,
       {int count}) async {
     final shardId = Random().nextInt(numShards);
-    final shardRef =
-        ref.collection(collectionName).document(shardId.toString());
-    await shardRef.updateData(<String, dynamic>{
+    final shardRef = ref.collection(collectionName).doc(shardId.toString());
+    await shardRef.update(<String, dynamic>{
       'count': FieldValue.increment(count != null ? count : 1)
     });
     return;
@@ -52,8 +53,9 @@ class DistributedCounter implements DistributedCounterRepository {
 
   Future<int> _load(DocumentReference ref, String collectionName) async {
     var totalCount = 0;
-    final snapshot = await ref.collection(collectionName).getDocuments();
-    snapshot.documents.forEach((item) => totalCount += item['count'] as int);
+    final snapshot = await ref.collection(collectionName).get();
+    // ignore: avoid_function_literals_in_foreach_calls
+    snapshot.docs.forEach((item) => totalCount += item.get('count') as int);
     return totalCount;
   }
 }

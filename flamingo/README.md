@@ -35,36 +35,18 @@ Please check Setup of cloud_firestore.<br>
 
 ## Usage
 
-Adding a configure code to main.dart.
+Adding a initializeApp code to main.dart.
 
 ### Initialize
 
 ```dart
 import 'package:flamingo/flamingo.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Flamingo.configure();
+  await Flamingo.initializeApp();
   ...
 }
-```
-
-Also be able to set app to firebase instance.
-
-```dart
-final app = await FirebaseApp.configure(
-  name: 'appName',
-  options: const FirebaseOptions(
-    googleAppID: '1:1234567890:ios:42424242424242',
-    gcmSenderID: '1234567890',
-  ),
-);
-final firestore = Firestore(app: app);
-Flamingo.configure(
-  firestore: firestore,
-  storage: FirebaseStorage(app: app),
-  root: firestore.collection('version').document('1'),
-);
 ```
 
 ### Create Model
@@ -236,16 +218,16 @@ Can be get documents in collection.
 
 ```dart
 final path = Document.path<User>();
-final snapshot = await firestoreInstance.collection(path).getDocuments();
+final snapshot = await firestoreInstance.collection(path).get();
 
 // from snapshot
-final listA = snapshot.documents.map((item) => User(snapshot: item)).toList()
+final listA = snapshot.docs.map((item) => User(snapshot: item)).toList()
   ..forEach((user) {
     print(user.id); // user model.
   });
 
 // from values.
-final listB = snapshot.documents.map((item) => User(id: item.documentID, values: item.data)).toList()
+final listB = snapshot.docs.map((item) => User(id: item.documentID, values: item.data)).toList()
   ..forEach((user) {
     print(user.id); // user model.
   });
@@ -339,7 +321,7 @@ final dispose = query.snapshots().listen((querySnapshot) {
       print('removed ${change.document.documentID}');
     }
   }
-  final _ = querySnapshot.documents.map((item) => User(snapshot: item)).toList()
+  final _ = querySnapshot.docs.map((item) => User(snapshot: item)).toList()
     ..forEach((item) => print('${item.id}, ${item.name}'));
 });
 
@@ -592,8 +574,8 @@ await batch.commit();
 
 // Get sub collection
 final path = ranking.count.ref.path;
-final snapshot = await firestoreInstance.collection(path).getDocuments();
-final list = snapshot.documents.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList()
+final snapshot = await firestoreInstance.collection(path).get();
+final list = snapshot.docs.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList()
   ..forEach((count) {
     print(count);
   });
@@ -1017,8 +999,8 @@ dev_dependencies:
   ...
 
   test: ^1.14.4
-  cloud_firestore_mocks: ^0.4.4
-  firebase_storage_mocks: ^0.1.0
+  cloud_firestore_mocks:
+  firebase_storage_mocks:
 ```
 
 Set Firestore and Cloud Storage mock instance.
@@ -1029,10 +1011,10 @@ import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flamingo/flamingo.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
   final firestore = MockFirestoreInstance();
   final storage = MockFirebaseStorage();
-  Flamingo.configure(
+  await Flamingo.initializeApp(
       firestore: firestore,
       storage: storage,
       root: firestore.document('test/v1'));
