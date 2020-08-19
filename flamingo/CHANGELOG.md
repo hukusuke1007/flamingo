@@ -1,4 +1,10 @@
-# 1.4.0
+# 1.4.1+1
+Updated CHANGELOG.
+
+## 1.4.1
+Modified initializeApp.
+
+## 1.4.0
 Upgrade Firebase Plugins.
 Renamed "configure" name to "initializeApp" name.
 

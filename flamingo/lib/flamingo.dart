@@ -31,22 +31,18 @@ class Flamingo {
   static Future<void> initializeApp({
     String name,
     FirebaseOptions options,
-    FirebaseFirestore firestore,
-    FirebaseStorage storage,
-    DocumentReference root,
     Settings settings,
+    String rootPath,
   }) async {
     await Firebase.initializeApp(name: name, options: options);
 
     if (settings != null) {
       FirebaseFirestore.instance.settings = settings;
     }
-
-    instance.firestore =
-        firestore != null ? firestore : FirebaseFirestore.instance;
-    instance.firebaseStorage =
-        storage != null ? storage : FirebaseStorage.instance;
-    instance.rootReference = root != null ? root : instance.firestore.doc('/');
+    instance.firestore = FirebaseFirestore.instance;
+    instance.firebaseStorage = FirebaseStorage.instance;
+    instance.rootReference =
+        instance.firestore.doc(rootPath != null ? rootPath : '/');
   }
 
   DocumentReference rootReference;
