@@ -1019,7 +1019,9 @@ await documentAccessor.save(sample1);
 final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.id));
 ```
 
-## ユニットテスト
+## [WIP] ユニットテスト
+
+<b>※最新のバージョンでは動作しません。対応完了次第更新します。</b>
 
 次のプラグインをインストールします。
 
