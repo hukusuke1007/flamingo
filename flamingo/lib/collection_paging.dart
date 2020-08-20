@@ -39,7 +39,6 @@ class CollectionPaging<T extends Document<T>> {
   }
 
   Future<List<DocumentSnapshot>> _load({
-    bool isAll = false,
     Source source = Source.serverAndCache,
     DocumentSnapshot startAfterDocument,
   }) async {
