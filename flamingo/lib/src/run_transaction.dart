@@ -1,4 +1,4 @@
-import 'flamingo.dart';
+import '../flamingo.dart';
 
 class RunTransaction {
   static Future<T> scope<T>(TransactionHandler<T> transactionHandler,

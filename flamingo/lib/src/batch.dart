@@ -1,4 +1,4 @@
-import 'flamingo.dart';
+import '../flamingo.dart';
 
 abstract class BatchRepository {
   bool get isAddedDocument;

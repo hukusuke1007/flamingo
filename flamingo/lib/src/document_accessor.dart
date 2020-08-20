@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'flamingo.dart';
+import '../flamingo.dart';
 
 abstract class DocumentAccessorRepository {
   Future save(Document document);

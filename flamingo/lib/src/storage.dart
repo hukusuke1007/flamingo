@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'flamingo.dart';
+import '../flamingo.dart';
 
 abstract class StorageRepository {
   FirebaseStorage get storage;

@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flamingo/document.dart';
-import 'package:flamingo/flamingo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
+
+import './document.dart';
 
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({

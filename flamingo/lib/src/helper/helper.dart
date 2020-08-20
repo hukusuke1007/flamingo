@@ -1,7 +1,6 @@
 import 'dart:math';
 
-import '../flamingo.dart';
-import '../model/model.dart';
+import '../../flamingo.dart';
 
 class Helper {
   const Helper._();

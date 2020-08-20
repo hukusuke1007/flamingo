@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'flamingo.dart';
+import '../flamingo.dart';
 import 'model/counter.dart';
 
 abstract class DistributedCounterRepository {
