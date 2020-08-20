@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
-import './document.dart';
+import 'model/document.dart';
 
 class CollectionPaging<T extends Document<T>> {
   CollectionPaging({

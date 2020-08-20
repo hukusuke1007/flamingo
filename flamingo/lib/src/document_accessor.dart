@@ -88,7 +88,6 @@ class DocumentAccessor implements DocumentAccessorRepository {
   Future<Document> _load(Document document, Source source) async {
     final documentSnapshot =
         await document.reference.get(GetOptions(source: source));
-//      print('snapshot ${documentSnapshot.data()}');
     if (documentSnapshot.data() != null) {
       document.setSnapshot(documentSnapshot);
       return document;

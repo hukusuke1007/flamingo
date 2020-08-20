@@ -4,22 +4,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
-import './document.dart';
+import 'model/document.dart';
 
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
     @required this.query,
     this.collectionReference,
-    @required this.limit,
+    @required this.initialLimit,
+    @required this.pagingLimit,
     @required this.decode,
   });
 
   final Query query;
   final CollectionReference collectionReference;
-  final int limit;
+  final int initialLimit;
+  final int pagingLimit;
   final T Function(DocumentSnapshot, CollectionReference) decode;
 
-  ValueStream<List<T>> get data => _dataController;
+  ValueStream<List<T>> get data => _dataController.stream;
   int get count => _dataController.value.length;
 
   bool _initLoaded = false;
@@ -34,8 +36,13 @@ class CollectionPagingListener<T extends Document<T>> {
   }
 
   void fetch() async {
-    _disposer ??= query.snapshots().listen((event) {
-      print('snapshot listen isNotEmpty: ${event.docs.isNotEmpty}');
+    assert(_disposer != null,
+        'Already set disposer. If you want to re-fetch, fetch after dispose');
+    final _query = query.limit(initialLimit);
+    _disposer ??= _query.snapshots().listen((event) {
+      // TODO(shohei): delete log
+      print(
+          'snapshot listen isNotEmpty: ${event.docs.isNotEmpty} docChanges: ${event.docChanges.length}');
       if (_initLoaded) {
         final docs = _dataController.value;
         for (var change in event.docChanges) {
@@ -66,28 +73,31 @@ class CollectionPagingListener<T extends Document<T>> {
     });
   }
 
-  void refresh({
+  Future<void> refresh({
     Source source = Source.serverAndCache,
   }) async {
-    final documents = await _load(source: source);
+    final documents = await _load(limit: initialLimit, source: source);
     final data = documents.map((e) => decode(e, collectionReference)).toList();
     _dataController.add(data);
   }
 
-  void loadMore({
+  Future<void> loadMore({
     Source source = Source.serverAndCache,
   }) async {
     if (_startAfterDocument == null) {
       return;
     }
-    final documents =
-        await _load(source: source, startAfterDocument: _startAfterDocument);
+    final documents = await _load(
+        limit: pagingLimit,
+        source: source,
+        startAfterDocument: _startAfterDocument);
     final data = _dataController.value
       ..addAll(documents.map((e) => decode(e, collectionReference)));
     _dataController.add(data);
   }
 
   Future<List<DocumentSnapshot>> _load({
+    int limit = 20,
     Source source = Source.serverAndCache,
     DocumentSnapshot startAfterDocument,
   }) async {

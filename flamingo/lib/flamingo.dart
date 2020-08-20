@@ -10,15 +10,16 @@ export 'package:firebase_storage/firebase_storage.dart';
 
 export 'src/batch.dart';
 export 'src/collection_paging.dart';
+export 'src/collection_paging_listener.dart';
 export 'src/constants.dart';
 export 'src/distributed_counter.dart';
-export 'src/document.dart';
 export 'src/document_accessor.dart';
 export 'src/enum/execute_type.dart';
 export 'src/helper/helper.dart';
 export 'src/master/master.dart';
 export 'src/model/collection.dart';
 export 'src/model/counter.dart';
+export 'src/model/document.dart';
 export 'src/model/increment.dart';
 export 'src/model/model.dart';
 export 'src/model/storage_file.dart';
