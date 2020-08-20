@@ -2,6 +2,7 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_example/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CollectionPagingListenerPage extends StatefulWidget {
@@ -13,9 +14,15 @@ class _State extends State<CollectionPagingListenerPage> {
   final ScrollController scrollController = ScrollController();
   final RefreshController refreshController = RefreshController();
 
-  CollectionPagingListener collectionPagingListener;
+  CollectionPagingListener<User> collectionPagingListener;
 
   List<User> items = [];
+
+  @override
+  void dispose() async {
+    super.dispose();
+    await collectionPagingListener.dispose();
+  }
 
   @override
   void initState() {
@@ -23,10 +30,9 @@ class _State extends State<CollectionPagingListenerPage> {
 
     final ref = User().collectionRef;
     collectionPagingListener = CollectionPagingListener<User>(
-      query: ref.orderBy('createdAt', descending: true),
+      query: ref.orderBy('updatedAt', descending: true),
       collectionReference: ref,
-      initialLimit: 20,
-      pagingLimit: 20,
+      limit: 3,
       decode: (snap, collectionRef) =>
           User(snapshot: snap, collectionRef: collectionRef),
     )
@@ -35,6 +41,8 @@ class _State extends State<CollectionPagingListenerPage> {
         setState(() {
           items = event;
         });
+//        print(
+//            'hasMore: ${collectionPagingListener.hasMore} data: ${collectionPagingListener.data.value}');
       });
   }
 
@@ -94,19 +102,47 @@ class _State extends State<CollectionPagingListenerPage> {
             scrollDirection: Axis.vertical,
             itemBuilder: (BuildContext context, int index) {
               final data = items[index];
-              return ListTile(
-                title: Text(
-                  data.id,
-                  maxLines: 1,
+              return Slidable(
+                actionPane: const SlidableDrawerActionPane(),
+                actionExtentRatio: 0.25,
+                child: ListTile(
+                  title: Text(
+                    data.id,
+                    maxLines: 1,
+                  ),
+                  subtitle: Text(
+                    '${index + 1} ${data.name} ${data.updatedAt.toDate()}',
+                    maxLines: 1,
+                  ),
+                  onTap: () async {
+                    data.name = Helper.randomString();
+                    final documentAccessor = DocumentAccessor();
+                    await documentAccessor.update(data);
+                  },
                 ),
-                subtitle: Text(
-                  '${data.name} ${data.createdAt.toDate()}',
-                  maxLines: 1,
-                ),
+                secondaryActions: <Widget>[
+                  IconSlideAction(
+                    caption: 'Delete',
+                    color: Colors.red,
+                    icon: Icons.delete,
+                    onTap: () async {
+                      await collectionPagingListener.deleteDoc(data);
+                    },
+                  ),
+                ],
               );
             },
             itemCount: items.length,
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final item = User()..name = Helper.randomString(length: 5);
+            final documentAccessor = DocumentAccessor();
+            await documentAccessor.save(item);
+          },
+          tooltip: 'Add',
+          child: const Icon(Icons.add),
         ),
       ),
     );

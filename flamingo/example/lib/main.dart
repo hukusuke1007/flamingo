@@ -1,4 +1,5 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_example/collection_paging_listener_page.dart';
 import 'package:flamingo_example/collection_paging_page.dart';
 import 'package:flutter/material.dart';
 
@@ -47,8 +48,8 @@ class HomePage extends StatelessWidget {
           alignment: Alignment.center,
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(4),
+              const Padding(
+                padding: EdgeInsets.all(4),
                 child: Text(
                   'Load Collection',
                   style: TextStyle(fontWeight: FontWeight.bold),
@@ -68,14 +69,29 @@ class HomePage extends StatelessWidget {
                             CollectionPagingPage(),
                       ));
                     },
-                    child: Text(
-                      'Paging Sample Page',
+                    child: const Text(
+                      'Paging Page',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  RaisedButton(
+                    padding: const EdgeInsets.all(4),
+                    color: Colors.lightGreen,
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: false)
+                          .push<void>(MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            CollectionPagingListenerPage(),
+                      ));
+                    },
+                    child: const Text(
+                      'Paging Listener Page',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],
               ),
-              Padding(
+              const Padding(
                 padding: const EdgeInsets.all(4),
                 child: Text(
                   'All',

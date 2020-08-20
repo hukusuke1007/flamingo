@@ -13,7 +13,7 @@ class _State extends State<CollectionPagingPage> {
   final ScrollController scrollController = ScrollController();
   final RefreshController refreshController = RefreshController();
 
-  CollectionPaging collectionPaging;
+  CollectionPaging<User> collectionPaging;
 
   List<User> items = [];
 
@@ -57,7 +57,7 @@ class _State extends State<CollectionPagingPage> {
           appBar: AppBar(
             title: const Text('Collection Paging Sample'),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: () => Navigator.pop(context),
             ),
             actions: <Widget>[

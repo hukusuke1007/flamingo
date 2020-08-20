@@ -13,6 +13,7 @@ dependencies:
 
   path_provider:
   pull_to_refresh:
+  flutter_slidable:
 
   flamingo:
     path: ../
