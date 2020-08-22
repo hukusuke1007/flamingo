@@ -13,9 +13,9 @@ enum OperationType {
   clear,
 }
 
-/// Snapshot for CollectionPageListener.
-class Snapshot {
-  Snapshot({
+/// Snapshot for CollectionPagingListener.
+class PagingSnapshot {
+  PagingSnapshot({
     this.querySnapshot,
     this.documentSnapshot,
     @required this.type,
@@ -26,7 +26,7 @@ class Snapshot {
   final OperationType type;
 }
 
-/// CollectionPageListener is SnapshotListener + Paging features.
+/// CollectionPagingListener is SnapshotListener + Paging features.
 /// To paging using startAfterDocument.
 ///
 /// [Note] If delete document of limit out of scope, use "deleteDoc" in CollectionPagingListener.
@@ -37,9 +37,9 @@ class CollectionPagingListener<T extends Document<T>> {
     this.collectionReference,
     @required this.limit,
     @required this.decode,
-  })  : initialLimit = limit,
-        pagingLimit = limit,
-        assert(limit != null || limit >= 1, 'You must set limit. value >= 1.') {
+  })  : assert(limit >= 1, 'You must set limit. value >= 1.'),
+        initialLimit = limit,
+        pagingLimit = limit {
     _configure();
   }
 
@@ -50,8 +50,8 @@ class CollectionPagingListener<T extends Document<T>> {
   final int pagingLimit;
   final T Function(DocumentSnapshot, CollectionReference) decode;
 
-  ValueStream<Snapshot> get snapshot => _snapshotController.stream;
-  Sink<Snapshot> get onSnapshot => _snapshotController.sink;
+  ValueStream<PagingSnapshot> get snapshot => _snapshotController.stream;
+  Sink<PagingSnapshot> get onSnapshot => _snapshotController.sink;
   ValueStream<List<T>> get data => _dataController.stream;
   int get count => _dataController.value.length;
   bool get hasMore => _hasMore;
@@ -63,8 +63,8 @@ class CollectionPagingListener<T extends Document<T>> {
   bool _hasMore = true;
   final BehaviorSubject<List<T>> _dataController =
       BehaviorSubject<List<T>>.seeded([]);
-  final BehaviorSubject<Snapshot> _snapshotController =
-      BehaviorSubject<Snapshot>.seeded(null);
+  final BehaviorSubject<PagingSnapshot> _snapshotController =
+      BehaviorSubject<PagingSnapshot>.seeded(null);
   DocumentSnapshot _startAfterDocument;
   StreamSubscription<QuerySnapshot> _disposer;
 
@@ -79,18 +79,18 @@ class CollectionPagingListener<T extends Document<T>> {
   Future<void> detach() async {
     await _disposer?.cancel();
     _disposer = null;
-    _snapshotController.add(Snapshot(type: OperationType.clear));
+    _snapshotController.add(PagingSnapshot(type: OperationType.clear));
     _initLoaded = false;
     _startAfterDocument = null;
   }
 
   /// Listen to snapshot from SnapshotListener.
   void fetch() {
-    assert(_disposer == null,
-        'Already set disposer. If you want to re-fetch, fetch after call detach() func ');
+    assert(!isFetched,
+        'Already fetched. If you want to re-fetch, fetch after call detach() func ');
     _disposer ??= query.limit(initialLimit).snapshots().listen((event) =>
-        _snapshotController
-            .add(Snapshot(querySnapshot: event, type: OperationType.listen)));
+        _snapshotController.add(
+            PagingSnapshot(querySnapshot: event, type: OperationType.listen)));
   }
 
   /// To clear and reload documents from get API.
@@ -98,8 +98,8 @@ class CollectionPagingListener<T extends Document<T>> {
     Source source = Source.serverAndCache,
   }) async {
     final snapshot = await _load(limit: initialLimit, source: source);
-    _snapshotController
-        .add(Snapshot(querySnapshot: snapshot, type: OperationType.refresh));
+    _snapshotController.add(
+        PagingSnapshot(querySnapshot: snapshot, type: OperationType.refresh));
   }
 
   /// To load next page data using startAfterDocument from get API.
@@ -113,8 +113,8 @@ class CollectionPagingListener<T extends Document<T>> {
         limit: pagingLimit,
         source: source,
         startAfterDocument: _startAfterDocument);
-    _snapshotController
-        .add(Snapshot(querySnapshot: snapshot, type: OperationType.paging));
+    _snapshotController.add(
+        PagingSnapshot(querySnapshot: snapshot, type: OperationType.paging));
   }
 
   /// If delete document of limit out of scope, use this.
@@ -129,7 +129,7 @@ class CollectionPagingListener<T extends Document<T>> {
       final doc = docs.firstWhere((element) => element.id == document.id,
           orElse: () => null);
       if (doc != null) {
-        _snapshotController.add(Snapshot(
+        _snapshotController.add(PagingSnapshot(
             documentSnapshot: doc.snapshot,
             type: OperationType.deleteWithOutOfScope));
       }
