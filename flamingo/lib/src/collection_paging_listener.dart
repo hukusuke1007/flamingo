@@ -53,14 +53,14 @@ class CollectionPagingListener<T extends Document<T>> {
   final int pagingLimit;
   final T Function(DocumentSnapshot, CollectionReference) decode;
 
-  final _documentAccessor = DocumentAccessor();
-
-  ValueStream<List<T>> get data => _dataController.stream;
-  Sink<List<T>> get onData => _dataController.sink;
   ValueStream<Snapshot> get snapshot => _snapshotController.stream;
+  Sink<Snapshot> get onSnapshot => _snapshotController.sink;
+  ValueStream<List<T>> get data => _dataController.stream;
   int get count => _dataController.value.length;
   bool get hasMore => _hasMore;
   bool get isFetched => _disposer != null || false;
+
+  final _documentAccessor = DocumentAccessor();
 
   bool _initLoaded = false;
   bool _hasMore = true;
@@ -169,7 +169,6 @@ class CollectionPagingListener<T extends Document<T>> {
       final docs = _dataController.value;
 //      print('eventType: ${event.type}');
       if (event.type == OperationType.listen) {
-        // TODO(shohei): delete log
         // print('docChanges ${querySnapshot.docChanges.length}');
         for (var change in querySnapshot.docChanges) {
 //          print(
@@ -185,6 +184,7 @@ class CollectionPagingListener<T extends Document<T>> {
               }
             }
             docs.insert(change.newIndex, data);
+            // TODO(shohei): It will be refactored this later.
             if (initialLimit >= docs.length) {
               _startAfterDocument = querySnapshot.docs.last;
             }
