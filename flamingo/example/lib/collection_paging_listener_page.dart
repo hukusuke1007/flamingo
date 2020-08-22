@@ -90,7 +90,7 @@ class _State extends State<CollectionPagingListenerPage> {
             },
           ),
           onRefresh: () async {
-            await collectionPagingListener.refresh();
+//            await collectionPagingListener.refresh();
             refreshController.refreshCompleted();
           },
           onLoading: () async {
@@ -126,7 +126,9 @@ class _State extends State<CollectionPagingListenerPage> {
                     color: Colors.red,
                     icon: Icons.delete,
                     onTap: () async {
-                      await collectionPagingListener.deleteDoc(data);
+                      final documentAccessor = DocumentAccessor();
+                      await documentAccessor.delete(data);
+//                      await collectionPagingListener.deleteDoc(data);
                     },
                   ),
                 ],

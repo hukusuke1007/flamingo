@@ -4,225 +4,177 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
-/// OperationType for Snapshot.
-enum OperationType {
-  refresh,
-  paging,
-  listen,
-  deleteWithOutOfScope,
-  clear,
-}
+// TODO(shohei): リアルタイムアップデートのみのページング
 
-/// Snapshot for CollectionPagingListener.
-class PagingSnapshot {
-  PagingSnapshot({
-    this.querySnapshot,
-    this.documentSnapshot,
-    @required this.type,
-  }) : assert(querySnapshot == null || documentSnapshot == null,
-            'Can be used only either of \'querySnapshot\' or \'documentSnapshot\'.');
-  final QuerySnapshot querySnapshot;
-  final DocumentSnapshot documentSnapshot;
-  final OperationType type;
+class _PagingData<T extends Document<T>> {
+  _PagingData({
+    this.docs,
+    this.startAfterDocument,
+  });
+  final List<T> docs;
+  final DocumentSnapshot startAfterDocument;
 }
 
 /// CollectionPagingListener is SnapshotListener + Paging features.
-/// To paging using startAfterDocument.
-///
-/// [Note] If delete document of limit out of scope, use "deleteDoc" in CollectionPagingListener.
-/// Because of not transferred snapshot from SnapshotListener if delete to document of limit out of scope.
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
     @required this.query,
     this.collectionReference,
     @required this.limit,
     @required this.decode,
-  })  : assert(limit >= 1, 'You must set limit. value >= 1.'),
-        initialLimit = limit,
-        pagingLimit = limit {
-    _configure();
-  }
+  }) : assert(limit >= 1, 'You must set limit. value >= 1.');
 
   final Query query;
   final CollectionReference collectionReference;
   final int limit;
-  final int initialLimit;
-  final int pagingLimit;
   final T Function(DocumentSnapshot, CollectionReference) decode;
 
-  ValueStream<PagingSnapshot> get snapshot => _snapshotController.stream;
-  Sink<PagingSnapshot> get onSnapshot => _snapshotController.sink;
+  final BehaviorSubject<List<_PagingListener<T>>> _pagingListenerController =
+      BehaviorSubject<List<_PagingListener<T>>>.seeded([]);
+
   ValueStream<List<T>> get data => _dataController.stream;
   int get count => _dataController.value.length;
   bool get hasMore => _hasMore;
-  bool get isFetched => _disposer != null || false;
 
-  final _documentAccessor = DocumentAccessor();
-
+  int _page = 0;
   bool _initLoaded = false;
   bool _hasMore = true;
   final BehaviorSubject<List<T>> _dataController =
       BehaviorSubject<List<T>>.seeded([]);
-  final BehaviorSubject<PagingSnapshot> _snapshotController =
-      BehaviorSubject<PagingSnapshot>.seeded(null);
   DocumentSnapshot _startAfterDocument;
-  StreamSubscription<QuerySnapshot> _disposer;
 
   /// To dispose SnapshotListener.
   Future<void> dispose() async {
-    await _disposer?.cancel();
-    await _snapshotController.close();
+    if (_pagingListenerController.value != null) {
+      for (var item in _pagingListenerController.value) {
+        await item.dispose();
+      }
+    }
+    await _pagingListenerController.close();
     await _dataController.close();
-  }
-
-  /// If you want to re-fetch, fetch after call detach() func
-  Future<void> detach() async {
-    await _disposer?.cancel();
-    _disposer = null;
-    _snapshotController.add(PagingSnapshot(type: OperationType.clear));
-    _initLoaded = false;
-    _startAfterDocument = null;
   }
 
   /// Listen to snapshot from SnapshotListener.
   void fetch() {
-    assert(!isFetched,
-        'Already fetched. If you want to re-fetch, fetch after call detach() func ');
-    _disposer ??= query.limit(initialLimit).snapshots().listen((event) =>
-        _snapshotController.add(
-            PagingSnapshot(querySnapshot: event, type: OperationType.listen)));
+    assert(_initLoaded == false);
+    _pagingListenerController.add([
+      _PagingListener(
+        query: query,
+        limit: limit,
+        decode: decode,
+        collectionReference: collectionReference,
+      )
+    ]);
+    _fetch(_page);
+    _initLoaded = true;
   }
 
-  /// To clear and reload documents from get API.
-  Future<void> refresh({
-    Source source = Source.serverAndCache,
-  }) async {
-    final snapshot = await _load(limit: initialLimit, source: source);
-    _snapshotController.add(
-        PagingSnapshot(querySnapshot: snapshot, type: OperationType.refresh));
-  }
-
-  /// To load next page data using startAfterDocument from get API.
+  /// To load next page data using SnapshotListener.
   Future<void> loadMore({
     Source source = Source.serverAndCache,
   }) async {
-    if (_startAfterDocument == null) {
-      return;
+    print('_hasMore $_hasMore');
+    if (_hasMore) {
+      _pagingListenerController.value.add(_PagingListener(
+        query: query,
+        limit: limit,
+        decode: decode,
+        collectionReference: collectionReference,
+        startAfterDocument: _startAfterDocument,
+      ));
+      _pagingListenerController.add(_pagingListenerController.value);
+      _page += 1;
+      _fetch(_page);
     }
-    final snapshot = await _load(
-        limit: pagingLimit,
-        source: source,
-        startAfterDocument: _startAfterDocument);
-    _snapshotController.add(
-        PagingSnapshot(querySnapshot: snapshot, type: OperationType.paging));
   }
 
-  /// If delete document of limit out of scope, use this.
-  Future<void> deleteDoc(T document) async {
-    final docs = _dataController.value.toList();
-    if (docs.isEmpty) {
-      return;
-    }
-    final index = docs.indexWhere((element) => element.id == document.id);
-    // 監視範囲外のドキュメントは削除リスナーが動かないためキャッシュを削除する
-    if (initialLimit < index + 1) {
-      final doc = docs.firstWhere((element) => element.id == document.id,
-          orElse: () => null);
-      if (doc != null) {
-        _snapshotController.add(PagingSnapshot(
-            documentSnapshot: doc.snapshot,
-            type: OperationType.deleteWithOutOfScope));
+  void _fetch(int page) {
+    final pagingListener = _pagingListenerController.value[page];
+    pagingListener.data.where((event) => event != null).map<List<T>>((event) {
+      if (page == _page) {
+        if (event.startAfterDocument != null) {
+          _startAfterDocument = event.startAfterDocument;
+        }
       }
-    }
-    await _documentAccessor.delete(document);
+      final last = _pagingListenerController.value.last;
+      if (last.data.value.docs.length >= limit) {
+        _hasMore = true;
+      } else {
+        _hasMore = false;
+      }
+
+      print(
+          'fetch ${event.startAfterDocument} _hasMore: $_hasMore, page: $page, _page: $_page');
+      return event.docs;
+    }).listen((_) {
+      final data = _pagingListenerController.value
+          .expand((e) => e.data.value != null ? e.data.value.docs : <T>[])
+          .toList();
+      _dataController.add(data);
+    });
+  }
+}
+
+class _PagingListener<T extends Document<T>> {
+  _PagingListener({
+    @required this.query,
+    @required this.limit,
+    @required this.decode,
+    this.collectionReference,
+    this.startAfterDocument,
+  }) : assert(limit >= 1, 'You must set limit. value >= 1.') {
+    _fetch();
   }
 
-  Future<QuerySnapshot> _load({
-    int limit = 20,
-    Source source = Source.serverAndCache,
-    DocumentSnapshot startAfterDocument,
-  }) async {
-    var dataSource = query.limit(limit);
+  final Query query;
+  final int limit;
+  final T Function(DocumentSnapshot, CollectionReference) decode;
+  final CollectionReference collectionReference;
+  final DocumentSnapshot startAfterDocument;
+
+  ValueStream<_PagingData<T>> get data => _dataController.stream;
+  final BehaviorSubject<_PagingData<T>> _dataController =
+      BehaviorSubject<_PagingData<T>>.seeded(null);
+
+  StreamSubscription<QuerySnapshot> _disposer;
+
+  Future<Stream<QuerySnapshot>> get _snapshots async {
+    var _query = query.limit(limit);
     if (startAfterDocument != null) {
-      dataSource = dataSource.startAfterDocument(startAfterDocument);
+      _query = _query.startAfterDocument(startAfterDocument);
     }
-    final result = await dataSource.get(GetOptions(source: source));
-    final documents = result.docs.toList();
-
-    if (documents.isNotEmpty) {
-      _startAfterDocument = result.docs.toList().last;
-      _hasMore = true;
-    } else {
-      _hasMore = false;
-    }
-    return result;
+    final qs = await _query.snapshots().first;
+//    if (qs.docs.isNotEmpty) {
+//      _query = _query.endAtDocument(qs.docs.last);
+//    }
+    return _query.endAtDocument(qs.docs.last).snapshots();
   }
 
-  void _configure() {
-    _snapshotController
-        .where((event) => event != null)
-        .asyncExpand<List<T>>((event) {
-      final querySnapshot = event.querySnapshot;
-      final docs = _dataController.value;
-//      print('eventType: ${event.type}');
-      if (event.type == OperationType.listen) {
-        // print('docChanges ${querySnapshot.docChanges.length}');
-        for (var change in querySnapshot.docChanges) {
-//          print(
-//              'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
-          final data = decode(change.doc, collectionReference);
-          if (change.type == DocumentChangeType.added) {
-            if (_initLoaded) {
-              // 範囲外での更新の場合は古いものは削除する
-              final index =
-                  docs.indexWhere((element) => element.id == change.doc.id);
-              if (index != -1) {
-                docs.removeAt(index);
-              }
-            }
-            docs.insert(change.newIndex, data);
-            // TODO(shohei): It will be refactored this later.
-            if (initialLimit >= docs.length) {
-              _startAfterDocument = querySnapshot.docs.last;
-            }
-          } else if (change.type == DocumentChangeType.modified) {
-            docs
-              ..removeAt(change.oldIndex)
-              ..insert(
-                  change.newIndex, decode(change.doc, collectionReference));
-          } else if (change.type == DocumentChangeType.removed) {
-            // 範囲内での削除をするため
-            // 新規追加や範囲外での更新をすると範囲内で保持しているものも削除対象になるため
-            // addedのドキュメントのnewIndexが0以外の場合は削除操作のため削除実施する
-            final addedDoc = querySnapshot.docChanges.firstWhere(
-                (element) => element.type == DocumentChangeType.added,
-                orElse: () => null);
-            if (addedDoc != null && addedDoc.newIndex != 0) {
-              docs.removeAt(change.oldIndex);
-            } else if (change.oldIndex == addedDoc.newIndex) {
-              docs.removeAt(change.oldIndex);
-            }
-          }
+  Future<void> dispose() async {
+    await _disposer?.cancel();
+    await _dataController.close();
+  }
+
+  void _fetch() async {
+    _disposer ??= (await _snapshots).listen((event) {
+      final docs =
+          _dataController.value != null ? _dataController.value.docs : <T>[];
+
+      for (var change in event.docChanges) {
+        if (change.type == DocumentChangeType.added) {
+          docs.insert(change.newIndex, decode(change.doc, collectionReference));
+        } else if (change.type == DocumentChangeType.modified) {
+          docs
+            ..removeAt(change.oldIndex)
+            ..insert(change.newIndex, decode(change.doc, collectionReference));
+        } else if (change.type == DocumentChangeType.removed) {
+          docs.removeAt(change.oldIndex);
         }
-        if (!_initLoaded) {
-          _initLoaded = true;
-        }
-      } else if (event.type == OperationType.refresh) {
-        docs
-          ..clear()
-          ..addAll(
-              querySnapshot.docs.map((e) => decode(e, collectionReference)));
-      } else if (event.type == OperationType.paging) {
-        if (querySnapshot.docs.isNotEmpty) {
-          docs.addAll(
-              querySnapshot.docs.map((e) => decode(e, collectionReference)));
-        }
-      } else if (event.type == OperationType.deleteWithOutOfScope) {
-        docs.removeWhere((element) => element.id == event.documentSnapshot.id);
-      } else if (event.type == OperationType.clear) {
-        docs.clear();
       }
-      return Stream.value(docs);
-    }).pipe(_dataController);
+      _dataController.add(_PagingData(
+        docs: docs,
+        startAfterDocument: docs.isNotEmpty ? docs.last.snapshot : null,
+      ));
+    });
   }
 }
