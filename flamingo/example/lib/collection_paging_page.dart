@@ -38,7 +38,7 @@ class _State extends State<CollectionPagingPage> {
 //          .orderBy('createdAt', descending: true),
 //      limit: 20,
 //      decode: (snap, _) =>
-//          User(snapshot: snap, collectionRef: User().collectionRef),
+//          User(snapshot: snap, collectionRef: snap.reference.parent),
 //    );
     initLoad();
   }
