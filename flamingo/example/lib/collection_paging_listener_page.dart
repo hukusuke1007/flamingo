@@ -32,7 +32,7 @@ class _State extends State<CollectionPagingListenerPage> {
     collectionPagingListener = CollectionPagingListener<User>(
       query: ref.orderBy('updatedAt', descending: true),
       collectionReference: ref,
-      limit: 3,
+      limit: 10,
       decode: (snap, collectionRef) =>
           User(snapshot: snap, collectionRef: collectionRef),
     )

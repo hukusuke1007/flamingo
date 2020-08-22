@@ -22,24 +22,24 @@ class _State extends State<CollectionPagingPage> {
     super.initState();
 
     /// Using Collection
-//    final ref = User().collectionRef;
-//    collectionPaging = CollectionPaging<User>(
-//      query: ref.orderBy('createdAt', descending: true),
-//      collectionReference: ref,
-//      limit: 20,
-//      decode: (snap, collectionRef) =>
-//          User(snapshot: snap, collectionRef: collectionRef),
-//    );
+    final ref = User().collectionRef;
+    collectionPaging = CollectionPaging<User>(
+      query: ref.orderBy('updatedAt', descending: true),
+      collectionReference: ref,
+      limit: 20,
+      decode: (snap, collectionRef) =>
+          User(snapshot: snap, collectionRef: collectionRef),
+    );
 
     /// Using CollectionGroup
-    collectionPaging = CollectionPaging<User>(
-      query: firestoreInstance
-          .collectionGroup('user')
-          .orderBy('createdAt', descending: true),
-      limit: 20,
-      decode: (snap, _) =>
-          User(snapshot: snap, collectionRef: User().collectionRef),
-    );
+//    collectionPaging = CollectionPaging<User>(
+//      query: firestoreInstance
+//          .collectionGroup('user')
+//          .orderBy('createdAt', descending: true),
+//      limit: 20,
+//      decode: (snap, _) =>
+//          User(snapshot: snap, collectionRef: User().collectionRef),
+//    );
     initLoad();
   }
 
@@ -118,7 +118,7 @@ class _State extends State<CollectionPagingPage> {
                     maxLines: 1,
                   ),
                   subtitle: Text(
-                    '${data.name} ${data.createdAt.toDate()}',
+                    '${index + 1} ${data.name} ${data.createdAt.toDate()}',
                     maxLines: 1,
                   ),
                 );

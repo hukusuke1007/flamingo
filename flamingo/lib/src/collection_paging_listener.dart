@@ -7,21 +7,33 @@ import 'package:rxdart/rxdart.dart';
 
 import 'model/document.dart';
 
-enum LoadType {
+/// OperationType for Snapshot.
+enum OperationType {
   refresh,
   paging,
   listen,
+  deleteWithOutOfScope,
+  clear,
 }
 
+/// Snapshot for CollectionPageListener.
 class Snapshot {
   Snapshot({
-    @required this.querySnapshot,
+    this.querySnapshot,
+    this.documentSnapshot,
     @required this.type,
-  });
+  }) : assert(querySnapshot == null || documentSnapshot == null,
+            'Can be used only either of \'querySnapshot\' or \'documentSnapshot\'.');
   final QuerySnapshot querySnapshot;
-  final LoadType type;
+  final DocumentSnapshot documentSnapshot;
+  final OperationType type;
 }
 
+/// CollectionPageListener is SnapshotListener + Paging features.
+/// To paging using startAfterDocument.
+///
+/// [Note] If delete document of limit out of scope, use "deleteDoc" in CollectionPagingListener.
+/// Because of not transferred snapshot from SnapshotListener if delete to document of limit out of scope.
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
     @required this.query,
@@ -30,7 +42,9 @@ class CollectionPagingListener<T extends Document<T>> {
     @required this.decode,
   })  : initialLimit = limit,
         pagingLimit = limit,
-        assert(limit != null || limit >= 1, 'You must set limit. value >= 1.');
+        assert(limit != null || limit >= 1, 'You must set limit. value >= 1.') {
+    _configure();
+  }
 
   final Query query;
   final CollectionReference collectionReference;
@@ -43,109 +57,55 @@ class CollectionPagingListener<T extends Document<T>> {
 
   ValueStream<List<T>> get data => _dataController.stream;
   Sink<List<T>> get onData => _dataController.sink;
-  ValueStream<Snapshot> get snapshot => _querySnapshotController.stream;
+  ValueStream<Snapshot> get snapshot => _snapshotController.stream;
   int get count => _dataController.value.length;
   bool get hasMore => _hasMore;
+  bool get isFetched => _disposer != null || false;
 
   bool _initLoaded = false;
   bool _hasMore = true;
   final BehaviorSubject<List<T>> _dataController =
       BehaviorSubject<List<T>>.seeded([]);
-  final BehaviorSubject<Snapshot> _querySnapshotController =
+  final BehaviorSubject<Snapshot> _snapshotController =
       BehaviorSubject<Snapshot>.seeded(null);
   DocumentSnapshot _startAfterDocument;
   StreamSubscription<QuerySnapshot> _disposer;
 
+  /// To dispose SnapshotListener.
   Future<void> dispose() async {
     await _disposer?.cancel();
-    await _querySnapshotController.close();
+    await _snapshotController.close();
     await _dataController.close();
   }
 
+  /// If you want to re-fetch, fetch after call detach() func
   Future<void> detach() async {
     await _disposer?.cancel();
     _disposer = null;
-    _querySnapshotController.add(null);
-    _dataController.add([]);
+    _snapshotController.add(Snapshot(type: OperationType.clear));
+    _initLoaded = false;
+    _startAfterDocument = null;
   }
 
+  /// Listen to snapshot from SnapshotListener.
   void fetch() {
     assert(_disposer == null,
         'Already set disposer. If you want to re-fetch, fetch after call detach() func ');
-    _querySnapshotController
-        .where((event) => event != null)
-        .asyncExpand<List<T>>((event) {
-      final snapshot = event.querySnapshot;
-      // TODO(shohei): delete log
-      print(
-          'querySnapshot type: ${event.type}, isNotEmpty: ${snapshot.docs.isNotEmpty} docChanges: ${snapshot.docChanges.length}');
-      final docs = _dataController.value;
-      if (event.type == LoadType.listen) {
-        print('docChanges ${snapshot.docChanges.length}');
-        for (var change in snapshot.docChanges) {
-          print(
-              'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
-          final data = decode(change.doc, collectionReference);
-          if (change.type == DocumentChangeType.added) {
-            if (_initLoaded) {
-              // 範囲外での更新の場合は古いものは削除する
-              final index =
-                  docs.indexWhere((element) => element.id == change.doc.id);
-              if (index != -1) {
-                docs.removeAt(index);
-              }
-            }
-            docs.insert(change.newIndex, data);
-            if (initialLimit >= docs.length) {
-              _startAfterDocument = snapshot.docs.last;
-            }
-          } else if (change.type == DocumentChangeType.modified) {
-            docs
-              ..removeAt(change.oldIndex)
-              ..insert(
-                  change.newIndex, decode(change.doc, collectionReference));
-          } else if (change.type == DocumentChangeType.removed) {
-            // 範囲内での削除をするため
-            // 新規追加や範囲外での更新をすると範囲内で保持しているものも削除対象になるため
-            // addedのドキュメントのnewIndexが0以外の場合は削除操作のため削除実施する
-            final addedDoc = snapshot.docChanges.firstWhere(
-                (element) => element.type == DocumentChangeType.added,
-                orElse: () => null);
-            if (addedDoc != null && addedDoc.newIndex != 0) {
-              docs.removeAt(change.oldIndex);
-            } else if (change.oldIndex == addedDoc.newIndex) {
-              docs.removeAt(change.oldIndex);
-            }
-          }
-        }
-        if (!_initLoaded) {
-          _initLoaded = true;
-        }
-      } else if (event.type == LoadType.refresh) {
-        docs
-          ..clear()
-          ..addAll(snapshot.docs.map((e) => decode(e, collectionReference)));
-      } else if (event.type == LoadType.paging) {
-        if (snapshot.docs.isNotEmpty) {
-          docs.addAll(snapshot.docs.map((e) => decode(e, collectionReference)));
-        }
-      }
-      return Stream.value(docs);
-    }).listen(_dataController.add);
-
     _disposer ??= query.limit(initialLimit).snapshots().listen((event) =>
-        _querySnapshotController
-            .add(Snapshot(querySnapshot: event, type: LoadType.listen)));
+        _snapshotController
+            .add(Snapshot(querySnapshot: event, type: OperationType.listen)));
   }
 
+  /// To clear and reload documents from get API.
   Future<void> refresh({
     Source source = Source.serverAndCache,
   }) async {
     final snapshot = await _load(limit: initialLimit, source: source);
-    _querySnapshotController
-        .add(Snapshot(querySnapshot: snapshot, type: LoadType.refresh));
+    _snapshotController
+        .add(Snapshot(querySnapshot: snapshot, type: OperationType.refresh));
   }
 
+  /// To load next page data using startAfterDocument from get API.
   Future<void> loadMore({
     Source source = Source.serverAndCache,
   }) async {
@@ -156,10 +116,11 @@ class CollectionPagingListener<T extends Document<T>> {
         limit: pagingLimit,
         source: source,
         startAfterDocument: _startAfterDocument);
-    _querySnapshotController
-        .add(Snapshot(querySnapshot: snapshot, type: LoadType.paging));
+    _snapshotController
+        .add(Snapshot(querySnapshot: snapshot, type: OperationType.paging));
   }
 
+  /// If delete document of limit out of scope, use this.
   Future<void> deleteDoc(T document) async {
     final docs = _dataController.value.toList();
     if (docs.isEmpty) {
@@ -168,8 +129,13 @@ class CollectionPagingListener<T extends Document<T>> {
     final index = docs.indexWhere((element) => element.id == document.id);
     // 監視範囲外のドキュメントは削除リスナーが動かないためキャッシュを削除する
     if (initialLimit < index + 1) {
-      docs.removeWhere((element) => element.id == document.id);
-      _dataController.add(docs);
+      final doc = docs.firstWhere((element) => element.id == document.id,
+          orElse: () => null);
+      if (doc != null) {
+        _snapshotController.add(Snapshot(
+            documentSnapshot: doc.snapshot,
+            type: OperationType.deleteWithOutOfScope));
+      }
     }
     await _documentAccessor.delete(document);
   }
@@ -193,5 +159,73 @@ class CollectionPagingListener<T extends Document<T>> {
       _hasMore = false;
     }
     return result;
+  }
+
+  void _configure() {
+    _snapshotController
+        .where((event) => event != null)
+        .asyncExpand<List<T>>((event) {
+      final querySnapshot = event.querySnapshot;
+      final docs = _dataController.value;
+//      print('eventType: ${event.type}');
+      if (event.type == OperationType.listen) {
+        // TODO(shohei): delete log
+        // print('docChanges ${querySnapshot.docChanges.length}');
+        for (var change in querySnapshot.docChanges) {
+//          print(
+//              'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+          final data = decode(change.doc, collectionReference);
+          if (change.type == DocumentChangeType.added) {
+            if (_initLoaded) {
+              // 範囲外での更新の場合は古いものは削除する
+              final index =
+                  docs.indexWhere((element) => element.id == change.doc.id);
+              if (index != -1) {
+                docs.removeAt(index);
+              }
+            }
+            docs.insert(change.newIndex, data);
+            if (initialLimit >= docs.length) {
+              _startAfterDocument = querySnapshot.docs.last;
+            }
+          } else if (change.type == DocumentChangeType.modified) {
+            docs
+              ..removeAt(change.oldIndex)
+              ..insert(
+                  change.newIndex, decode(change.doc, collectionReference));
+          } else if (change.type == DocumentChangeType.removed) {
+            // 範囲内での削除をするため
+            // 新規追加や範囲外での更新をすると範囲内で保持しているものも削除対象になるため
+            // addedのドキュメントのnewIndexが0以外の場合は削除操作のため削除実施する
+            final addedDoc = querySnapshot.docChanges.firstWhere(
+                (element) => element.type == DocumentChangeType.added,
+                orElse: () => null);
+            if (addedDoc != null && addedDoc.newIndex != 0) {
+              docs.removeAt(change.oldIndex);
+            } else if (change.oldIndex == addedDoc.newIndex) {
+              docs.removeAt(change.oldIndex);
+            }
+          }
+        }
+        if (!_initLoaded) {
+          _initLoaded = true;
+        }
+      } else if (event.type == OperationType.refresh) {
+        docs
+          ..clear()
+          ..addAll(
+              querySnapshot.docs.map((e) => decode(e, collectionReference)));
+      } else if (event.type == OperationType.paging) {
+        if (querySnapshot.docs.isNotEmpty) {
+          docs.addAll(
+              querySnapshot.docs.map((e) => decode(e, collectionReference)));
+        }
+      } else if (event.type == OperationType.deleteWithOutOfScope) {
+        docs.removeWhere((element) => element.id == event.documentSnapshot.id);
+      } else if (event.type == OperationType.clear) {
+        docs.clear();
+      }
+      return Stream.value(docs);
+    }).pipe(_dataController);
   }
 }
