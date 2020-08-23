@@ -256,14 +256,14 @@ final collectionPaging = CollectionPaging<User>(
 
 #### CollectionPagingListener
 Can be used listener and paging features of documents by CollectionPagingListener.<br>
-SnapshotListener + Paging features. To paging using "startAfterDocument".
 
 ```dart
 final ref = User().collectionRef;
 final collectionPagingListener = CollectionPagingListener<User>(
   query: ref.orderBy('updatedAt', descending: true),
   collectionReference: ref,
-  limit: 10,
+  initialLimit: 20,
+  pagingLimit: 20,
   decode: (snap, collectionRef) =>
       User(snapshot: snap, collectionRef: collectionRef),
 );
@@ -280,19 +280,21 @@ collectionPagingListener.data.listen((event) {
     });
   });
 
+// Get document changes status and cache status.
+collectionPagingListener.docChanges.listen((event) {
+    print('docChanges ${event.length}');
+    for (var change in event) {
+      print(
+          'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+    }
+  });
 
-// Refresh. To clear and reload documents from get API.
-await collectionPagingListener.refresh());
+// LoadMore. To load next page data.
+collectionPagingListener.loadMore();
 
-// LoadMore. To load next page data using startAfterDocument from get API.
-await collectionPagingListener.loadMore();
-```
 
-[Note] If delete document of limit out of scope, use "deleteDoc" in CollectionPagingListener.<br>
-Because of not transferred snapshot from SnapshotListener if delete to document of limit out of scope.
-
-```dart
-await collectionPagingListener.deleteDoc(data); // data is Document.
+// Dispose.
+await collectionPagingListener.dispose();
 ```
 
 [sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_listener_page.dart)

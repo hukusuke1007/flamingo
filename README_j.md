@@ -272,15 +272,15 @@ CollectionPagingとSmartRefresherを使ったサンプルコードです。
 [sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_page.dart)
 
 #### CollectionPagingListener
-CollectionPagingListenerを使うことで、ドキュメントのリアルタイム操作（作成、更新、削除）による取得とページングによる取得ができます。<br>
-ページング取得には"startAfterDocument"を使用しています。
+CollectionPagingListenerを使うことで、ドキュメントのリアルタイム操作（作成、更新、削除）による取得とページングによる取得ができます。
 
 ```dart
 final ref = User().collectionRef;
 final collectionPagingListener = CollectionPagingListener<User>(
   query: ref.orderBy('updatedAt', descending: true),
   collectionReference: ref,
-  limit: 10,
+  initialLimit: 20,
+  pagingLimit: 20,
   decode: (snap, collectionRef) =>
       User(snapshot: snap, collectionRef: collectionRef),
 );
@@ -297,19 +297,21 @@ collectionPagingListener.data.listen((event) {
     });
   });
 
+// Get document changes status and cache status.
+collectionPagingListener.docChanges.listen((event) {
+    print('docChanges ${event.length}');
+    for (var change in event) {
+      print(
+          'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+    }
+  });
 
-// Refresh. To clear and reload documents from get API.
-await collectionPagingListener.refresh());
+// LoadMore. To load next page data.
+collectionPagingListener.loadMore();
 
-// LoadMore. To load next page data using startAfterDocument from get API.
-await collectionPagingListener.loadMore();
-```
 
-[注意] limit範囲外のドキュメントを削除する場合は、deleteDoc を使用してください。<br>
-理由はlimitの監視範囲外のドキュメントを削除してもFirestoreのListener経由で検知できないためです。
-
-```dart
-await collectionPagingListener.deleteDoc(data); // data is Document.
+// Dispose.
+await collectionPagingListener.dispose();
 ```
 
 [sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_listener_page.dart)
