@@ -229,36 +229,15 @@ await batch.commit();
 
 ### Get Documents
 
-Collection内のドキュメントを取得します。
-
-```dart
-final path = Document.path<User>();
-final snapshot = await firestoreInstance.collection(path).get();
-
-// from snapshot
-final listA = snapshot.docs.map((item) => User(snapshot: item)).toList()
-  ..forEach((user) {
-    print(user.id); // user model.
-  });
-
-// from values.
-final listB = snapshot.docs.map((item) => User(id: item.documentID, values: item.data)).toList()
-  ..forEach((user) {
-    print(user.id); // user model.
-  });
-```
-
-Collectionから取得した DocumentSnapshot をモデルクラスのパラメータに渡すことでマッピングされます。また、**Algolia**などの外部サービスを使うことを考慮してMap<String, dynamic>型のvaluesもマッピングできるようにしています。
-
-
 #### CollectionPaging
 CollectionPagingを使えばドキュメントのページング取得ができます。
 
-
 ```dart
+final ref = User().collectionRef;
 final collectionPaging = CollectionPaging<User>(
   query: User().collectionRef.orderBy('createdAt', descending: true),
   limit: 20,
+  collectionRef: ref,
   decode: (snap, collectionRef) =>
       User(snapshot: snap, collectionRef: collectionRef),
 );
@@ -282,8 +261,8 @@ final collectionPaging = CollectionPaging<User>(
     .collectionGroup('user')
     .orderBy('createdAt', descending: true),
   limit: 20,
-  decode: (snap, collectionRef) =>
-      User(snapshot: snap, collectionRef: collectionRef),
+  decode: (snap, _) =>
+      User(snapshot: snap, collectionRef: snap.reference.parent),
 );
 ```
 
@@ -291,6 +270,73 @@ CollectionPagingとSmartRefresherを使ったサンプルコードです。
 上部のスクロールで最新の20件を取得し、下部のスクロールでページング取得をしてリスト表示します。
 
 [sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_page.dart)
+
+#### CollectionPagingListener
+CollectionPagingListenerを使うことで、ドキュメントのリアルタイム操作（作成、更新、削除）による取得とページングによる取得ができます。
+
+```dart
+final ref = User().collectionRef;
+final collectionPagingListener = CollectionPagingListener<User>(
+  query: ref.orderBy('updatedAt', descending: true),
+  collectionReference: ref,
+  initialLimit: 20,
+  pagingLimit: 20,
+  decode: (snap, collectionRef) =>
+      User(snapshot: snap, collectionRef: collectionRef),
+);
+
+// Fetch to set listener.
+collectionPagingListener.fetch();
+
+List<User> items = [];
+
+// Get documents via listener. data is ValueStream.
+collectionPagingListener.data.listen((event) {
+    setState(() {
+      items = event;
+    });
+  });
+
+// Get document changes status and cache status.
+collectionPagingListener.docChanges.listen((event) {
+    print('docChanges ${event.length}');
+    for (var change in event) {
+      print(
+          'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+    }
+  });
+
+// LoadMore. To load next page data.
+collectionPagingListener.loadMore();
+
+
+// Dispose.
+await collectionPagingListener.dispose();
+```
+
+[sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_listener_page.dart)
+
+#### firestoreInstance
+Collection内のドキュメントを取得します。
+
+Collectionから取得した DocumentSnapshot をモデルクラスのパラメータに渡すことでマッピングされます。また、**Algolia**などの外部サービスを使うことを考慮してMap<String, dynamic>型のvaluesもマッピングできるようにしています。
+
+```dart
+final path = Document.path<User>();
+final snapshot = await firestoreInstance.collection(path).get();
+
+// from snapshot
+final listA = snapshot.docs.map((item) => User(snapshot: item)).toList()
+  ..forEach((user) {
+    print(user.id); // user model.
+  });
+
+// from values.
+final listB = snapshot.docs.map((item) => User(id: item.documentID, values: item.data)).toList()
+  ..forEach((user) {
+    print(user.id); // user model.
+  });
+```
 
 ### Snapshot Listener
 
@@ -360,10 +406,6 @@ await documentAccessor.delete(user);
 
 await dispose.cancel();
 ```
-
-#### CollectionPagingListener
-
-Coming soon...
 
 ### Mapのモデル
 

@@ -13,7 +13,7 @@ class _State extends State<CollectionPagingPage> {
   final ScrollController scrollController = ScrollController();
   final RefreshController refreshController = RefreshController();
 
-  CollectionPaging collectionPaging;
+  CollectionPaging<User> collectionPaging;
 
   List<User> items = [];
 
@@ -22,24 +22,24 @@ class _State extends State<CollectionPagingPage> {
     super.initState();
 
     /// Using Collection
-//    final ref = User().collectionRef;
-//    collectionPaging = CollectionPaging<User>(
-//      query: ref.orderBy('createdAt', descending: true),
-//      collectionReference: ref,
-//      limit: 20,
-//      decode: (snap, collectionRef) =>
-//          User(snapshot: snap, collectionRef: collectionRef),
-//    );
+    final ref = User().collectionRef;
+    collectionPaging = CollectionPaging<User>(
+      query: ref.orderBy('updatedAt', descending: true),
+      collectionReference: ref,
+      limit: 100,
+      decode: (snap, collectionRef) =>
+          User(snapshot: snap, collectionRef: collectionRef),
+    );
 
     /// Using CollectionGroup
-    collectionPaging = CollectionPaging<User>(
-      query: firestoreInstance
-          .collectionGroup('user')
-          .orderBy('createdAt', descending: true),
-      limit: 20,
-      decode: (snap, _) =>
-          User(snapshot: snap, collectionRef: User().collectionRef),
-    );
+//    collectionPaging = CollectionPaging<User>(
+//      query: firestoreInstance
+//          .collectionGroup('user')
+//          .orderBy('createdAt', descending: true),
+//      limit: 20,
+//      decode: (snap, _) =>
+//          User(snapshot: snap, collectionRef: snap.reference.parent),
+//    );
     initLoad();
   }
 
@@ -57,7 +57,7 @@ class _State extends State<CollectionPagingPage> {
           appBar: AppBar(
             title: const Text('Collection Paging Sample'),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
+              icon: const Icon(Icons.arrow_back_ios),
               onPressed: () => Navigator.pop(context),
             ),
             actions: <Widget>[
@@ -118,7 +118,7 @@ class _State extends State<CollectionPagingPage> {
                     maxLines: 1,
                   ),
                   subtitle: Text(
-                    '${data.name} ${data.createdAt.toDate()}',
+                    '${index + 1} ${data.name} ${data.createdAt.toDate()}',
                     maxLines: 1,
                   ),
                 );

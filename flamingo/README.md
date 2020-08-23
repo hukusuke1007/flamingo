@@ -213,7 +213,93 @@ final hoge = await documentAccessor.load<User>(user);
 ```
 
 ### Get Documents
+#### CollectionPaging
+Can be used get and paging features of documents by CollectionPaging.
 
+Query of Collection.
+
+```dart
+final ref = User().collectionRef;
+final collectionPaging = CollectionPaging<User>(
+  query: User().collectionRef.orderBy('createdAt', descending: true),
+  limit: 20,
+  collectionRef: ref,
+  decode: (snap, collectionRef) =>
+      User(snapshot: snap, collectionRef: collectionRef),
+);
+
+List<User> items = [];
+
+// Load 
+final _items = await collectionPaging.load<User>();
+items = _items;
+
+// LoadMore
+final _items = await collectionPaging.loadMore<User>();
+items.addAll(_items);
+```
+
+Query of CollectionGroup.
+
+```dart
+final collectionPaging = CollectionPaging<User>(
+  query: firestoreInstance
+    .collectionGroup('user')
+    .orderBy('createdAt', descending: true),
+  limit: 20,
+  decode: (snap, _) =>
+      User(snapshot: snap, collectionRef: snap.reference.parent),
+);
+```
+
+[sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_page.dart)
+
+#### CollectionPagingListener
+Can be used listener and paging features of documents by CollectionPagingListener.<br>
+
+```dart
+final ref = User().collectionRef;
+final collectionPagingListener = CollectionPagingListener<User>(
+  query: ref.orderBy('updatedAt', descending: true),
+  collectionReference: ref,
+  initialLimit: 20,
+  pagingLimit: 20,
+  decode: (snap, collectionRef) =>
+      User(snapshot: snap, collectionRef: collectionRef),
+);
+
+// Fetch to set listener.
+collectionPagingListener.fetch();
+
+List<User> items = [];
+
+// Get documents via listener. data is ValueStream.
+collectionPagingListener.data.listen((event) {
+    setState(() {
+      items = event;
+    });
+  });
+
+// Get document changes status and cache status.
+collectionPagingListener.docChanges.listen((event) {
+    print('docChanges ${event.length}');
+    for (var change in event) {
+      print(
+          'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+    }
+  });
+
+// LoadMore. To load next page data.
+collectionPagingListener.loadMore();
+
+
+// Dispose.
+await collectionPagingListener.dispose();
+```
+
+[sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_listener_page.dart)
+
+#### firestoreInstance
 Can be get documents in collection.
 
 ```dart
@@ -232,44 +318,6 @@ final listB = snapshot.docs.map((item) => User(id: item.documentID, values: item
     print(user.id); // user model.
   });
 ```
-
-#### CollectionPaging
-Can be used CollectionPaging.
-
-Query of collection.
-```dart
-final collectionPaging = CollectionPaging<User>(
-  query: User().collectionRef.orderBy('createdAt', descending: true),
-  limit: 20,
-  decode: (snap, collectionRef) =>
-      User(snapshot: snap, collectionRef: collectionRef),
-);
-
-List<User> items = [];
-
-// Load 
-final _items = await collectionPaging.load<User>();
-items = _items;
-
-// LoadMore
-final _items = await collectionPaging.loadMore<User>();
-items.addAll(_items);
-```
-
-Query of collectionGroup.
-
-```dart
-final collectionPaging = CollectionPaging<User>(
-  query: firestoreInstance
-    .collectionGroup('user')
-    .orderBy('createdAt', descending: true),
-  limit: 20,
-  decode: (snap, collectionRef) =>
-      User(snapshot: snap, collectionRef: collectionRef),
-);
-```
-
-[sample code](https://github.com/hukusuke1007/flamingo/blob/master/flamingo/example/lib/collection_paging_page.dart)
 
 ### Snapshot Listener 
 
@@ -339,10 +387,6 @@ await documentAccessor.delete(user);
 
 await dispose.cancel();
 ```
-
-#### CollectionPagingListener
-
-Coming soon...
 
 ### Model of map object
 

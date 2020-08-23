@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flamingo/document.dart';
-import 'package:flamingo/flamingo.dart';
 import 'package:flutter/foundation.dart';
+
+import 'model/document.dart';
 
 class CollectionPaging<T extends Document<T>> {
   CollectionPaging({
@@ -39,7 +39,6 @@ class CollectionPaging<T extends Document<T>> {
   }
 
   Future<List<DocumentSnapshot>> _load({
-    bool isAll = false,
     Source source = Source.serverAndCache,
     DocumentSnapshot startAfterDocument,
   }) async {

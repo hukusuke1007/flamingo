@@ -1,4 +1,7 @@
-# 1.4.1+2
+# 1.5.0
+Added CollectionPagingListener.
+
+## 1.4.1+2
 Update README. => [WIP] Unit Test.
 
 ## 1.4.1+1

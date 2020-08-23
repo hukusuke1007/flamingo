@@ -1,5 +1,5 @@
-import 'base.dart';
-import 'flamingo.dart';
+import '../../flamingo.dart';
+import '../base.dart';
 
 class Document<T> extends Base implements DocumentType {
   Document({

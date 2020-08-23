@@ -1,5 +1,4 @@
-import 'flamingo.dart';
-import 'model/model.dart';
+import '../flamingo.dart';
 
 class Base {
   void write(Map<String, dynamic> data, String key, dynamic value) =>
