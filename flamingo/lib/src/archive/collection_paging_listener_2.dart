@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 // TODO(shohei): リアルタイムアップデートのみのページング
+/// やりたいことができなかった
 
 class _PagingData<T extends Document<T>> {
   _PagingData({

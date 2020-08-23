@@ -4,6 +4,8 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
+/// [多分使えるけど推奨しない]
+
 /// OperationType for Snapshot.
 enum OperationType {
   refresh,
