@@ -32,7 +32,8 @@ class _State extends State<CollectionPagingListenerPage> {
     collectionPagingListener = CollectionPagingListener<User>(
       query: ref.orderBy('updatedAt', descending: true),
       collectionReference: ref,
-      limit: 10,
+      initialLimit: 20,
+      pagingLimit: 20,
       decode: (snap, collectionRef) =>
           User(snapshot: snap, collectionRef: collectionRef),
     )
@@ -41,9 +42,15 @@ class _State extends State<CollectionPagingListenerPage> {
         setState(() {
           items = event;
         });
-//        print(
-//            'hasMore: ${collectionPagingListener.hasMore} data: ${collectionPagingListener.data.value}');
       });
+
+    collectionPagingListener.docChanges.listen((event) {
+      print('docChanges ${event.length}');
+      for (var change in event) {
+        print(
+            'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+      }
+    });
   }
 
   @override
@@ -89,12 +96,11 @@ class _State extends State<CollectionPagingListenerPage> {
               );
             },
           ),
-          onRefresh: () async {
-//            await collectionPagingListener.refresh();
+          onRefresh: () {
             refreshController.refreshCompleted();
           },
-          onLoading: () async {
-            await collectionPagingListener.loadMore();
+          onLoading: () {
+            collectionPagingListener.loadMore();
             refreshController.loadComplete();
           },
           child: ListView.builder(

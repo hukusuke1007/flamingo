@@ -4,114 +4,70 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
-// TODO(shohei): リアルタイムアップデートのみのページング
-
-class _PagingData<T extends Document<T>> {
-  _PagingData({
-    this.docs,
-    this.startAfterDocument,
-  });
-  final List<T> docs;
-  final DocumentSnapshot startAfterDocument;
-}
-
 /// CollectionPagingListener is SnapshotListener + Paging features.
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
     @required this.query,
     this.collectionReference,
-    @required this.limit,
+    @required this.initialLimit,
+    @required this.pagingLimit,
     @required this.decode,
-  }) : assert(limit >= 1, 'You must set limit. value >= 1.');
+  })  : assert(initialLimit >= 1 && pagingLimit >= 1,
+            'You must set limit. value >= 1.'),
+        _limit = initialLimit,
+        _pagingListenerController =
+            _PagingListener(query: query, limit: initialLimit, decode: decode);
 
   final Query query;
   final CollectionReference collectionReference;
-  final int limit;
+  final int initialLimit;
+  final int pagingLimit;
   final T Function(DocumentSnapshot, CollectionReference) decode;
 
-  final BehaviorSubject<List<_PagingListener<T>>> _pagingListenerController =
-      BehaviorSubject<List<_PagingListener<T>>>.seeded([]);
-
   ValueStream<List<T>> get data => _dataController.stream;
+  Stream<List<DocumentChange>> get docChanges => _docChangesController.stream;
   int get count => _dataController.value.length;
   bool get hasMore => _hasMore;
 
-  int _page = 0;
-  bool _initLoaded = false;
-  bool _hasMore = true;
+  final _PagingListener<T> _pagingListenerController;
   final BehaviorSubject<List<T>> _dataController =
       BehaviorSubject<List<T>>.seeded([]);
-  DocumentSnapshot _startAfterDocument;
+  final PublishSubject<List<DocumentChange>> _docChangesController =
+      PublishSubject<List<DocumentChange>>();
+
+  bool _hasMore = true;
+  bool _initLoaded = false;
+  int _limit = 0;
 
   /// To dispose SnapshotListener.
   Future<void> dispose() async {
-    if (_pagingListenerController.value != null) {
-      for (var item in _pagingListenerController.value) {
-        await item.dispose();
-      }
-    }
-    await _pagingListenerController.close();
+    await _pagingListenerController.dispose();
     await _dataController.close();
+    await _docChangesController.close();
   }
 
   /// Listen to snapshot from SnapshotListener.
   void fetch() {
     assert(_initLoaded == false);
-    _pagingListenerController.add([
-      _PagingListener(
-        query: query,
-        limit: limit,
-        decode: decode,
-        collectionReference: collectionReference,
-      )
-    ]);
-    _fetch(_page);
+    _pagingListenerController.data
+        .where((event) => event != null)
+        .listen((event) {
+      _hasMore = event.length >= _limit;
+      _dataController.add(event);
+    });
+    _pagingListenerController.docChanges
+        .where((event) => event.isNotEmpty)
+        .pipe(_docChangesController);
+    _pagingListenerController.onLoad.add(_limit);
     _initLoaded = true;
   }
 
   /// To load next page data using SnapshotListener.
-  Future<void> loadMore({
-    Source source = Source.serverAndCache,
-  }) async {
-    print('_hasMore $_hasMore');
+  void loadMore() {
     if (_hasMore) {
-      _pagingListenerController.value.add(_PagingListener(
-        query: query,
-        limit: limit,
-        decode: decode,
-        collectionReference: collectionReference,
-        startAfterDocument: _startAfterDocument,
-      ));
-      _pagingListenerController.add(_pagingListenerController.value);
-      _page += 1;
-      _fetch(_page);
+      _limit += pagingLimit;
+      _pagingListenerController.onLoad.add(_limit);
     }
-  }
-
-  void _fetch(int page) {
-    final pagingListener = _pagingListenerController.value[page];
-    pagingListener.data.where((event) => event != null).map<List<T>>((event) {
-      if (page == _page) {
-        if (event.startAfterDocument != null) {
-          _startAfterDocument = event.startAfterDocument;
-        }
-      }
-      final last = _pagingListenerController.value.last;
-      if (last.data.value.docs.length >= limit) {
-        _hasMore = true;
-      } else {
-        _hasMore = false;
-      }
-
-      print(
-          'fetch ${event.startAfterDocument} _hasMore: $_hasMore, page: $page, _page: $_page');
-      return event.docs;
-    }).listen((_) {
-      final data = _pagingListenerController.value
-          .expand((e) => e.data.value != null ? e.data.value.docs : <T>[])
-          .toList();
-      _dataController.add(data);
-    });
   }
 }
 
@@ -121,60 +77,65 @@ class _PagingListener<T extends Document<T>> {
     @required this.limit,
     @required this.decode,
     this.collectionReference,
-    this.startAfterDocument,
   }) : assert(limit >= 1, 'You must set limit. value >= 1.') {
-    _fetch();
+    _loadController
+        .where((event) => event > 0)
+        .switchMap<int>((event) => Stream.value(event))
+        .listen(_fetch);
   }
 
   final Query query;
   final int limit;
   final T Function(DocumentSnapshot, CollectionReference) decode;
   final CollectionReference collectionReference;
-  final DocumentSnapshot startAfterDocument;
 
-  ValueStream<_PagingData<T>> get data => _dataController.stream;
-  final BehaviorSubject<_PagingData<T>> _dataController =
-      BehaviorSubject<_PagingData<T>>.seeded(null);
+  ValueStream<List<T>> get data => _dataController.stream;
+  Stream<List<DocumentChange>> get docChanges => _docChangesController.stream;
+  Sink<int> get onLoad => _loadController.sink;
+
+  final BehaviorSubject<List<T>> _dataController =
+      BehaviorSubject<List<T>>.seeded([]);
+  final PublishSubject<List<DocumentChange>> _docChangesController =
+      PublishSubject<List<DocumentChange>>();
+  final PublishSubject<int> _loadController = PublishSubject<int>();
 
   StreamSubscription<QuerySnapshot> _disposer;
-
-  Future<Stream<QuerySnapshot>> get _snapshots async {
-    var _query = query.limit(limit);
-    if (startAfterDocument != null) {
-      _query = _query.startAfterDocument(startAfterDocument);
-    }
-    final qs = await _query.snapshots().first;
-//    if (qs.docs.isNotEmpty) {
-//      _query = _query.endAtDocument(qs.docs.last);
-//    }
-    return _query.endAtDocument(qs.docs.last).snapshots();
-  }
 
   Future<void> dispose() async {
     await _disposer?.cancel();
     await _dataController.close();
+    await _docChangesController.close();
+    await _loadController.close();
   }
 
-  void _fetch() async {
-    _disposer ??= (await _snapshots).listen((event) {
-      final docs =
-          _dataController.value != null ? _dataController.value.docs : <T>[];
-
+  void _fetch(int limit) async {
+    if (_disposer != null) {
+      await _disposer.cancel();
+      _disposer = null;
+      _dataController.value.clear();
+    }
+    _disposer = query.limit(limit).snapshots().listen((event) {
+      final docs = _dataController.value;
       for (var change in event.docChanges) {
+//        print(
+//            'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
         if (change.type == DocumentChangeType.added) {
           docs.insert(change.newIndex, decode(change.doc, collectionReference));
         } else if (change.type == DocumentChangeType.modified) {
-          docs
-            ..removeAt(change.oldIndex)
-            ..insert(change.newIndex, decode(change.doc, collectionReference));
+          final doc = decode(change.doc, collectionReference);
+          if (change.oldIndex == change.newIndex) {
+            docs[change.newIndex] = doc;
+          } else {
+            docs
+              ..removeAt(change.oldIndex)
+              ..insert(change.newIndex, doc);
+          }
         } else if (change.type == DocumentChangeType.removed) {
           docs.removeAt(change.oldIndex);
         }
       }
-      _dataController.add(_PagingData(
-        docs: docs,
-        startAfterDocument: docs.isNotEmpty ? docs.last.snapshot : null,
-      ));
+      _docChangesController.add(event.docChanges);
+      _dataController.add(docs);
     });
   }
 }
