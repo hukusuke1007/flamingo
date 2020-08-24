@@ -4,6 +4,15 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
+class DocumentChangeData<T extends Document<T>> {
+  DocumentChangeData({
+    @required this.doc,
+    @required this.docChange,
+  });
+  final T doc;
+  final DocumentChange docChange;
+}
+
 /// CollectionPagingListener is SnapshotListener + Paging features.
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
@@ -25,15 +34,16 @@ class CollectionPagingListener<T extends Document<T>> {
   final T Function(DocumentSnapshot, CollectionReference) decode;
 
   ValueStream<List<T>> get data => _dataController.stream;
-  Stream<List<DocumentChange>> get docChanges => _docChangesController.stream;
+  Stream<List<DocumentChangeData<T>>> get docChanges =>
+      _docChangesController.stream;
   int get count => _dataController.value.length;
   bool get hasMore => _hasMore;
 
   final _PagingListener<T> _pagingListenerController;
   final BehaviorSubject<List<T>> _dataController =
       BehaviorSubject<List<T>>.seeded([]);
-  final PublishSubject<List<DocumentChange>> _docChangesController =
-      PublishSubject<List<DocumentChange>>();
+  final PublishSubject<List<DocumentChangeData<T>>> _docChangesController =
+      PublishSubject<List<DocumentChangeData<T>>>();
 
   bool _hasMore = true;
   bool _initLoaded = false;
@@ -90,13 +100,14 @@ class _PagingListener<T extends Document<T>> {
   final CollectionReference collectionReference;
 
   ValueStream<List<T>> get data => _dataController.stream;
-  Stream<List<DocumentChange>> get docChanges => _docChangesController.stream;
+  Stream<List<DocumentChangeData<T>>> get docChanges =>
+      _docChangesController.stream;
   Sink<int> get onLoad => _loadController.sink;
 
   final BehaviorSubject<List<T>> _dataController =
       BehaviorSubject<List<T>>.seeded([]);
-  final PublishSubject<List<DocumentChange>> _docChangesController =
-      PublishSubject<List<DocumentChange>>();
+  final PublishSubject<List<DocumentChangeData<T>>> _docChangesController =
+      PublishSubject<List<DocumentChangeData<T>>>();
   final PublishSubject<int> _loadController = PublishSubject<int>();
 
   StreamSubscription<QuerySnapshot> _disposer;
@@ -116,13 +127,12 @@ class _PagingListener<T extends Document<T>> {
     }
     _disposer = query.limit(limit).snapshots().listen((event) {
       final docs = _dataController.value;
+      final changes = <DocumentChangeData<T>>[];
       for (var change in event.docChanges) {
-//        print(
-//            'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+        final doc = decode(change.doc, collectionReference);
         if (change.type == DocumentChangeType.added) {
-          docs.insert(change.newIndex, decode(change.doc, collectionReference));
+          docs.insert(change.newIndex, doc);
         } else if (change.type == DocumentChangeType.modified) {
-          final doc = decode(change.doc, collectionReference);
           if (change.oldIndex == change.newIndex) {
             docs[change.newIndex] = doc;
           } else {
@@ -133,9 +143,10 @@ class _PagingListener<T extends Document<T>> {
         } else if (change.type == DocumentChangeType.removed) {
           docs.removeAt(change.oldIndex);
         }
+        changes.add(DocumentChangeData<T>(doc: doc, docChange: change));
       }
-      _docChangesController.add(event.docChanges);
       _dataController.add(docs);
+      _docChangesController.add(changes);
     });
   }
 }

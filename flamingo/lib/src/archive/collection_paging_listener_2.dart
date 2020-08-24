@@ -7,15 +7,6 @@ import 'package:rxdart/rxdart.dart';
 // TODO(shohei): リアルタイムアップデートのみのページング
 /// やりたいことができなかった
 
-class _PagingData<T extends Document<T>> {
-  _PagingData({
-    this.docs,
-    this.startAfterDocument,
-  });
-  final List<T> docs;
-  final DocumentSnapshot startAfterDocument;
-}
-
 /// CollectionPagingListener is SnapshotListener + Paging features.
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
@@ -139,8 +130,7 @@ class _PagingListener<T extends Document<T>> {
       _query = _query.startAfterDocument(startAfterDocument);
     }
     final qs = await _query.snapshots().first;
-    // return _query.endAtDocument(qs.docs.last).snapshots();
-    return _query.snapshots();
+    return _query.endAtDocument(qs.docs.last).snapshots();
   }
 
   Future<void> dispose() async {

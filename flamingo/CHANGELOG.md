@@ -1,4 +1,8 @@
-# 1.5.0
+# 1.5.1
+Changed docChanges data type in CollectionPagingListener.
+Updated plugins.
+
+## 1.5.0
 Added CollectionPagingListener.
 
 ## 1.4.1+2

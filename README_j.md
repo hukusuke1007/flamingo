@@ -275,14 +275,12 @@ CollectionPagingとSmartRefresherを使ったサンプルコードです。
 CollectionPagingListenerを使うことで、ドキュメントのリアルタイム操作（作成、更新、削除）による取得とページングによる取得ができます。
 
 ```dart
-final ref = User().collectionRef;
 final collectionPagingListener = CollectionPagingListener<User>(
-  query: ref.orderBy('updatedAt', descending: true),
-  collectionReference: ref,
+  query: User().collectionRef.orderBy('updatedAt', descending: true),
   initialLimit: 20,
   pagingLimit: 20,
-  decode: (snap, collectionRef) =>
-      User(snapshot: snap, collectionRef: collectionRef),
+  decode: (snap, _) =>
+      User(snapshot: snap, collectionRef: snap.reference.parent),
 );
 
 // Fetch to set listener.
@@ -299,10 +297,9 @@ collectionPagingListener.data.listen((event) {
 
 // Get document changes status and cache status.
 collectionPagingListener.docChanges.listen((event) {
-    print('docChanges ${event.length}');
-    for (var change in event) {
-      print(
-          'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+    for (var item in event) {
+      final change = item.docChange;
+      print('id: ${item.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
     }
   });
 
@@ -364,13 +361,7 @@ await documentAccessor.delete(user);
 await disposer.cancel();
 ```
 
-コレクションのスナップショットも監視することができます。
-
-DocumentChangeType を利用する場合は cloud_firestore をインポートしてください。
-
-```
-import 'package:cloud_firestore/cloud_firestore.dart';
-```
+コレクションのスナップショットも監視することができます。CollectionPagingListenerでもスナップショットを監視することができます。
 
 ```dart
 // Listen

@@ -28,14 +28,12 @@ class _State extends State<CollectionPagingListenerPage> {
   void initState() {
     super.initState();
 
-    final ref = User().collectionRef;
     collectionPagingListener = CollectionPagingListener<User>(
-      query: ref.orderBy('updatedAt', descending: true),
-      collectionReference: ref,
+      query: User().collectionRef.orderBy('updatedAt', descending: true),
       initialLimit: 20,
       pagingLimit: 20,
-      decode: (snap, collectionRef) =>
-          User(snapshot: snap, collectionRef: collectionRef),
+      decode: (snap, _) =>
+          User(snapshot: snap, collectionRef: snap.reference.parent),
     )
       ..fetch()
       ..data.listen((event) {
@@ -45,10 +43,10 @@ class _State extends State<CollectionPagingListenerPage> {
       });
 
     collectionPagingListener.docChanges.listen((event) {
-      print('docChanges ${event.length}');
-      for (var change in event) {
+      for (var item in event) {
+        final change = item.docChange;
         print(
-            'id: ${change.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
+            'id: ${item.doc.id}, changeType: ${change.type}, oldIndex: ${change.oldIndex}, newIndex: ${change.newIndex} cache: ${change.doc.metadata.isFromCache}');
       }
     });
   }
