@@ -135,7 +135,6 @@ class _State extends State<CollectionPagingListenerStreamBuilderPage> {
                         onTap: () async {
                           final documentAccessor = DocumentAccessor();
                           await documentAccessor.delete(data);
-//                      await collectionPagingListener.deleteDoc(data);
                         },
                       ),
                     ],
