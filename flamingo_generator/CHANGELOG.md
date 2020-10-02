@@ -1,4 +1,16 @@
-# 0.3.4
+# 0.4.1+1
+Modified homepage url.
+
+## 0.4.1
+Modified pubspec.yaml
+
+## 0.4.0+1
+Modified CHANGELOG.md
+
+## 0.4.0
+Updated plugin.
+
+## 0.3.4
 Fixed plugins
 
 ## 0.3.3
