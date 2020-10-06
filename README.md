@@ -718,16 +718,13 @@ class CreditCard extends Document<CreditCard> {
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }) : super(id: id, snapshot: snapshot, values: values) {
-    point = Increment(CreditCardKey.point.value);
-    score = Increment(CreditCardKey.score.value);
-  }
+  }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  Increment<int> point;
+  Increment<int> point = Increment<int>();
 
   @Field()
-  Increment<double> score;
+  Increment<double> score = Increment<double>();
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -790,18 +787,18 @@ await batch.commit();
 
 // Increment
 card
-  ..point = await documentAccessor.increment<int>(card.point, card.reference, value: 10)
-  ..score = await documentAccessor.increment<double>(card.score, card.reference, value: 3.5);
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, fieldName: CreditCardKey.point.value, value: 10)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, fieldName: CreditCardKey.score.value, value: 3.5);
 
 // Decrement
 card
-  ..point = await documentAccessor.increment<int>(card.point, card.reference, value: -5)
-  ..score = await documentAccessor.increment<double>(card.score, card.reference, value: -2.5);
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, fieldName: CreditCardKey.point.value, value: -5)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, fieldName: CreditCardKey.score.value, value: -2.5);
 
 // Clear
 card
-  ..point = await documentAccessor.increment<int>(card.point, card.reference, isClear: true)
-  ..score = await documentAccessor.increment<double>(card.score, card.reference, isClear: true);
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, fieldName: CreditCardKey.point.value, isClear: true)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, fieldName: CreditCardKey.score.value, isClear: true);
 ```
 
 Attension: 
@@ -1049,7 +1046,7 @@ import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:flamingo/flamingo.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
   final firestore = MockFirestoreInstance();
   final storage = MockFirebaseStorage();
   await Flamingo.initializeApp(

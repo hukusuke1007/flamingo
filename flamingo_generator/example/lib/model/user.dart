@@ -31,10 +31,10 @@ class User extends Document<User> {
   List<Map<String, int>> listIntMap;
 
   @Field()
-  Increment<int> point = Increment('point');
+  Increment<int> point = Increment<int>();
 
   @Field()
-  Increment<double> score = Increment('score');
+  Increment<double> score = Increment<double>();
 
   @ModelField()
   Cart cartA;

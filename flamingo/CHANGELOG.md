@@ -1,4 +1,8 @@
-# 1.5.1
+# 1.6.0
+Modified Increment Bug.
+BREAKING CHANGE: Change the implementation of Increment method.
+
+## 1.5.1
 Changed docChanges data type in CollectionPagingListener.
 Updated plugins.
 

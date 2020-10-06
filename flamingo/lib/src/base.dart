@@ -4,8 +4,12 @@ class Base {
   void write(Map<String, dynamic> data, String key, dynamic value) =>
       Helper.write(data, key, value);
 
-  void writeIncrement(Map<String, dynamic> data, Increment entity) =>
-      Helper.writeIncrement(data, entity);
+  void writeIncrement(
+    Map<String, dynamic> data,
+    Increment entity,
+    String fieldName,
+  ) =>
+      Helper.writeIncrement(data, entity, fieldName);
 
   void writeModel(Map<String, dynamic> data, String key, Model model) =>
       Helper.writeModel(data, key, model);

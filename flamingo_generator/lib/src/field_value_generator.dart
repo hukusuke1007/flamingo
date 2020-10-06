@@ -83,7 +83,7 @@ class FieldValueGenerator extends Generator {
   /// For save
   String _fieldForSave(_AnnotatedElement f) {
     if (f.elementType.toString().contains('Increment<')) {
-      return '''Helper.writeIncrement(data, doc.${f.element.name});''';
+      return '''Helper.writeIncrement(data, doc.${f.element.name}, \'${f.element.name}\');''';
     } else {
       if (f.annotation.read('isWriteNotNull').boolValue) {
         return """Helper.writeNotNull(data, \'${f.element.name}\', doc.${f.element.name});""";
@@ -136,7 +136,7 @@ class FieldValueGenerator extends Generator {
           .toString()
           .replaceAll('Increment<', '')
           .replaceAll('>', '');
-      return '''doc.${f.element.name} = Helper.valueFromIncrement<$_type>(data, doc.${f.element.name}.fieldName);''';
+      return '''doc.${f.element.name} = Helper.valueFromIncrement<$_type>(data, \'${f.element.name}\');''';
     } else {
       if (f.elementType.isDartCoreList) {
         if (f.elementType.toString().contains('Map')) {

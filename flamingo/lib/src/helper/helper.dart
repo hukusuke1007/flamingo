@@ -25,12 +25,16 @@ class Helper {
     data[key] = value;
   }
 
-  static void writeIncrement(Map<String, dynamic> data, Increment entity) {
+  static void writeIncrement(
+    Map<String, dynamic> data,
+    Increment entity,
+    String fieldName,
+  ) {
     if (entity.isClearValue) {
-      data[entity.fieldName] = entity.value.runtimeType == double ? 0.0 : 0;
+      data[fieldName] = entity.value.runtimeType == double ? 0.0 : 0;
     } else {
       if (entity.incrementValue != null) {
-        data[entity.fieldName] = FieldValue.increment(entity.incrementValue);
+        data[fieldName] = FieldValue.increment(entity.incrementValue);
       }
     }
   }
@@ -227,7 +231,7 @@ class Helper {
 
   static Increment<U> valueFromIncrement<U extends num>(
           Map<String, dynamic> data, String key) =>
-      Increment(key, value: data[key] as U);
+      Increment(value: data[key] as U);
 
   static bool isVal(Map<String, dynamic> data, String key) =>
       data.containsKey(key);

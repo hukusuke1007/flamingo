@@ -125,7 +125,7 @@ class Batch implements BatchRepository {
   @override
   Future commit() async {
     await _writeBatch.commit();
-    for (var item in _batchDocument) {
+    for (final item in _batchDocument) {
       item.document.onCompleted(item.executeType);
     }
     _batchDocument.clear();

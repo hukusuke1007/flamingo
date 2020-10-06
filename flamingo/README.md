@@ -151,7 +151,6 @@ targets:
             - lib/model/**/*.dart
 ```
 
-
 ### CRUD
 
 Create instance the following code.
@@ -213,6 +212,7 @@ final hoge = await documentAccessor.load<User>(user);
 ```
 
 ### Get Documents
+
 #### CollectionPaging
 Can be used get and paging features of documents by CollectionPaging.
 
@@ -343,6 +343,7 @@ await dispose.cancel();
 ```
 
 Listen snapshot of collection documents. And can be used also CollectionPagingListener.
+
 
 ```dart
 // Listen
@@ -717,16 +718,13 @@ class CreditCard extends Document<CreditCard> {
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }) : super(id: id, snapshot: snapshot, values: values) {
-    point = Increment(CreditCardKey.point.value);
-    score = Increment(CreditCardKey.score.value);
-  }
+  }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  Increment<int> point;
+  Increment<int> point = Increment<int>();
 
   @Field()
-  Increment<double> score;
+  Increment<double> score = Increment<double>();
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -789,18 +787,18 @@ await batch.commit();
 
 // Increment
 card
-  ..point = await documentAccessor.increment<int>(card.point, card.reference, value: 10)
-  ..score = await documentAccessor.increment<double>(card.score, card.reference, value: 3.5);
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, fieldName: CreditCardKey.point.value, value: 10)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, fieldName: CreditCardKey.score.value, value: 3.5);
 
 // Decrement
 card
-  ..point = await documentAccessor.increment<int>(card.point, card.reference, value: -5)
-  ..score = await documentAccessor.increment<double>(card.score, card.reference, value: -2.5);
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, fieldName: CreditCardKey.point.value, value: -5)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, fieldName: CreditCardKey.score.value, value: -2.5);
 
 // Clear
 card
-  ..point = await documentAccessor.increment<int>(card.point, card.reference, isClear: true)
-  ..score = await documentAccessor.increment<double>(card.score, card.reference, isClear: true);
+  ..point = await documentAccessor.increment<int>(card.point, card.reference, fieldName: CreditCardKey.point.value, isClear: true)
+  ..score = await documentAccessor.increment<double>(card.score, card.reference, fieldName: CreditCardKey.score.value, isClear: true);
 ```
 
 Attension: 
@@ -1024,7 +1022,6 @@ final _sample1 = await documentAccessor.load<ListSample>(ListSample(id: sample1.
 ## [WIP] Unit Test
 
 <b>※Under construction</b>
-
 
 Install packages for unit test.
 
