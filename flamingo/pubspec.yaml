@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   firebase_core: ^0.5.0
-  cloud_firestore: ^0.14.0+2
-  firebase_storage: ^4.0.0
+  cloud_firestore: ^0.14.1+2
+  firebase_storage: ^4.0.1
   rxdart: ^0.24.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pedantic_mono: ^1.9.1
+  pedantic_mono:
