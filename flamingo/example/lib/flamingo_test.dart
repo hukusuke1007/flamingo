@@ -1,4 +1,5 @@
 import 'package:flamingo/flamingo.dart';
+import 'package:flamingo_example/model/app_user.dart';
 import 'package:flamingo_example/model/count.dart';
 import 'package:flamingo_example/model/list_sample.dart';
 import 'package:flamingo_example/model/map_sample.dart';
@@ -94,6 +95,7 @@ class FlamingoTest {
     await model();
     await incrementTest1();
     await incrementTest2();
+    await incrementTest3();
     await valueZeroTest();
     await extendCRUD();
     await testReferencePath();
@@ -1021,8 +1023,12 @@ class FlamingoTest {
       print('--- increment int ---');
       {
         print('--- increment +10 ---');
-        card1.point = await documentAccessor
-            .increment<int>(card1.point, card1.reference, value: 10);
+        card1.point = await documentAccessor.increment<int>(
+          card1.point,
+          card1.reference,
+          fieldName: CreditCardKey.point.value,
+          value: 10,
+        );
         print('point ${card1.point.value}');
         final _card = await documentAccessor.load<CreditCard>(card1);
         print('point load ${_card.point.value}');
@@ -1030,8 +1036,12 @@ class FlamingoTest {
 
       {
         print('--- increment +100 ---');
-        card1.point = await documentAccessor
-            .increment<int>(card1.point, card1.reference, value: 100);
+        card1.point = await documentAccessor.increment<int>(
+          card1.point,
+          card1.reference,
+          fieldName: CreditCardKey.point.value,
+          value: 100,
+        );
         print('point ${card1.point.value}');
         final _card = await documentAccessor.load<CreditCard>(card1);
         print('point load ${_card.point.value}');
@@ -1039,8 +1049,12 @@ class FlamingoTest {
 
       {
         print('--- increment -100 ---');
-        card1.point = await documentAccessor
-            .increment<int>(card1.point, card1.reference, value: -100);
+        card1.point = await documentAccessor.increment<int>(
+          card1.point,
+          card1.reference,
+          fieldName: CreditCardKey.point.value,
+          value: -100,
+        );
         print('point ${card1.point.value}');
         final _card = await documentAccessor.load<CreditCard>(card1);
         print('point load ${_card.point.value}');
@@ -1050,8 +1064,12 @@ class FlamingoTest {
       card1.log();
       {
         print('--- increment +0.5 ---');
-        card1.score = await documentAccessor
-            .increment<double>(card1.score, card1.reference, value: 0.5);
+        card1.score = await documentAccessor.increment<double>(
+          card1.score,
+          card1.reference,
+          fieldName: CreditCardKey.score.value,
+          value: 0.5,
+        );
         print('score ${card1.score.value}');
         final _card = await documentAccessor.load<CreditCard>(card1);
         print('score load ${_card.score.value}');
@@ -1059,8 +1077,12 @@ class FlamingoTest {
 
       {
         print('--- increment +10.5 ---');
-        card1.score = await documentAccessor
-            .increment<double>(card1.score, card1.reference, value: 10.5);
+        card1.score = await documentAccessor.increment<double>(
+          card1.score,
+          card1.reference,
+          fieldName: CreditCardKey.score.value,
+          value: 10.5,
+        );
         print('score ${card1.score.value}');
         final _card = await documentAccessor.load<CreditCard>(card1);
         print('score load ${_card.score.value}');
@@ -1068,8 +1090,12 @@ class FlamingoTest {
 
       {
         print('--- increment -2.5 ---');
-        card1.score = await documentAccessor
-            .increment<double>(card1.score, card1.reference, value: -2.5);
+        card1.score = await documentAccessor.increment<double>(
+          card1.score,
+          card1.reference,
+          fieldName: CreditCardKey.score.value,
+          value: -2.5,
+        );
         print('score ${card1.score.value}');
         final _card = await documentAccessor.load<CreditCard>(card1);
         print('score load ${_card.score.value}');
@@ -1080,15 +1106,44 @@ class FlamingoTest {
         print('--- increment clear ---');
         card1
           ..point = await documentAccessor.increment<int>(
-              card1.point, card1.reference, isClear: true)
-          ..score = await documentAccessor
-              .increment<double>(card1.score, card1.reference, isClear: true);
+            card1.point,
+            card1.reference,
+            fieldName: CreditCardKey.score.value,
+            isClear: true,
+          )
+          ..score = await documentAccessor.increment<double>(
+            card1.score,
+            card1.reference,
+            fieldName: CreditCardKey.score.value,
+            isClear: true,
+          );
         print('point ${card1.point.value}, score: ${card1.score.value}');
         final _card = await documentAccessor.load<CreditCard>(card1);
         print('load point: ${_card.point.value}, score: ${_card.score.value}');
         _card.log();
       }
     }
+  }
+
+  Future incrementTest3() async {
+    print('--- incrementTest 3 ---');
+    final data = AppUser()
+      ..name = 'aaa'
+      ..newMessagesCount.incrementValue = 1;
+    await documentAccessor.save(data);
+
+    final result = await documentAccessor.load<AppUser>(data);
+    assert(result != null, 'result is null');
+
+    final ref = AppUser().collectionRef;
+    final collectionPaging = CollectionPaging<AppUser>(
+      query: ref.where(AppUserKey.newMessagesCount.value, isEqualTo: 1),
+      collectionReference: ref,
+      limit: 5,
+      decode: (snap, collectionRef) => AppUser(snapshot: snap),
+    );
+    final list = await collectionPaging.load<AppUser>();
+    assert(list.isNotEmpty, 'list is empty');
   }
 
   Future valueZeroTest() async {

@@ -685,6 +685,17 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
+                  RaisedButton(
+                    padding: const EdgeInsets.all(4),
+                    color: Colors.deepOrangeAccent,
+                    onPressed: () async {
+                      await test.incrementTest3();
+                    },
+                    child: Text(
+                      'Save 3',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
               Padding(

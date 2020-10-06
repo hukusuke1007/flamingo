@@ -72,8 +72,8 @@ Map<String, dynamic> _$toData(User doc) {
   Helper.writeNotNull(data, 'strList', doc.strList);
   Helper.writeNotNull(data, 'intMap', doc.intMap);
   Helper.writeNotNull(data, 'listIntMap', doc.listIntMap);
-  Helper.writeIncrement(data, doc.point);
-  Helper.writeIncrement(data, doc.score);
+  Helper.writeIncrement(data, doc.point, 'point');
+  Helper.writeIncrement(data, doc.score, 'score');
 
   Helper.writeModelNotNull(data, 'cartA', doc.cartA);
   Helper.writeModel(data, 'cartB', doc.cartB);
@@ -94,8 +94,8 @@ void _$fromData(User doc, Map<String, dynamic> data) {
   doc.strList = Helper.valueListFromKey<String>(data, 'strList');
   doc.intMap = Helper.valueMapFromKey<String, int>(data, 'intMap');
   doc.listIntMap = Helper.valueMapListFromKey<String, int>(data, 'listIntMap');
-  doc.point = Helper.valueFromIncrement<int>(data, doc.point.fieldName);
-  doc.score = Helper.valueFromIncrement<double>(data, doc.score.fieldName);
+  doc.point = Helper.valueFromIncrement<int>(data, 'point');
+  doc.score = Helper.valueFromIncrement<double>(data, 'score');
 
   final _cartA = Helper.valueMapFromKey<String, dynamic>(data, 'cartA');
   if (_cartA != null) {

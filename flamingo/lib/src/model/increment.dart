@@ -1,27 +1,39 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class Increment<T extends num> {
-  Increment(this.fieldName, {this.value, this.incrementValue});
-  final String fieldName;
+  Increment({
+    this.value,
+    this.incrementValue,
+  });
   final T value;
   T incrementValue;
+  // String get fieldName => _fieldName;
   bool isClearValue = false;
 
-  Map<String, dynamic> toData(num value, {bool isClear}) => <String, dynamic>{
+  Map<String, dynamic> toData(
+    num value, {
+    @required String fieldName,
+    bool isClear,
+  }) =>
+      <String, dynamic>{
         fieldName: isClear != true ? FieldValue.increment(value) : value,
       };
+
+  // // ignore: use_setters_to_change_properties
+  // void setFieldName(String key) => _fieldName = key;
 
   Increment<T> onRefresh() {
     Increment<T> result;
     if (isClearValue) {
       final _value = T.toString() == 'double' ? 0.0 : 0;
-      result = Increment<T>(fieldName, value: _value as T);
+      result = Increment<T>(value: _value as T);
     } else {
       if (incrementValue != null) {
         final _value = value != null ? value + incrementValue : incrementValue;
-        result = Increment<T>(fieldName, value: _value as T);
+        result = Increment<T>(value: _value as T);
       } else {
-        result = Increment<T>(fieldName, value: value);
+        result = Increment<T>(value: value);
       }
     }
     _clear();

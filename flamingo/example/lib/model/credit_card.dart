@@ -8,16 +8,13 @@ class CreditCard extends Document<CreditCard> {
     String id,
     DocumentSnapshot snapshot,
     Map<String, dynamic> values,
-  }) : super(id: id, snapshot: snapshot, values: values) {
-    point = Increment(CreditCardKey.point.value);
-    score = Increment(CreditCardKey.score.value);
-  }
+  }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  Increment<int> point;
+  Increment<int> point = Increment<int>();
 
   @Field()
-  Increment<double> score;
+  Increment<double> score = Increment<double>();
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

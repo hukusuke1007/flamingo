@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import '../flamingo.dart';
 
 abstract class DocumentAccessorRepository {
@@ -42,6 +44,7 @@ class DocumentAccessor implements DocumentAccessorRepository {
     Increment<T> entity,
     DocumentReference reference, {
     num value,
+    @required String fieldName,
     bool isClear,
   }) async {
     var updateValue = value;
@@ -50,13 +53,12 @@ class DocumentAccessor implements DocumentAccessorRepository {
     }
     final batch = Batch()
       ..updateRaw(
-        entity.toData(updateValue, isClear: isClear),
+        entity.toData(updateValue, fieldName: fieldName, isClear: isClear),
         reference,
         isTimestamp: true,
       );
     await batch.commit();
-    return Increment(entity.fieldName,
-        value: updateValue as T, incrementValue: null);
+    return Increment(value: updateValue as T, incrementValue: null);
   }
 
   @override
