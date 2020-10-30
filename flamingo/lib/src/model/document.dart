@@ -22,20 +22,23 @@ class Document<T> extends Base implements DocumentType {
       _collectionRef = _referenceDocument.parent;
       _reference = _referenceDocument;
     } else {
-      /// From id.
+      /// Set id
       _id = id;
 
-      /// From collectionPath or collectionRef.
+      /// Set collectionRef
       if (collectionPath != null) {
         _collectionRef = Flamingo.instance.firestore.collection(collectionPath);
       } else {
         if (collectionRef != null) {
           _collectionRef = collectionRef;
+        } else if (snapshot != null) {
+          _collectionRef = snapshot.reference.parent;
         } else {
           _collectionRef = collectionRootReference;
         }
       }
 
+      /// Set reference
       if (id != null) {
         _reference = _collectionRef.doc(_id);
       } else {
@@ -43,7 +46,7 @@ class Document<T> extends Base implements DocumentType {
         _id = _reference.id;
       }
 
-      /// From snapshot.
+      /// From snapshot
       if (snapshot != null) {
         setSnapshot(snapshot); // setSnapshotでidが作られる
         _reference = _collectionRef.doc(_id);

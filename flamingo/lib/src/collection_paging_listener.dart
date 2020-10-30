@@ -17,7 +17,6 @@ class DocumentChangeData<T extends Document<T>> {
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
     @required this.query,
-    this.collectionReference,
     @required this.initialLimit,
     @required this.pagingLimit,
     @required this.decode,
@@ -28,10 +27,9 @@ class CollectionPagingListener<T extends Document<T>> {
             _PagingListener(query: query, limit: initialLimit, decode: decode);
 
   final Query query;
-  final CollectionReference collectionReference;
   final int initialLimit;
   final int pagingLimit;
-  final T Function(DocumentSnapshot, CollectionReference) decode;
+  final T Function(DocumentSnapshot) decode;
 
   ValueStream<List<T>> get data => _dataController.stream;
   Stream<List<DocumentChangeData<T>>> get docChanges =>
@@ -96,7 +94,7 @@ class _PagingListener<T extends Document<T>> {
 
   final Query query;
   final int limit;
-  final T Function(DocumentSnapshot, CollectionReference) decode;
+  final T Function(DocumentSnapshot) decode;
   final CollectionReference collectionReference;
 
   ValueStream<List<T>> get data => _dataController.stream;
@@ -119,7 +117,7 @@ class _PagingListener<T extends Document<T>> {
     await _loadController.close();
   }
 
-  void _fetch(int limit) async {
+  Future<void> _fetch(int limit) async {
     if (_disposer != null) {
       await _disposer.cancel();
       _disposer = null;
@@ -128,8 +126,8 @@ class _PagingListener<T extends Document<T>> {
     _disposer = query.limit(limit).snapshots().listen((event) {
       final docs = _dataController.value;
       final changes = <DocumentChangeData<T>>[];
-      for (var change in event.docChanges) {
-        final doc = decode(change.doc, collectionReference);
+      for (final change in event.docChanges) {
+        final doc = decode(change.doc);
         if (change.type == DocumentChangeType.added) {
           docs.insert(change.newIndex, doc);
         } else if (change.type == DocumentChangeType.modified) {

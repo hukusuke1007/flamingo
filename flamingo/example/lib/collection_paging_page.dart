@@ -22,13 +22,10 @@ class _State extends State<CollectionPagingPage> {
     super.initState();
 
     /// Using Collection
-    final ref = User().collectionRef;
     collectionPaging = CollectionPaging<User>(
-      query: ref.orderBy('updatedAt', descending: true),
-      collectionReference: ref,
+      query: User().collectionRef.orderBy('updatedAt', descending: true),
       limit: 100,
-      decode: (snap, collectionRef) =>
-          User(snapshot: snap, collectionRef: collectionRef),
+      decode: (snap) => User(snapshot: snap),
     );
 
     /// Using CollectionGroup
@@ -37,8 +34,8 @@ class _State extends State<CollectionPagingPage> {
 //          .collectionGroup('user')
 //          .orderBy('createdAt', descending: true),
 //      limit: 20,
-//      decode: (snap, _) =>
-//          User(snapshot: snap, collectionRef: snap.reference.parent),
+//      decode: (snap) =>
+//          User(snapshot: snap,
 //    );
     initLoad();
   }
