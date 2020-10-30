@@ -1,4 +1,7 @@
-# 0.6.0
+# 0.6.0+1
+Updated CHANGELOG.md
+
+## 0.6.0
 Modified Timestamp type.
 
 ## 0.5.0
