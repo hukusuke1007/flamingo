@@ -219,13 +219,10 @@ Can be used get and paging features of documents by CollectionPaging.
 Query of Collection.
 
 ```dart
-final ref = User().collectionRef;
 final collectionPaging = CollectionPaging<User>(
   query: User().collectionRef.orderBy('createdAt', descending: true),
   limit: 20,
-  collectionRef: ref,
-  decode: (snap, collectionRef) =>
-      User(snapshot: snap, collectionRef: collectionRef),
+  decode: (snap) => User(snapshot: snap),
 );
 
 List<User> items = [];
@@ -247,8 +244,7 @@ final collectionPaging = CollectionPaging<User>(
     .collectionGroup('user')
     .orderBy('createdAt', descending: true),
   limit: 20,
-  decode: (snap, _) =>
-      User(snapshot: snap, collectionRef: snap.reference.parent),
+  decode: (snap) => User(snapshot: snap),
 );
 ```
 
@@ -262,8 +258,7 @@ final collectionPagingListener = CollectionPagingListener<User>(
   query: User().collectionRef.orderBy('updatedAt', descending: true),
   initialLimit: 20,
   pagingLimit: 20,
-  decode: (snap, _) =>
-      User(snapshot: snap, collectionRef: snap.reference.parent),
+  decode: (snap) => User(snapshot: snap),
 );
 
 // Fetch to set listener.
@@ -611,7 +606,7 @@ await batch.commit();
 // Get sub collection
 final path = ranking.count.ref.path;
 final snapshot = await firestoreInstance.collection(path).get();
-final list = snapshot.docs.map((item) => Count(snapshot: item, collectionRef: ranking.count.ref)).toList()
+final list = snapshot.docs.map((item) => Count(snapshot: item)).toList()
   ..forEach((count) {
     print(count);
   });
