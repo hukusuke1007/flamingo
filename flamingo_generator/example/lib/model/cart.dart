@@ -17,6 +17,9 @@ class Cart extends Model {
   @Field()
   double itemC;
 
+  @Field()
+  Timestamp itemAt;
+
   @override
   Map<String, dynamic> toData() => _$toData(this);
 

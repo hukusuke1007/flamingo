@@ -133,6 +133,12 @@ class FlamingoTest {
     print('--- timestamp test ---');
     final data = <String, dynamic>{
       'name': 'shohei',
+      UserKey.editAt.value: {'_seconds': 1575163645, '_nanoseconds': 648000000},
+      UserKey.clearAt.value: Timestamp.now(),
+      _user.updatedFieldValueKey: {
+        '_seconds': 1575163645,
+        '_nanoseconds': 648000000
+      },
       _user.createdFieldValueKey: {
         '_seconds': 1575163645,
         '_nanoseconds': 648000000
@@ -146,6 +152,10 @@ class FlamingoTest {
       final _user = User(values: data);
       assert(_user.createdAt != null);
       assert(_user.updatedAt != null);
+      assert(_user.editAt != null);
+      assert(_user.clearAt != null);
+      print(_user.editAt.toDate());
+      print(_user.clearAt.toDate());
     }
   }
 

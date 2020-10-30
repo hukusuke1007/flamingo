@@ -21,6 +21,12 @@ class User extends Document<User> {
   @Field()
   String name;
 
+  @Field()
+  Timestamp editAt;
+
+  @Field()
+  Timestamp clearAt;
+
   @SubCollection()
   Collection<Setting> setting;
 

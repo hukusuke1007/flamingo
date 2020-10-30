@@ -1,4 +1,7 @@
-# 1.6.0
+# 1.7.0
+Updated Plugins.
+
+## 1.6.0
 Modified Increment Bug.
 BREAKING CHANGE: Change the implementation of Increment method.
 

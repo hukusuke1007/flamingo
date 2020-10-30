@@ -154,6 +154,14 @@ class FieldValueGenerator extends Generator {
           final mapValueType =
               f.elementType.toString().split(', ')[1].replaceAll('>', '');
           return """doc.${f.element.name} = Helper.valueMapFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
+        } else if (f.elementType.toString() == 'Timestamp') {
+          return """
+          if (data[\'${f.element.name}\'] is Map) {
+            doc.${f.element.name} = Helper.timestampFromMap(data, \'${f.element.name}\');
+          } else {
+            doc.${f.element.name} = Helper.valueFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');
+          }
+          """;
         }
         return """doc.${f.element.name} = Helper.valueFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');""";
       }

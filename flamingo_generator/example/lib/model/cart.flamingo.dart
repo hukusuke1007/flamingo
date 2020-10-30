@@ -11,6 +11,7 @@ enum CartKey {
   itemA,
   itemB,
   itemC,
+  itemAt,
 }
 
 extension CartKeyExtension on CartKey {
@@ -22,6 +23,8 @@ extension CartKeyExtension on CartKey {
         return 'itemB';
       case CartKey.itemC:
         return 'itemC';
+      case CartKey.itemAt:
+        return 'itemAt';
       default:
         return toString();
     }
@@ -34,6 +37,7 @@ Map<String, dynamic> _$toData(Cart doc) {
   Helper.writeNotNull(data, 'itemA', doc.itemA);
   Helper.writeNotNull(data, 'itemB', doc.itemB);
   Helper.writeNotNull(data, 'itemC', doc.itemC);
+  Helper.writeNotNull(data, 'itemAt', doc.itemAt);
 
   return data;
 }
@@ -43,4 +47,9 @@ void _$fromData(Cart doc, Map<String, dynamic> data) {
   doc.itemA = Helper.valueFromKey<String>(data, 'itemA');
   doc.itemB = Helper.valueFromKey<int>(data, 'itemB');
   doc.itemC = Helper.valueFromKey<double>(data, 'itemC');
+  if (data['itemAt'] is Map) {
+    doc.itemAt = Helper.timestampFromMap(data, 'itemAt');
+  } else {
+    doc.itemAt = Helper.valueFromKey<Timestamp>(data, 'itemAt');
+  }
 }
