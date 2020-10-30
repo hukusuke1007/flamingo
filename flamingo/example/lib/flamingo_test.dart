@@ -55,8 +55,7 @@ class FlamingoTest {
           .collection(User().collectionPath)
           .orderBy('createdAt', descending: true),
       limit: 20,
-      decode: (snap, collectionRef) =>
-          User(snapshot: snap, collectionRef: collectionRef),
+      decode: (snap) => User(snapshot: snap),
     );
   }
   final DocumentAccessor documentAccessor = DocumentAccessor();
@@ -388,12 +387,10 @@ class FlamingoTest {
 
     final snapshot = await firestoreInstance
         .collection(ranking.count.ref.path)
-        .limit(5)
+        .limit(2)
         .get();
     print('from Snapshot');
-    final listA = snapshot.docs
-        .map((item) => Count(snapshot: item, collectionRef: ranking.count.ref))
-        .toList();
+    final listA = snapshot.docs.map((item) => Count(snapshot: item)).toList();
     assert(listA.isNotEmpty);
     listA.forEach((item) {
       assertCollection(item, ranking.count.ref.path);
@@ -1148,9 +1145,8 @@ class FlamingoTest {
     final ref = AppUser().collectionRef;
     final collectionPaging = CollectionPaging<AppUser>(
       query: ref.where(AppUserKey.newMessagesCount.value, isEqualTo: 1),
-      collectionReference: ref,
       limit: 5,
-      decode: (snap, collectionRef) => AppUser(snapshot: snap),
+      decode: (snap) => AppUser(snapshot: snap),
     );
     final list = await collectionPaging.load<AppUser>();
     assert(list.isNotEmpty, 'list is empty');

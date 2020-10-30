@@ -1,4 +1,7 @@
-# 1.7.0
+# 1.8.0
+Modified to set Collection Reference by Snapshot.
+
+## 1.7.0
 Updated Plugins.
 
 ## 1.6.0

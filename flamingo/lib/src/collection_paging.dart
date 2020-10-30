@@ -6,25 +6,20 @@ import 'model/document.dart';
 class CollectionPaging<T extends Document<T>> {
   CollectionPaging({
     @required this.query,
-    this.collectionReference,
     @required this.limit,
     @required this.decode,
   });
 
   final Query query;
-  final CollectionReference collectionReference;
   final int limit;
-  final T Function(DocumentSnapshot, CollectionReference) decode;
+  final T Function(DocumentSnapshot) decode;
   DocumentSnapshot _startAfterDocument;
 
   Future<List<D>> load<D extends Document<D>>({
     Source source = Source.serverAndCache,
   }) async {
     final documents = await _load(source: source);
-    return documents
-        .map((e) => decode(e, collectionReference))
-        .cast<D>()
-        .toList();
+    return documents.map(decode).cast<D>().toList();
   }
 
   Future<List<D>> loadMore<D extends Document<D>>({
@@ -32,10 +27,7 @@ class CollectionPaging<T extends Document<T>> {
   }) async {
     final documents =
         await _load(source: source, startAfterDocument: _startAfterDocument);
-    return documents
-        .map((e) => decode(e, collectionReference))
-        .cast<D>()
-        .toList();
+    return documents.map(decode).cast<D>().toList();
   }
 
   Future<List<DocumentSnapshot>> _load({

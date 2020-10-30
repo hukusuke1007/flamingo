@@ -30,8 +30,7 @@ class _State extends State<CollectionPagingListenerStreamBuilderPage> {
       query: User().collectionRef.orderBy('updatedAt', descending: true),
       initialLimit: 20,
       pagingLimit: 20,
-      decode: (snap, _) =>
-          User(snapshot: snap, collectionRef: snap.reference.parent),
+      decode: (snap) => User(snapshot: snap),
     )..fetch();
 
     collectionPagingListener.docChanges.listen((event) {
