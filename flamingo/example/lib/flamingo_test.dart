@@ -60,7 +60,7 @@ class FlamingoTest {
   }
   final DocumentAccessor documentAccessor = DocumentAccessor();
 
-  CollectionPaging _collectionPaging;
+  CollectionPaging<User> _collectionPaging;
 
   Future all() async {
     print('------- start -------');
@@ -1148,7 +1148,7 @@ class FlamingoTest {
       limit: 5,
       decode: (snap) => AppUser(snapshot: snap),
     );
-    final list = await collectionPaging.load<AppUser>();
+    final list = await collectionPaging.load();
     assert(list.isNotEmpty, 'list is empty');
   }
 
@@ -1342,7 +1342,7 @@ class FlamingoTest {
   }
 
   Future<List<User>> loadUsers() async {
-    final documents = await _collectionPaging.load<User>();
+    final documents = await _collectionPaging.load();
     for (var doc in documents) {
       print('${doc.id} ${doc.toData()}');
     }
@@ -1350,7 +1350,7 @@ class FlamingoTest {
   }
 
   Future<List<User>> loadMoreUsers() async {
-    final documents = await _collectionPaging.loadMore<User>();
+    final documents = await _collectionPaging.loadMore();
     for (var doc in documents) {
       print('${doc.id} ${doc.toData()}');
     }

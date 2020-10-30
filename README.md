@@ -228,11 +228,11 @@ final collectionPaging = CollectionPaging<User>(
 List<User> items = [];
 
 // Load 
-final _items = await collectionPaging.load<User>();
+final _items = await collectionPaging.load();
 items = _items;
 
 // LoadMore
-final _items = await collectionPaging.loadMore<User>();
+final _items = await collectionPaging.loadMore();
 items.addAll(_items);
 ```
 

@@ -15,19 +15,19 @@ class CollectionPaging<T extends Document<T>> {
   final T Function(DocumentSnapshot) decode;
   DocumentSnapshot _startAfterDocument;
 
-  Future<List<D>> load<D extends Document<D>>({
+  Future<List<T>> load({
     Source source = Source.serverAndCache,
   }) async {
     final documents = await _load(source: source);
-    return documents.map(decode).cast<D>().toList();
+    return documents.map(decode).cast<T>().toList();
   }
 
-  Future<List<D>> loadMore<D extends Document<D>>({
+  Future<List<T>> loadMore({
     Source source = Source.serverAndCache,
   }) async {
     final documents =
         await _load(source: source, startAfterDocument: _startAfterDocument);
-    return documents.map(decode).cast<D>().toList();
+    return documents.map(decode).cast<T>().toList();
   }
 
   Future<List<DocumentSnapshot>> _load({

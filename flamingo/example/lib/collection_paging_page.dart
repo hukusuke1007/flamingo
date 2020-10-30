@@ -41,7 +41,7 @@ class _State extends State<CollectionPagingPage> {
   }
 
   void initLoad() async {
-    final _items = await collectionPaging.load<User>();
+    final _items = await collectionPaging.load();
     setState(() {
       items = _items;
     });
@@ -91,14 +91,14 @@ class _State extends State<CollectionPagingPage> {
               },
             ),
             onRefresh: () async {
-              final _items = await collectionPaging.load<User>();
+              final _items = await collectionPaging.load();
               setState(() {
                 items = _items;
               });
               refreshController.refreshCompleted();
             },
             onLoading: () async {
-              final _items = await collectionPaging.loadMore<User>();
+              final _items = await collectionPaging.loadMore();
               setState(() {
                 items.addAll(_items);
               });

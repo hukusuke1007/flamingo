@@ -1,4 +1,7 @@
-# 1.8.0
+# 1.8.1
+Modified CollectionPaging.
+
+## 1.8.0
 Modified to set Collection Reference by Snapshot.
 
 ## 1.7.0
