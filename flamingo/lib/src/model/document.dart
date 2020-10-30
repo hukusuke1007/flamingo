@@ -11,9 +11,14 @@ class Document<T> extends Base implements DocumentType {
     CollectionReference collectionRef,
   })  : assert(id == null || documentPath == null,
             'Can be used only either of \'id\' or \'documentPath\'.'),
-        assert(documentPath == null || collectionPath == null,
+        // ignore: lines_longer_than_80_chars
+        assert(
+            documentPath == null || collectionPath == null,
+            // ignore: lines_longer_than_80_chars
             'Can be used only either of \'documentPath\' or \'collectionPath\'.'),
-        assert(collectionPath == null || collectionRef == null,
+        assert(
+            collectionPath == null || collectionRef == null,
+            // ignore: lines_longer_than_80_chars
             'Can be used only either of \'collectionPath\' or \'collectionRef\'.') {
     if (documentPath != null) {
       /// From reference path.
@@ -28,14 +33,12 @@ class Document<T> extends Base implements DocumentType {
       /// Set collectionRef
       if (collectionPath != null) {
         _collectionRef = Flamingo.instance.firestore.collection(collectionPath);
+      } else if (collectionRef != null) {
+        _collectionRef = collectionRef;
+      } else if (snapshot != null) {
+        _collectionRef = snapshot.reference.parent;
       } else {
-        if (collectionRef != null) {
-          _collectionRef = collectionRef;
-        } else if (snapshot != null) {
-          _collectionRef = snapshot.reference.parent;
-        } else {
-          _collectionRef = collectionRootReference;
-        }
+        _collectionRef = collectionRootReference;
       }
 
       /// Set reference
