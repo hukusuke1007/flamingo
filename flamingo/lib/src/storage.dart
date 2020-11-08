@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:rxdart/rxdart.dart';
+
 import '../flamingo.dart';
 
 abstract class StorageRepository {
   FirebaseStorage get storage;
-  Stream<StorageTaskEvent> get uploader;
+  Stream<TaskSnapshot> get uploader;
   Future<StorageFile> save(
     String folderPath,
     File data, {
@@ -38,13 +40,13 @@ class Storage implements StorageRepository {
   static String fileName({int length}) => Helper.randomString(length: length);
 
   final _storage = storageInstance;
-  StreamController<StorageTaskEvent> _uploader;
+  PublishSubject<TaskSnapshot> _uploader;
 
   @override
   FirebaseStorage get storage => _storage;
 
   @override
-  Stream<StorageTaskEvent> get uploader => _uploader.stream;
+  Stream<TaskSnapshot> get uploader => _uploader.stream;
 
   @override
   Future<StorageFile> save(
@@ -60,14 +62,14 @@ class Storage implements StorageRepository {
     final path = '$folderPath/$refFileName';
     final ref = storage.ref().child(path);
     final uploadTask = ref.putFile(data,
-        StorageMetadata(contentType: refMimeType, customMetadata: metadata));
-    uploadTask.events.listen((event) {
+        SettableMetadata(contentType: refMimeType, customMetadata: metadata));
+    uploadTask.snapshotEvents.listen((event) {
       if (_uploader != null) {
         _uploader.add(event);
       }
     });
-    final snapshot = await uploadTask.onComplete;
-    final downloadUrl = await snapshot.ref.getDownloadURL() as String;
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await snapshot.ref.getDownloadURL();
     return StorageFile(
       name: refFileName,
       url: downloadUrl,
@@ -136,7 +138,7 @@ class Storage implements StorageRepository {
 
   @override
   void fetch() {
-    _uploader ??= StreamController<StorageTaskEvent>();
+    _uploader ??= PublishSubject<TaskSnapshot>();
   }
 
   @override

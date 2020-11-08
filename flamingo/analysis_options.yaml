@@ -1,5 +1,10 @@
 include: package:pedantic_mono/analysis_options.yaml
 analyzer:
+  errors:
+    missing_required_param: error
+    missing_return: warning
+    todo: warning
+    sdk_version_async_exported_from_core: ignore
   exclude:
     - lib/l10n/messages_*.dart
     - ios/**

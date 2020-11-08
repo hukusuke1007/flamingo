@@ -36,19 +36,30 @@ class Flamingo {
     String rootPath,
   }) async {
     await Firebase.initializeApp(name: name, options: options);
+    overrideWithSetting(settings: settings, rootPath: rootPath);
+  }
 
+  static void overrideWithSetting({
+    FirebaseFirestore firestoreInstance,
+    FirebaseStorage storageInstance,
+    Settings settings,
+    String rootPath,
+  }) {
     if (settings != null) {
       FirebaseFirestore.instance.settings = settings;
     }
-    instance.firestore = FirebaseFirestore.instance;
-    instance.firebaseStorage = FirebaseStorage.instance;
-    instance.rootReference =
-        instance.firestore.doc(rootPath != null ? rootPath : '/');
+    instance._firestore = firestoreInstance ?? FirebaseFirestore.instance;
+    instance._firebaseStorage = storageInstance ?? FirebaseStorage.instance;
+    instance._rootReference = instance.firestore.doc(rootPath ?? '/');
   }
 
-  DocumentReference rootReference;
-  FirebaseFirestore firestore;
-  FirebaseStorage firebaseStorage;
+  DocumentReference get rootReference => _rootReference;
+  FirebaseFirestore get firestore => _firestore;
+  FirebaseStorage get firebaseStorage => _firebaseStorage;
+
+  DocumentReference _rootReference;
+  FirebaseFirestore _firestore;
+  FirebaseStorage _firebaseStorage;
 }
 
 DocumentReference get rootReference => Flamingo.instance.rootReference;

@@ -1,4 +1,7 @@
-# 1.8.1
+# 1.9.0
+Updated Plugins.
+
+## 1.8.1
 Modified CollectionPaging.
 
 ## 1.8.0

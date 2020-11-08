@@ -430,8 +430,7 @@ class FlamingoTest {
     storage.fetch();
     storage.uploader.listen((data) {
       // confirm status
-      print(
-          'total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
+      print('total: ${data.totalBytes} transferred: ${data.bytesTransferred}');
     });
 
     // save file metadata into firestore
@@ -492,8 +491,7 @@ class FlamingoTest {
     storage.fetch();
     storage.uploader.listen((data) {
       // confirm status
-      print(
-          'total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
+      print('total: ${data.totalBytes} transferred: ${data.bytesTransferred}');
     });
 
     // save file metadata into firestore
@@ -841,8 +839,7 @@ class FlamingoTest {
     storage.fetch();
     storage.uploader.listen((data) {
       // confirm status
-      print(
-          'total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
+      print('total: ${data.totalBytes} transferred: ${data.bytesTransferred}');
     });
 
     // save file metadata into firestore

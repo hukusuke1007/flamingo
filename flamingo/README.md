@@ -653,7 +653,7 @@ storage.fetch();
 
 // Checking status
 storage.uploader.listen((data){
-  print('total: ${data.snapshot.totalByteCount} transferred: ${data.snapshot.bytesTransferred}');
+  print('total: ${data.totalBytes} transferred: ${data.bytesTransferred}');
 });
 
 // Upload file into firebase storage and save file metadata into firestore
