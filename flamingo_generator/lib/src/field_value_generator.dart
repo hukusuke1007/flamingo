@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
 import 'package:build/build.dart';
-import 'package:code_builder/code_builder.dart';
 import 'package:flamingo_annotation/flamingo_annotation.dart' as annotation;
 import 'package:source_gen/source_gen.dart';
 
@@ -18,10 +17,12 @@ class FieldValueGenerator extends Generator {
       const TypeChecker.fromRuntime(annotation.SubCollection);
   @override
   FutureOr<String> generate(LibraryReader library, BuildStep buildStep) {
-    final lib = Library(
-        (b) => b..body.addAll(library.classes.map((e) => Code(_code(e)))));
-    final emitter = DartEmitter();
-    return lib.accept(emitter).toString();
+    final values = StringBuffer();
+    // ignore: avoid_function_literals_in_foreach_calls
+    library.classes.forEach((element) {
+      values.writeln(_code(element));
+    });
+    return values.toString();
   }
 
   String _code(ClassElement class$) {
@@ -127,6 +128,7 @@ class FieldValueGenerator extends Generator {
         return """Helper.writeStorage(data, \'$folderName\', doc.${f.element.name}, isSetNull: $isSetNull);""";
       }
     }
+    return '';
   }
 
   /// For load
