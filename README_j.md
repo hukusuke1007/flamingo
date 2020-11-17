@@ -19,10 +19,7 @@ dependencies:
   flamingo_annotation:
 
 dev_dependencies:
-  build_runner: ^1.10.1
-  # If occur analyzer error, please set build_resolvers.
-  # build_resolvers: ^1.3.10
-
+  build_runner: ^1.10.4
   flamingo_generator:
 ```
 
