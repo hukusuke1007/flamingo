@@ -9,7 +9,6 @@ part of 'ranking.dart';
 /// Field value key
 enum RankingKey {
   title,
-
   count,
 }
 
