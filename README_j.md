@@ -19,7 +19,7 @@ dependencies:
   flamingo_annotation:
 
 dev_dependencies:
-  build_runner: ^1.10.4
+  build_runner:
   flamingo_generator:
 ```
 
