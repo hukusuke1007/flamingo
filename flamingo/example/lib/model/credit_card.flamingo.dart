@@ -20,7 +20,7 @@ extension CreditCardKeyExtension on CreditCardKey {
       case CreditCardKey.score:
         return 'score';
       default:
-        return toString();
+        return null;
     }
   }
 }

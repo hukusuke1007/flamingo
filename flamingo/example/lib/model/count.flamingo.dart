@@ -20,7 +20,7 @@ extension CountKeyExtension on CountKey {
       case CountKey.count:
         return 'count';
       default:
-        return toString();
+        return null;
     }
   }
 }

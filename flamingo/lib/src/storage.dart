@@ -11,7 +11,7 @@ abstract class StorageRepository {
   Future<StorageFile> save(
     String folderPath,
     File data, {
-    String fileName,
+    String filename,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
@@ -21,7 +21,7 @@ abstract class StorageRepository {
     DocumentReference reference,
     String folderName,
     File data, {
-    String fileName,
+    String filename,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
@@ -52,26 +52,24 @@ class Storage implements StorageRepository {
   Future<StorageFile> save(
     String folderPath,
     File data, {
-    String fileName,
+    String filename,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {
-    final refFileName = fileName != null ? fileName : Storage.fileName();
+    final refFilename = filename != null ? filename : Storage.fileName();
     final refMimeType = mimeType != null ? mimeType : '';
-    final path = '$folderPath/$refFileName';
+    final path = '$folderPath/$refFilename';
     final ref = storage.ref().child(path);
     final uploadTask = ref.putFile(data,
         SettableMetadata(contentType: refMimeType, customMetadata: metadata));
-    uploadTask.snapshotEvents.listen((event) {
-      if (_uploader != null) {
-        _uploader.add(event);
-      }
-    });
+    if (_uploader != null) {
+      uploadTask.snapshotEvents.listen(_uploader.add);
+    }
     final snapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await snapshot.ref.getDownloadURL();
     return StorageFile(
-      name: refFileName,
+      name: refFilename,
       url: downloadUrl,
       path: path,
       mimeType: refMimeType,
@@ -82,15 +80,14 @@ class Storage implements StorageRepository {
 
   @override
   Future<void> delete(String folderPath, StorageFile storageFile) async {
-    if (storageFile != null) {
-      final path = '$folderPath/${storageFile.name}';
-      final ref = storage.ref().child(path);
-      await ref.delete();
-      storageFile.isDeleted = true;
-    } else {
+    if (storageFile == null) {
       print('StorageFile is null');
+      return;
     }
-    return;
+    final path = '$folderPath/${storageFile.name}';
+    final ref = storage.ref().child(path);
+    await ref.delete();
+    storageFile.isDeleted = true;
   }
 
   @override
@@ -98,14 +95,14 @@ class Storage implements StorageRepository {
     DocumentReference reference,
     String folderName,
     File data, {
-    String fileName,
+    String filename,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {
     final folderPath = '${reference.path}/$folderName';
     final storageFile = await save(folderPath, data,
-        fileName: fileName, mimeType: mimeType, metadata: metadata);
+        filename: filename, mimeType: mimeType, metadata: metadata);
     storageFile.additionalData = additionalData;
     final documentAccessor = DocumentAccessor();
     final values = <String, dynamic>{};

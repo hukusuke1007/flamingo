@@ -30,7 +30,7 @@ extension ModelSampleKeyExtension on ModelSampleKey {
       case ModelSampleKey.file:
         return 'file';
       default:
-        return toString();
+        return null;
     }
   }
 }

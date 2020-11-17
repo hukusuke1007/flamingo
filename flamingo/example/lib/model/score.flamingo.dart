@@ -21,7 +21,7 @@ extension ScoreKeyExtension on ScoreKey {
       case ScoreKey.counter:
         return 'counter';
       default:
-        return toString();
+        return null;
     }
   }
 }

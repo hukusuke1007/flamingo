@@ -93,8 +93,12 @@ class Document<T> extends Base implements DocumentType {
   String get id => _id;
 
   /// For reference
-  String get modelName =>
-      toString().split(' ')[2].replaceAll("\'", '').toLowerCase();
+  String get modelName => toString()
+      .replaceAll('*', '')
+      .split(' ')[2]
+      .replaceAll("\'", '')
+      .toLowerCase();
+
   CollectionReference get collectionRootReference =>
       Flamingo.instance.rootReference.collection(modelName);
 

@@ -52,7 +52,7 @@ class FieldValueGenerator extends Generator {
             case $enumName.${f.element.name}:
               return \'${f.element.name}\';
           """).join()}default:
-              return toString();
+              return null;
           }
        }
      }
@@ -83,7 +83,7 @@ class FieldValueGenerator extends Generator {
 
   /// For save
   String _fieldForSave(_AnnotatedElement f) {
-    if (f.elementType.toString().contains('Increment<')) {
+    if (f.elementType.type.contains('Increment<')) {
       return '''Helper.writeIncrement(data, doc.${f.element.name}, \'${f.element.name}\');''';
     } else {
       if (f.annotation.read('isWriteNotNull').boolValue) {
@@ -116,15 +116,15 @@ class FieldValueGenerator extends Generator {
         : f.annotation.read('folderName').stringValue;
     final isSetNull = f.annotation.read('isSetNull').boolValue;
     if (f.annotation.read('isWriteNotNull').boolValue) {
-      if (f.elementType.toString() == 'List<StorageFile>') {
+      if (f.elementType.type == 'List<StorageFile>') {
         return """Helper.writeStorageListNotNull(data, \'$folderName\', doc.${f.element.name}, isSetNull: $isSetNull);""";
-      } else if (f.elementType.toString() == 'StorageFile') {
+      } else if (f.elementType.type == 'StorageFile') {
         return """Helper.writeStorageNotNull(data, \'$folderName\', doc.${f.element.name}, isSetNull: $isSetNull);""";
       }
     } else {
-      if (f.elementType.toString() == 'List<StorageFile>') {
+      if (f.elementType.type == 'List<StorageFile>') {
         return """Helper.writeStorageList(data, \'$folderName\', doc.${f.element.name}, isSetNull: $isSetNull);""";
-      } else if (f.elementType.toString() == 'StorageFile') {
+      } else if (f.elementType.type == 'StorageFile') {
         return """Helper.writeStorage(data, \'$folderName\', doc.${f.element.name}, isSetNull: $isSetNull);""";
       }
     }
@@ -133,39 +133,35 @@ class FieldValueGenerator extends Generator {
 
   /// For load
   String _fieldForLoad(_AnnotatedElement f) {
-    if (f.elementType.toString().contains('Increment<')) {
-      final _type = f.elementType
-          .toString()
-          .replaceAll('Increment<', '')
-          .replaceAll('>', '');
+    if (f.elementType.type.contains('Increment<')) {
+      final _type =
+          f.elementType.type.replaceAll('Increment<', '').replaceAll('>', '');
       return '''doc.${f.element.name} = Helper.valueFromIncrement<$_type>(data, \'${f.element.name}\');''';
     } else {
       if (f.elementType.isDartCoreList) {
-        if (f.elementType.toString().contains('Map')) {
+        if (f.elementType.type.contains('Map')) {
           final mapValueType =
-              f.elementType.toString().split(', ')[1].replaceAll('>', '');
+              f.elementType.type.split(', ')[1].replaceAll('>', '');
           return """doc.${f.element.name} = Helper.valueMapListFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
         }
-        final _type = f.elementType
-            .toString()
-            .replaceAll('List<', '')
-            .replaceAll('>', '');
+        final _type =
+            f.elementType.type.replaceAll('List<', '').replaceAll('>', '');
         return """doc.${f.element.name} = Helper.valueListFromKey<$_type>(data, \'${f.element.name}\');""";
       } else {
         if (f.elementType.isDartCoreMap) {
           final mapValueType =
-              f.elementType.toString().split(', ')[1].replaceAll('>', '');
+              f.elementType.type.split(', ')[1].replaceAll('>', '');
           return """doc.${f.element.name} = Helper.valueMapFromKey<String, $mapValueType>(data, \'${f.element.name}\');""";
-        } else if (f.elementType.toString() == 'Timestamp') {
+        } else if (f.elementType.type == 'Timestamp') {
           return """
           if (data[\'${f.element.name}\'] is Map) {
             doc.${f.element.name} = Helper.timestampFromMap(data, \'${f.element.name}\');
           } else {
-            doc.${f.element.name} = Helper.valueFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');
+            doc.${f.element.name} = Helper.valueFromKey<${f.elementType.type}>(data, \'${f.element.name}\');
           }
           """;
         }
-        return """doc.${f.element.name} = Helper.valueFromKey<${f.elementType.toString()}>(data, \'${f.element.name}\');""";
+        return """doc.${f.element.name} = Helper.valueFromKey<${f.elementType.type}>(data, \'${f.element.name}\');""";
       }
     }
   }
@@ -174,7 +170,7 @@ class FieldValueGenerator extends Generator {
     if (f.elementType.isDartCoreList) {
       final local = '_${f.element.name}';
       final _type =
-          f.elementType.toString().replaceAll('List<', '').replaceAll('>', '');
+          f.elementType.type.replaceAll('List<', '').replaceAll('>', '');
       return """
       final $local = Helper.valueMapListFromKey<String, dynamic>(data, \'${f.element.name}\');
       if ($local != null) {
@@ -188,7 +184,7 @@ class FieldValueGenerator extends Generator {
       return """
       final $local = Helper.valueMapFromKey<String, dynamic>(data, \'${f.element.name}\');
       if ($local != null) {
-        doc.${f.element.name} = ${f.elementType.toString()}(values: $local);
+        doc.${f.element.name} = ${f.elementType.type}(values: $local);
       } else {
         doc.${f.element.name} = null;
       }
@@ -224,4 +220,10 @@ class _AnnotatedElement {
   final DartType elementType;
   final ConstantReader annotation;
   final Element element;
+}
+
+extension DartTypeExtension on DartType {
+  String get type {
+    return toString().replaceAll('*', '');
+  }
 }

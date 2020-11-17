@@ -21,7 +21,7 @@ extension RankingKeyExtension on RankingKey {
       case RankingKey.count:
         return 'count';
       default:
-        return toString();
+        return null;
     }
   }
 }

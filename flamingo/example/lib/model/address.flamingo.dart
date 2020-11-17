@@ -20,7 +20,7 @@ extension AddressKeyExtension on AddressKey {
       case AddressKey.country:
         return 'country';
       default:
-        return toString();
+        return null;
     }
   }
 }
