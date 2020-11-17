@@ -245,7 +245,7 @@ packages:
       path: "../../flamingo"
       relative: true
     source: path
-    version: "1.9.0"
+    version: "1.10.0-dev.1"
   flamingo_annotation:
     dependency: "direct main"
     description:
@@ -259,7 +259,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.7.0-dev.1"
+    version: "0.7.0-dev.2"
   flutter:
     dependency: "direct main"
     description: flutter
