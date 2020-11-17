@@ -26,7 +26,7 @@ extension CartKeyExtension on CartKey {
       case CartKey.itemAt:
         return 'itemAt';
       default:
-        return toString();
+        return null;
     }
   }
 }

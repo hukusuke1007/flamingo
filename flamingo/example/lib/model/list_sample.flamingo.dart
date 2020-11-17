@@ -33,7 +33,7 @@ extension ListSampleKeyExtension on ListSampleKey {
       case ListSampleKey.filesB:
         return 'filesB';
       default:
-        return toString();
+        return null;
     }
   }
 }

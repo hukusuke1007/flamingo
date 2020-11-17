@@ -44,7 +44,7 @@ class User extends Document<User> {
 
   void log() {
     print(
-        'User $id ${reference.path} $name $createdFieldValueKey $updatedFieldValueKey '
+        'User $modelName $id ${reference.path} $name $createdFieldValueKey $updatedFieldValueKey '
         '${createdAt?.toDate()} '
         '${updatedAt?.toDate()}');
   }

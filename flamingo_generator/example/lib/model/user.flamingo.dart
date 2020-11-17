@@ -59,7 +59,7 @@ extension UserKeyExtension on UserKey {
       case UserKey.item:
         return 'item';
       default:
-        return toString();
+        return null;
     }
   }
 }

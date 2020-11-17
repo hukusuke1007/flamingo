@@ -1,4 +1,7 @@
-# 0.6.0+1
+# 0.7.0
+Update Plugins and Modified type.
+
+## 0.6.0+1
 Updated CHANGELOG.md
 
 ## 0.6.0

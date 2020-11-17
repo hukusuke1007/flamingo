@@ -20,7 +20,7 @@ extension PointKeyExtension on PointKey {
       case PointKey.pointDouble:
         return 'pointDouble';
       default:
-        return toString();
+        return null;
     }
   }
 }

@@ -17,7 +17,7 @@ extension MedalKeyExtension on MedalKey {
       case MedalKey.name:
         return 'name';
       default:
-        return toString();
+        return null;
     }
   }
 }

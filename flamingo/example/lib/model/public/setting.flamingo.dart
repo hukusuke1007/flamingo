@@ -17,7 +17,7 @@ extension SettingKeyExtension on SettingKey {
       case SettingKey.isEnable:
         return 'isEnable';
       default:
-        return toString();
+        return null;
     }
   }
 }

@@ -27,7 +27,7 @@ extension UserKeyExtension on UserKey {
       case UserKey.setting:
         return 'setting';
       default:
-        return toString();
+        return null;
     }
   }
 }
