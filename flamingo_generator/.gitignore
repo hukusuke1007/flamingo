@@ -6,6 +6,6 @@
 .idea
 
 build/
-.pubspec.lock
+pubspec.lock
 .metadata
 flamingo_generator.iml
