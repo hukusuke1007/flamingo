@@ -1,4 +1,7 @@
-# 0.7.0
+# 0.7.0+1
+Modified example
+
+## 0.7.0
 Update Plugins and Modified type.
 
 ## 0.6.0+1

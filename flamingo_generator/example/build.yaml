@@ -4,5 +4,4 @@ targets:
       flamingo_generator|field_value_generator:
         generate_for:
           include:
-            - lib/model/*.dart
-            - lib/model/**/*.dart
+            - lib/*.dart
