@@ -1,5 +1,8 @@
-# 0.7.0+2
-Updated analysis_options.yaml
+# 0.8.0
+Updated flamingo_annotation.
+
+## 0.7.0+2
+Updated analysis_options.yaml.
 
 ## 0.7.0+1
 Modified example

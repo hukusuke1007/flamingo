@@ -1,4 +1,7 @@
-# 0.3.0
+# 0.4.0
+Updated pubspec.yaml and Removed files.
+
+## 0.3.0
 Modified parameter.
 
 ## 0.2.0
