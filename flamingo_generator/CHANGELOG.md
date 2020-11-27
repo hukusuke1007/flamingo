@@ -1,4 +1,7 @@
-# 0.7.0+1
+# 0.7.0+2
+Updated analysis_options.yaml
+
+## 0.7.0+1
 Modified example
 
 ## 0.7.0
