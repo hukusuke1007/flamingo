@@ -1,4 +1,7 @@
-# 1.11.0
+# 1.12.0
+Updated Plugins. Added getEmulatorSettings to use Firebase Emulator.
+
+## 1.11.0
 Updated Plugins.
 
 ## 1.10.0
