@@ -1,9 +1,13 @@
 import 'dart:async';
 
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:analyzer/dart/element/element.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:analyzer/dart/element/type.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:build/build.dart';
 import 'package:flamingo_annotation/flamingo_annotation.dart' as annotation;
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:source_gen/source_gen.dart';
 
 class FieldValueGenerator extends Generator {
@@ -35,9 +39,9 @@ class FieldValueGenerator extends Generator {
        ${class$.annotatedWith(hasStorageFieldValue).map((f) => """${f.element.name}, """).join()}
        ${class$.annotatedWith(hasSubCollectionValue).map((f) => """${f.element.name}, """).join()}
      }
-     
+
      extension ${enumName}Extension on $enumName {
-       String get value {
+       String? get value {
           switch (this) {
           ${class$.annotatedWith(hasFieldValue).map((f) => """
             case $enumName.${f.element.name}:
@@ -68,7 +72,7 @@ class FieldValueGenerator extends Generator {
           """).join()}
       return data;
     }
-    
+
     /// For load data
     void _\$fromData(${class$.name} doc, Map<String, dynamic> data) {
       ${class$.annotatedWith(hasFieldValue).map((f) => """${_fieldForLoad(f)}
@@ -208,10 +212,8 @@ extension _FieldGeneratorExtension on ClassElement {
   Iterable<_AnnotatedElement> annotatedWith(TypeChecker checker) {
     return fields.map((f) {
       final annotation = checker.firstAnnotationOf(f, throwOnUnresolved: true);
-      return (annotation != null)
-          ? _AnnotatedElement(f.type, ConstantReader(annotation), f)
-          : null;
-    }).where((e) => e != null);
+      return _AnnotatedElement(f.type, ConstantReader(annotation), f);
+    });
   }
 }
 
@@ -224,6 +226,6 @@ class _AnnotatedElement {
 
 extension DartTypeExtension on DartType {
   String get type {
-    return toString().replaceAll('*', '');
+    return toString().replaceAll('*', '').replaceAll('?', '');
   }
 }
