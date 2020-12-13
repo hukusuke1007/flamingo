@@ -23,7 +23,7 @@ class StorageField {
     this.isSetNull = true,
   });
   final bool isWriteNotNull;
-  final String folderName;
+  final String? folderName;
   final bool isSetNull;
 }
 
