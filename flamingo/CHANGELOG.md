@@ -1,4 +1,7 @@
-# 1.12.0
+# 1.13.0
+Added no limit feature in CollectionPaging and CollectionPagingListener.
+
+## 1.12.0
 Updated Plugins. Added getEmulatorSettings to use Firebase Emulator.
 
 ## 1.11.0
