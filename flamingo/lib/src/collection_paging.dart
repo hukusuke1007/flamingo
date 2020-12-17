@@ -6,7 +6,7 @@ import 'model/document.dart';
 class CollectionPaging<T extends Document<T>> {
   CollectionPaging({
     @required this.query,
-    @required this.limit,
+    this.limit,
     @required this.decode,
   });
 
@@ -34,7 +34,10 @@ class CollectionPaging<T extends Document<T>> {
     Source source = Source.serverAndCache,
     DocumentSnapshot startAfterDocument,
   }) async {
-    var dataSource = query.limit(limit);
+    var dataSource = query;
+    if (limit != null) {
+      dataSource = dataSource.limit(limit);
+    }
     if (startAfterDocument != null) {
       dataSource = dataSource.startAfterDocument(startAfterDocument);
     }

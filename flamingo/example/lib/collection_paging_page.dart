@@ -24,7 +24,7 @@ class _State extends State<CollectionPagingPage> {
     /// Using Collection
     collectionPaging = CollectionPaging<User>(
       query: User().collectionRef.orderBy('updatedAt', descending: true),
-      limit: 100,
+      // limit: 100,
       decode: (snap) => User(snapshot: snap),
     );
 
