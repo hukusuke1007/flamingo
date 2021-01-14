@@ -22,7 +22,7 @@ class User extends Public<User> {
 
   @override
   CollectionReference get collectionRootReference =>
-      super.collectionRootReference.document('v1').collection('users');
+      super.collectionRootReference.doc('v1').collection('users');
 
   @Field()
   String name;
