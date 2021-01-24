@@ -15,7 +15,7 @@ enum CartKey {
 }
 
 extension CartKeyExtension on CartKey {
-  String? get value {
+  String get value {
     switch (this) {
       case CartKey.itemA:
         return 'itemA';
@@ -26,7 +26,7 @@ extension CartKeyExtension on CartKey {
       case CartKey.itemAt:
         return 'itemAt';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }

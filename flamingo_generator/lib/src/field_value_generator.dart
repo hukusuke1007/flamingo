@@ -41,7 +41,7 @@ class FieldValueGenerator extends Generator {
      }
 
      extension ${enumName}Extension on $enumName {
-       String? get value {
+       String get value {
           switch (this) {
           ${class$.annotatedWith(hasFieldValue).map((f) => """
             case $enumName.${f.element.name}:
@@ -56,7 +56,7 @@ class FieldValueGenerator extends Generator {
             case $enumName.${f.element.name}:
               return \'${f.element.name}\';
           """).join()}default:
-              return null;
+              throw Exception('Invalid data key. key: $this');
           }
        }
      }

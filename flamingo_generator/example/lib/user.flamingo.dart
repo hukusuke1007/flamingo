@@ -26,7 +26,7 @@ enum UserKey {
 }
 
 extension UserKeyExtension on UserKey {
-  String? get value {
+  String get value {
     switch (this) {
       case UserKey.name:
         return 'name';
@@ -59,7 +59,7 @@ extension UserKeyExtension on UserKey {
       case UserKey.item:
         return 'item';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }

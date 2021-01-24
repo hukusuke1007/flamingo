@@ -12,12 +12,12 @@ enum ItemKey {
 }
 
 extension ItemKeyExtension on ItemKey {
-  String? get value {
+  String get value {
     switch (this) {
       case ItemKey.name:
         return 'name';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }
