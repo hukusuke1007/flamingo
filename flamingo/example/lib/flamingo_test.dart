@@ -298,7 +298,7 @@ class FlamingoTest {
     // create
     {
       final batch = Batch()
-        ..save(setting, reference: userA.setting.ref.document(setting.id));
+        ..save(setting, reference: userA.setting.ref.doc(setting.id));
       assert(batch.isAddedDocument == true);
       assert(batch.addedDocumentCount == 1);
       await batch.commit();
@@ -313,7 +313,7 @@ class FlamingoTest {
     {
       setting.isEnable = false;
       final batch = Batch()
-        ..update(setting, reference: userA.setting.ref.document(setting.id));
+        ..update(setting, reference: userA.setting.ref.doc(setting.id));
       await batch.commit();
 
       final _setting = await documentAccessor.load<Setting>(
@@ -325,7 +325,7 @@ class FlamingoTest {
     // delete
     {
       final batch = Batch()
-        ..delete(setting, reference: userA.setting.ref.document(setting.id));
+        ..delete(setting, reference: userA.setting.ref.doc(setting.id));
       await batch.commit();
 
       final _setting = await documentAccessor.load<Setting>(
