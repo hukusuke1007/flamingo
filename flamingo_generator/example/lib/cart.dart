@@ -9,16 +9,16 @@ class Cart extends Model {
   }) : super(values: values);
 
   @Field()
-  String itemA;
+  String? itemA;
 
   @Field()
-  int itemB;
+  int? itemB;
 
   @Field()
-  double itemC;
+  double? itemC;
 
   @Field()
-  Timestamp itemAt;
+  Timestamp? itemAt;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

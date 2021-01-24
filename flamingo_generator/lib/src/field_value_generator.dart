@@ -210,10 +210,14 @@ class FieldValueGenerator extends Generator {
 
 extension _FieldGeneratorExtension on ClassElement {
   Iterable<_AnnotatedElement> annotatedWith(TypeChecker checker) {
-    return fields.map((f) {
+    final result = <_AnnotatedElement>[];
+    for (final f in fields) {
       final annotation = checker.firstAnnotationOf(f, throwOnUnresolved: true);
-      return _AnnotatedElement(f.type, ConstantReader(annotation), f);
-    });
+      if (annotation != null) {
+        result.add(_AnnotatedElement(f.type, ConstantReader(annotation), f));
+      }
+    }
+    return result;
   }
 }
 

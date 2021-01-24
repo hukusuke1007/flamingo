@@ -11,7 +11,7 @@ class Item extends Document<Item> {
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  String name;
+  String? name;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

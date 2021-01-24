@@ -15,7 +15,7 @@ enum CartKey {
 }
 
 extension CartKeyExtension on CartKey {
-  String get value {
+  String? get value {
     switch (this) {
       case CartKey.itemA:
         return 'itemA';

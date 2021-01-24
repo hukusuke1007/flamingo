@@ -16,52 +16,52 @@ class User extends Document<User> {
   }
 
   @Field()
-  String name;
+  String? name;
 
   @Field(isWriteNotNull: false)
-  String profile;
+  String? profile;
 
   @Field()
-  List<String> strList;
+  List<String>? strList;
 
   @Field()
-  Map<String, int> intMap;
+  Map<String, int>? intMap;
 
   @Field()
-  List<Map<String, int>> listIntMap;
+  List<Map<String, int>>? listIntMap;
 
   @Field()
-  Increment<int> point = Increment<int>();
+  Increment<int>? point = Increment<int>();
 
   @Field()
-  Increment<double> score = Increment<double>();
+  Increment<double>? score = Increment<double>();
 
   @ModelField()
-  Cart cartA;
+  Cart? cartA;
 
   @ModelField(isWriteNotNull: false)
-  Cart cartB;
+  Cart? cartB;
 
   @ModelField()
-  List<Cart> carts;
+  List<Cart>? carts;
 
   @StorageField()
-  StorageFile fileA;
+  StorageFile? fileA;
 
   @StorageField(isWriteNotNull: false, folderName: 'image')
-  StorageFile fileB;
+  StorageFile? fileB;
 
   @StorageField()
-  List<StorageFile> filesA;
+  List<StorageFile>? filesA;
 
   @StorageField(isWriteNotNull: false)
-  List<StorageFile> filesB;
+  List<StorageFile>? filesB;
 
   @SubCollection()
-  Collection<Item> item;
+  Collection<Item>? item;
 
-  String dummyName;
-  int dummyAge;
+  String? dummyName;
+  int? dummyAge;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

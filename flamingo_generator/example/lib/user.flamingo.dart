@@ -26,7 +26,7 @@ enum UserKey {
 }
 
 extension UserKeyExtension on UserKey {
-  String get value {
+  String? get value {
     switch (this) {
       case UserKey.name:
         return 'name';
