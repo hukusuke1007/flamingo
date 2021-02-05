@@ -1,4 +1,7 @@
-# 1.14.0
+# 1.14.1
+Added getDownloadUrl and getDownloadUrlWithPath
+
+## 1.14.0
 Updated Plugins.
 
 ## 1.13.0

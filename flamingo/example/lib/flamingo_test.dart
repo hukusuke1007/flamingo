@@ -451,6 +451,19 @@ class FlamingoTest {
     assertCreateDocument(post, _post);
     assertStorageFile(post.file, _post.file);
     _post.log();
+
+    print('  ----getDownloadUrl');
+    {
+      final downloadUrl = await storage.getDownloadUrl(path, post.file);
+      print('downloadUrl $downloadUrl');
+      assert(downloadUrl == post.file.url);
+    }
+    {
+      final downloadUrl = await storage.getDownloadUrlWithPath(post.file.path);
+      print('downloadUrl ${post.file.path}, $downloadUrl');
+      assert(downloadUrl == post.file.url);
+    }
+
     // dispose for uploading status
     storage.dispose();
   }
