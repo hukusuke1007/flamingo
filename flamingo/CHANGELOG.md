@@ -1,4 +1,10 @@
-# 1.14.1
+# 1.15.1
+Revert 1.15.0
+
+## 1.15.0
+BREAKING: Changed Storage Parameter. File => Uint8List.
+
+## 1.14.1
 Added getDownloadUrl and getDownloadUrlWithPath
 
 ## 1.14.0
