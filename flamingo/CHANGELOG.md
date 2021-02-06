@@ -1,4 +1,7 @@
-# 1.15.1
+# 1.15.2
+BREAKING: Added ref, getData, getDataWithPath, deleteWithPath in Storage. Changed Storage Parameter. getDownloadUrl func and delete func. Changed StorageFile immutable.
+
+## 1.15.1
 Revert 1.15.0
 
 ## 1.15.0
