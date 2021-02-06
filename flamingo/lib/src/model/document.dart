@@ -86,8 +86,11 @@ class Document<T> extends Base implements DocumentType {
   final Map<String, dynamic> values;
 
   /// Field
-  Timestamp createdAt;
-  Timestamp updatedAt;
+  Timestamp _createdAt;
+  Timestamp get createdAt => _createdAt;
+
+  Timestamp _updatedAt;
+  Timestamp get updatedAt => _updatedAt;
 
   String _id;
   String get id => _id;
@@ -136,18 +139,30 @@ class Document<T> extends Base implements DocumentType {
     }
   }
 
+  void setAt({
+    Timestamp createdAt,
+    Timestamp updatedAt,
+  }) {
+    if (createdAt != null) {
+      _createdAt = createdAt;
+    }
+    if (updatedAt != null) {
+      _updatedAt = updatedAt;
+    }
+  }
+
   /// Private method
   void _fromAt(Map<String, dynamic> data) {
     if (data[createdFieldValueKey] is Map) {
-      createdAt = timestampFromMap(data, createdFieldValueKey);
+      _createdAt = timestampFromMap(data, createdFieldValueKey);
     } else if (data[createdFieldValueKey] is Timestamp) {
-      createdAt = data[createdFieldValueKey] as Timestamp;
+      _createdAt = data[createdFieldValueKey] as Timestamp;
     }
 
     if (data[updatedFieldValueKey] is Map) {
-      updatedAt = timestampFromMap(data, updatedFieldValueKey);
+      _updatedAt = timestampFromMap(data, updatedFieldValueKey);
     } else if (data[updatedFieldValueKey] is Timestamp) {
-      updatedAt = data[updatedFieldValueKey] as Timestamp;
+      _updatedAt = data[updatedFieldValueKey] as Timestamp;
     }
   }
 }

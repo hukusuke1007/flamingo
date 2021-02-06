@@ -435,14 +435,15 @@ class FlamingoTest {
 
     // save file metadata into firestore
     final path = '${post.documentPath}/${PostKey.file.value}';
-    post.file = await storage
-        .save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'});
-    post.file.additionalData = <String, dynamic>{
+    post.file =
+        await storage.save(path, file, mimeType: mimeTypePng, metadata: {
+      'newPost': 'true'
+    }, additionalData: <String, dynamic>{
       'key0': 'key',
       'key1': 10,
       'key2': 0.123,
       'key3': true,
-    };
+    });
     await documentAccessor.save(post);
     post.log();
 
@@ -451,6 +452,31 @@ class FlamingoTest {
     assertCreateDocument(post, _post);
     assertStorageFile(post.file, _post.file);
     _post.log();
+
+    print('  ----getDownloadUrl');
+    {
+      final downloadUrl = await storage.getDownloadUrl(post.file);
+      print('getDownloadUrl $downloadUrl');
+      assert(downloadUrl == post.file.url);
+    }
+    {
+      final downloadUrl = await storage.getDownloadUrlWithPath(post.file.path);
+      print('getDownloadUrlWithPath ${post.file.path}, $downloadUrl');
+      assert(downloadUrl == post.file.url);
+    }
+    assert(storage.ref(post.file).fullPath == post.file.path);
+
+    print('  ----getData');
+    {
+      final data = await storage.getData(post.file);
+      print('getData $data');
+      assert(data != null);
+    }
+    {
+      final data = await storage.getDataWithPath(post.file.path);
+      print('getDataWithPath $data');
+      assert(data != null);
+    }
     // dispose for uploading status
     storage.dispose();
   }
@@ -469,7 +495,7 @@ class FlamingoTest {
     assertCreateDocument(post, _post);
     assertStorageFile(post.file, _post.file);
 
-    await storage.delete(path, post.file);
+    await storage.delete(post.file);
     await documentAccessor.update(post);
 
     print('  ----get');
@@ -717,23 +743,41 @@ class FlamingoTest {
         true,
         false,
         true,
-      ]
-      ..filesA = [
-        StorageFile(
-            name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
-        StorageFile(
-            name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
-        StorageFile(
-            name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
-      ]
-      ..filesB = [
-        StorageFile(
-            name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
-        StorageFile(
-            name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
-        StorageFile(
-            name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
       ];
+    sample1.filesA = [
+      StorageFile(
+          name: 'name1',
+          path: '${sample1.documentPath}/name1',
+          url: 'https://sample1.jpg',
+          mimeType: mimeTypePng),
+      StorageFile(
+          name: 'name2',
+          path: '${sample1.documentPath}/name2',
+          url: 'https://sample2.jpg',
+          mimeType: mimeTypePng),
+      StorageFile(
+          name: 'name3',
+          path: '${sample1.documentPath}/name3',
+          url: 'https://sample3.jpg',
+          mimeType: mimeTypePng),
+    ];
+    sample1.filesB = [
+      StorageFile(
+          name: 'name1',
+          path: '${sample1.documentPath}/name4',
+          url: 'https://sample1.jpg',
+          mimeType: mimeTypePng),
+      StorageFile(
+          name: 'name2',
+          path: '${sample1.documentPath}/name2',
+          url: 'https://sample2.jpg',
+          mimeType: mimeTypePng),
+      StorageFile(
+          name: 'name3',
+          path: '${sample1.documentPath}/name3',
+          url: 'https://sample3.jpg',
+          mimeType: mimeTypePng),
+    ];
     await documentAccessor.save(sample1);
     sample1.log();
 
@@ -769,7 +813,7 @@ class FlamingoTest {
       ..boolList = [];
 
     // ignore: avoid_function_literals_in_foreach_calls
-    sample1.filesA.forEach((d) => d.isDeleted = true);
+    sample1.filesA.forEach((d) => d.deleted());
     sample1.filesB = [];
     await documentAccessor.save(sample1);
 
@@ -787,23 +831,41 @@ class FlamingoTest {
     }
 
     {
-      final sample1 = ListSample()
-        ..filesA = [
-          StorageFile(
-              name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
-          StorageFile(
-              name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
-          StorageFile(
-              name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
-        ]
-        ..filesB = [
-          StorageFile(
-              name: 'name1', url: 'https://sample1.jpg', mimeType: mimeTypePng),
-          StorageFile(
-              name: 'name2', url: 'https://sample2.jpg', mimeType: mimeTypePng),
-          StorageFile(
-              name: 'name3', url: 'https://sample3.jpg', mimeType: mimeTypePng),
-        ];
+      final sample1 = ListSample();
+      sample1.filesA = [
+        StorageFile(
+            name: 'name1',
+            path: '${sample1.documentPath}/name1',
+            url: 'https://sample1.jpg',
+            mimeType: mimeTypePng),
+        StorageFile(
+            name: 'name2',
+            path: '${sample1.documentPath}/name2',
+            url: 'https://sample2.jpg',
+            mimeType: mimeTypePng),
+        StorageFile(
+            name: 'name3',
+            path: '${sample1.documentPath}/name3',
+            url: 'https://sample3.jpg',
+            mimeType: mimeTypePng),
+      ];
+      sample1.filesB = [
+        StorageFile(
+            name: 'name1',
+            path: '${sample1.documentPath}/name1',
+            url: 'https://sample1.jpg',
+            mimeType: mimeTypePng),
+        StorageFile(
+            name: 'name2',
+            path: '${sample1.documentPath}/name2',
+            url: 'https://sample2.jpg',
+            mimeType: mimeTypePng),
+        StorageFile(
+            name: 'name3',
+            path: '${sample1.documentPath}/name3',
+            url: 'https://sample3.jpg',
+            mimeType: mimeTypePng),
+      ];
       await documentAccessor.save(sample1);
       {
         final _sample1 =
@@ -858,7 +920,7 @@ class FlamingoTest {
 
     {
       print('  ----get delete file');
-      await storage.delete(path, item.file);
+      await storage.deleteWithPath(item.file.path);
       await documentAccessor.update(item);
       final _item =
           await documentAccessor.load<ModelSample>(ModelSample(id: item.id));

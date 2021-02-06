@@ -1,4 +1,19 @@
-# 1.14.0
+# 1.15.3
+Refactored model.
+
+## 1.15.2
+BREAKING: Added ref, getData, getDataWithPath, deleteWithPath in Storage. Changed Storage Parameter. getDownloadUrl func and delete func. Changed StorageFile immutable.
+
+## 1.15.1
+Revert 1.15.0
+
+## 1.15.0
+BREAKING: Changed Storage Parameter. File => Uint8List.
+
+## 1.14.1
+Added getDownloadUrl and getDownloadUrlWithPath
+
+## 1.14.0
 Updated Plugins.
 
 ## 1.13.0

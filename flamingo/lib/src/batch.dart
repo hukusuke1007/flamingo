@@ -54,11 +54,9 @@ class Batch implements BatchRepository {
     final nowAt = Timestamp.now();
     data[document.createdFieldValueKey] = nowAt;
     data[document.updatedFieldValueKey] = nowAt;
-    document
-      ..createdAt = nowAt
-      ..updatedAt = nowAt;
-    _writeBatch.set(reference != null ? reference : document.reference, data,
-        SetOptions(merge: true));
+    document.setAt(createdAt: nowAt, updatedAt: nowAt);
+    _writeBatch.set(
+        reference ?? document.reference, data, SetOptions(merge: true));
     _batchDocument.add(_BatchDocument(document, ExecuteType.create));
   }
 
@@ -70,9 +68,8 @@ class Batch implements BatchRepository {
     final data = document.toData();
     final nowAt = Timestamp.now();
     data[document.updatedFieldValueKey] = nowAt;
-    document.updatedAt = nowAt;
-    _writeBatch.update(
-        reference != null ? reference : document.reference, data);
+    document.setAt(updatedAt: nowAt);
+    _writeBatch.update(reference ?? document.reference, data);
     _batchDocument.add(_BatchDocument(document, ExecuteType.update));
   }
 
@@ -81,7 +78,7 @@ class Batch implements BatchRepository {
     Document document, {
     DocumentReference reference,
   }) {
-    _writeBatch.delete(reference != null ? reference : document.reference);
+    _writeBatch.delete(reference ?? document.reference);
     _batchDocument.add(_BatchDocument(document, ExecuteType.delete));
   }
 

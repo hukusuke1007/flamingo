@@ -666,8 +666,7 @@ Delete storage file.
 
 ```dart
 // delete file in firebase storage and delete file metadata in firestore
-final path = '${post.documentPath}/${PostKey.file.value}';
-await storage.delete(path, post.file);
+await storage.delete(post.file);
 await documentAccessor.update(post);
 ```
 

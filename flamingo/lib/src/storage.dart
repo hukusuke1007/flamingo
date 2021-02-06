@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../flamingo.dart';
@@ -8,6 +10,7 @@ import '../flamingo.dart';
 abstract class StorageRepository {
   FirebaseStorage get storage;
   Stream<TaskSnapshot> get uploader;
+  Reference ref(StorageFile storageFile);
   Future<StorageFile> save(
     String folderPath,
     File data, {
@@ -16,7 +19,6 @@ abstract class StorageRepository {
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   });
-  Future<void> delete(String folderPath, StorageFile storageFile);
   Future<StorageFile> saveWithDoc(
     DocumentReference reference,
     String folderName,
@@ -26,6 +28,12 @@ abstract class StorageRepository {
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   });
+  Future<String> getDownloadUrl(StorageFile storageFile);
+  Future<String> getDownloadUrlWithPath(String filePath);
+  Future<Uint8List> getData(StorageFile storageFile, [int maxSize]);
+  Future<Uint8List> getDataWithPath(String filePath, [int maxSize]);
+  Future<void> delete(StorageFile storageFile);
+  Future<void> deleteWithPath(String filePath);
   Future<void> deleteWithDoc(
     DocumentReference reference,
     String folderName,
@@ -37,9 +45,14 @@ abstract class StorageRepository {
 }
 
 class Storage implements StorageRepository {
+  Storage({
+    FirebaseStorage storage,
+  }) {
+    _storage = storage ?? storageInstance;
+  }
   static String fileName({int length}) => Helper.randomString(length: length);
 
-  final _storage = storageInstance;
+  FirebaseStorage _storage;
   PublishSubject<TaskSnapshot> _uploader;
 
   @override
@@ -47,6 +60,10 @@ class Storage implements StorageRepository {
 
   @override
   Stream<TaskSnapshot> get uploader => _uploader.stream;
+
+  @override
+  Reference ref(StorageFile storageFile) =>
+      storage.ref().child(storageFile.path);
 
   @override
   Future<StorageFile> save(
@@ -57,12 +74,18 @@ class Storage implements StorageRepository {
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {
-    final refFilename = filename != null ? filename : Storage.fileName();
-    final refMimeType = mimeType != null ? mimeType : '';
+    final refFilename = filename ?? Storage.fileName();
+    final refMimeType = mimeType ?? '';
     final path = '$folderPath/$refFilename';
     final ref = storage.ref().child(path);
-    final uploadTask = ref.putFile(data,
-        SettableMetadata(contentType: refMimeType, customMetadata: metadata));
+    final settableMetadata =
+        SettableMetadata(contentType: refMimeType, customMetadata: metadata);
+    UploadTask uploadTask;
+    if (kIsWeb) {
+      uploadTask = ref.putData(data.readAsBytesSync(), settableMetadata);
+    } else {
+      uploadTask = ref.putFile(data, settableMetadata);
+    }
     if (_uploader != null) {
       uploadTask.snapshotEvents.listen(_uploader.add);
     }
@@ -79,18 +102,6 @@ class Storage implements StorageRepository {
   }
 
   @override
-  Future<void> delete(String folderPath, StorageFile storageFile) async {
-    if (storageFile == null) {
-      print('StorageFile is null');
-      return;
-    }
-    final path = '$folderPath/${storageFile.name}';
-    final ref = storage.ref().child(path);
-    await ref.delete();
-    storageFile.isDeleted = true;
-  }
-
-  @override
   Future<StorageFile> saveWithDoc(
     DocumentReference reference,
     String folderName,
@@ -101,14 +112,56 @@ class Storage implements StorageRepository {
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {
     final folderPath = '${reference.path}/$folderName';
-    final storageFile = await save(folderPath, data,
-        filename: filename, mimeType: mimeType, metadata: metadata);
-    storageFile.additionalData = additionalData;
+    final storageFile = await save(
+      folderPath,
+      data,
+      filename: filename,
+      mimeType: mimeType,
+      metadata: metadata,
+      additionalData: additionalData,
+    );
     final documentAccessor = DocumentAccessor();
     final values = <String, dynamic>{};
     values['$folderName'] = storageFile.toJson();
     await documentAccessor.saveRaw(values, reference);
     return storageFile;
+  }
+
+  @override
+  Future<String> getDownloadUrl(StorageFile storageFile) async {
+    final ref = storage.ref().child(storageFile.path);
+    return ref.getDownloadURL();
+  }
+
+  @override
+  Future<String> getDownloadUrlWithPath(String filePath) async {
+    final ref = storage.ref().child(filePath);
+    return ref.getDownloadURL();
+  }
+
+  @override
+  Future<Uint8List> getData(StorageFile storageFile, [int maxSize]) async {
+    final ref = storage.ref().child(storageFile.path);
+    return ref.getData(maxSize);
+  }
+
+  @override
+  Future<Uint8List> getDataWithPath(String filePath, [int maxSize]) async {
+    final ref = storage.ref().child(filePath);
+    return ref.getData(maxSize);
+  }
+
+  @override
+  Future<void> delete(StorageFile storageFile) async {
+    final ref = storage.ref().child(storageFile.path);
+    await ref.delete();
+    storageFile.deleted();
+  }
+
+  @override
+  Future<void> deleteWithPath(String filePath) async {
+    final ref = storage.ref().child(filePath);
+    await ref.delete();
   }
 
   @override
@@ -118,8 +171,7 @@ class Storage implements StorageRepository {
     StorageFile storageFile, {
     bool isNotNull = true,
   }) async {
-    final folderPath = '${reference.path}/$folderName';
-    await delete(folderPath, storageFile);
+    await delete(storageFile);
     if (storageFile.isDeleted) {
       final values = <String, dynamic>{};
       if (isNotNull) {
