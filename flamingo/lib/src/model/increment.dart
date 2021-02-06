@@ -7,8 +7,8 @@ class Increment<T extends num> {
     this.incrementValue,
   });
   final T value;
+
   T incrementValue;
-  // String get fieldName => _fieldName;
   bool isClearValue = false;
 
   Map<String, dynamic> toData(
@@ -19,9 +19,6 @@ class Increment<T extends num> {
       <String, dynamic>{
         fieldName: isClear != true ? FieldValue.increment(value) : value,
       };
-
-  // // ignore: use_setters_to_change_properties
-  // void setFieldName(String key) => _fieldName = key;
 
   Increment<T> onRefresh() {
     Increment<T> result;

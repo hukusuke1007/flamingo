@@ -22,7 +22,7 @@ class DistributedCounter implements DistributedCounterRepository {
   @override
   Future<int> load(Counter counter) async {
     final count = await _load(counter.parentRef, counter.collectionName);
-    counter.count = count;
+    counter.setCount(count);
     return count;
   }
 

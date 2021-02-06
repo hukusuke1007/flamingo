@@ -1,4 +1,7 @@
-# 1.15.2
+# 1.15.3
+Refactored model.
+
+## 1.15.2
 BREAKING: Added ref, getData, getDataWithPath, deleteWithPath in Storage. Changed Storage Parameter. getDownloadUrl func and delete func. Changed StorageFile immutable.
 
 ## 1.15.1
