@@ -78,11 +78,10 @@ class Storage implements StorageRepository {
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {
     final refFilename = filename ?? Storage.fileName();
-    final refMimeType = mimeType;
     final path = '$folderPath/$refFilename';
     final ref = storage.ref().child(path);
     final settableMetadata =
-        SettableMetadata(contentType: refMimeType, customMetadata: metadata);
+        SettableMetadata(contentType: mimeType, customMetadata: metadata);
     UploadTask uploadTask;
     if (kIsWeb) {
       uploadTask = ref.putData(data.readAsBytesSync(), settableMetadata);
@@ -98,7 +97,7 @@ class Storage implements StorageRepository {
       name: refFilename,
       url: downloadUrl,
       path: path,
-      mimeType: refMimeType,
+      mimeType: mimeType,
       metadata: metadata,
       additionalData: additionalData,
     );
