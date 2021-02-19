@@ -78,7 +78,7 @@ class Storage implements StorageRepository {
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   }) async {
     final refFilename = filename ?? Storage.fileName();
-    final refMimeType = mimeType ?? '';
+    final refMimeType = mimeType;
     final path = '$folderPath/$refFilename';
     final ref = storage.ref().child(path);
     final settableMetadata =
