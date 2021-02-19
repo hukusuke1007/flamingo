@@ -20,7 +20,7 @@ extension PointKeyExtension on PointKey {
       case PointKey.pointDouble:
         return 'pointDouble';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

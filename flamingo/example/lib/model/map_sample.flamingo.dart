@@ -29,7 +29,7 @@ extension MapSampleKeyExtension on MapSampleKey {
       case MapSampleKey.listStrMap:
         return 'listStrMap';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

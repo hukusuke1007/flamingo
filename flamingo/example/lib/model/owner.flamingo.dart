@@ -23,7 +23,7 @@ extension OwnerKeyExtension on OwnerKey {
       case OwnerKey.medals:
         return 'medals';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

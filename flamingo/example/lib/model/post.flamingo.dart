@@ -20,7 +20,7 @@ extension PostKeyExtension on PostKey {
       case PostKey.files:
         return 'files';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

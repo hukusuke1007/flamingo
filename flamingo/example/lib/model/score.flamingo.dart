@@ -21,7 +21,7 @@ extension ScoreKeyExtension on ScoreKey {
       case ScoreKey.counter:
         return 'counter';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

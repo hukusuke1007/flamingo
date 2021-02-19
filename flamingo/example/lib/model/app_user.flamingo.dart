@@ -38,7 +38,7 @@ extension AppUserKeyExtension on AppUserKey {
       case AppUserKey.newMessagesCount:
         return 'newMessagesCount';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

@@ -17,7 +17,7 @@ extension SettingKeyExtension on SettingKey {
       case SettingKey.isEnable:
         return 'isEnable';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

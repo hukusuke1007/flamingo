@@ -30,7 +30,7 @@ extension ModelSampleKeyExtension on ModelSampleKey {
       case ModelSampleKey.file:
         return 'file';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

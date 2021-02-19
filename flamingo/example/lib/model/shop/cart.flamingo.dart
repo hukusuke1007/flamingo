@@ -20,7 +20,7 @@ extension CartKeyExtension on CartKey {
       case CartKey.collectionRef:
         return 'collectionRef';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

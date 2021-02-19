@@ -17,7 +17,7 @@ extension PublicKeyExtension on PublicKey {
       case PublicKey.domain:
         return 'domain';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

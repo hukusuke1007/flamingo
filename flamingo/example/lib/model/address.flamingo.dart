@@ -20,7 +20,7 @@ extension AddressKeyExtension on AddressKey {
       case AddressKey.country:
         return 'country';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }
