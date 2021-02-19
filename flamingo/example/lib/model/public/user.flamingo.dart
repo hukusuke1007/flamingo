@@ -21,7 +21,7 @@ extension UserKeyExtension on UserKey {
       case UserKey.setting:
         return 'setting';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }

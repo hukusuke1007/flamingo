@@ -5,28 +5,28 @@ part 'list_sample.flamingo.dart';
 
 class ListSample extends Document<ListSample> {
   ListSample({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  List<String> strList;
+  List<String>? strList;
 
   @Field()
-  List<int> intList;
+  List<int>? intList;
 
   @Field()
-  List<double> doubleList;
+  List<double>? doubleList;
 
   @Field()
-  List<bool> boolList;
+  List<bool>? boolList;
 
   @StorageField(isWriteNotNull: false)
-  List<StorageFile> filesA;
+  List<StorageFile>? filesA;
 
   @StorageField()
-  List<StorageFile> filesB;
+  List<StorageFile>? filesB;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

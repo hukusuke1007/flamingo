@@ -20,7 +20,7 @@ extension CountKeyExtension on CountKey {
       case CountKey.count:
         return 'count';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }

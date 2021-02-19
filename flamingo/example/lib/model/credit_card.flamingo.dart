@@ -20,7 +20,7 @@ extension CreditCardKeyExtension on CreditCardKey {
       case CreditCardKey.score:
         return 'score';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }

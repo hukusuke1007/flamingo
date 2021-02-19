@@ -21,7 +21,7 @@ extension RankingKeyExtension on RankingKey {
       case RankingKey.count:
         return 'count';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }

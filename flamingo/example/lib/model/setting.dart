@@ -5,10 +5,10 @@ part 'setting.flamingo.dart';
 
 class Setting extends Document<Setting> {
   Setting({
-    String id,
-    DocumentSnapshot documentSnapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    String? id,
+    DocumentSnapshot? documentSnapshot,
+    Map<String, dynamic>? values,
+    CollectionReference? collectionRef,
   }) : super(
             id: id,
             snapshot: documentSnapshot,
@@ -16,7 +16,7 @@ class Setting extends Document<Setting> {
             collectionRef: collectionRef);
 
   @Field()
-  bool isEnable;
+  bool? isEnable;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

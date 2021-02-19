@@ -7,14 +7,14 @@ class Address extends Model {
   Address({
     this.postCode,
     this.country,
-    Map<String, dynamic> values,
+    Map<String, dynamic>? values,
   }) : super(values: values);
 
   @Field()
-  String postCode;
+  String? postCode;
 
   @Field()
-  String country;
+  String? country;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

@@ -23,7 +23,7 @@ extension ShopKeyExtension on ShopKey {
       case ShopKey.carts:
         return 'carts';
       default:
-        return null;
+        throw Exception('Invalid data key. key: FieldValueGenerator');
     }
   }
 }

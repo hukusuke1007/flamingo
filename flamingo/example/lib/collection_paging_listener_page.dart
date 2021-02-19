@@ -14,7 +14,7 @@ class _State extends State<CollectionPagingListenerPage> {
   final ScrollController scrollController = ScrollController();
   final RefreshController refreshController = RefreshController();
 
-  CollectionPagingListener<User> collectionPagingListener;
+  late CollectionPagingListener<User> collectionPagingListener;
 
   List<User> items = [];
 
@@ -114,7 +114,7 @@ class _State extends State<CollectionPagingListenerPage> {
                     maxLines: 1,
                   ),
                   subtitle: Text(
-                    '${index + 1} ${data.name} ${data.updatedAt.toDate()}',
+                    '${index + 1} ${data.name} ${data.updatedAt?.toDate()}',
                     maxLines: 1,
                   ),
                   onTap: () async {

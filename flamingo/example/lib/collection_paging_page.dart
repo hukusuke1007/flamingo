@@ -13,7 +13,7 @@ class _State extends State<CollectionPagingPage> {
   final ScrollController scrollController = ScrollController();
   final RefreshController refreshController = RefreshController();
 
-  CollectionPaging<User> collectionPaging;
+  late CollectionPaging<User> collectionPaging;
 
   List<User> items = [];
 
@@ -115,7 +115,7 @@ class _State extends State<CollectionPagingPage> {
                     maxLines: 1,
                   ),
                   subtitle: Text(
-                    '${index + 1} ${data.name} ${data.createdAt.toDate()}',
+                    '${index + 1} ${data.name} ${data.createdAt?.toDate()}',
                     maxLines: 1,
                   ),
                 );

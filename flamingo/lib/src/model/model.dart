@@ -3,11 +3,11 @@ import '../base.dart';
 class Model extends Base {
   Model({this.values}) {
     if (values != null) {
-      fromData(values);
+      fromData(values!);
     }
   }
 
-  final Map<String, dynamic> values;
+  final Map<String, dynamic>? values;
 
   /// Data for save
   Map<String, dynamic> toData() => <String, dynamic>{};

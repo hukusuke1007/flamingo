@@ -5,25 +5,26 @@ part 'app_user.flamingo.dart';
 
 class AppUser extends Document<AppUser> {
   @Field()
-  String name;
+  String? name;
   @Field()
-  String username;
+  String? username;
   @Field()
-  String firstName;
+  String? firstName;
   @Field()
-  String lastName;
+  String? lastName;
   @Field()
-  String email;
+  String? email;
   @Field()
-  String phoneNumber;
+  String? phoneNumber;
   @Field()
-  String photoUrl;
+  String? photoUrl;
 
   @Field()
   Increment<int> newMessagesCount = Increment<int>();
   // @SubCollection()
   // Collection<Token> tokens;
-  AppUser({String id, DocumentSnapshot snapshot, Map<String, dynamic> values})
+  AppUser(
+      {String? id, DocumentSnapshot? snapshot, Map<String, dynamic>? values})
       : super(
             id: id,
             snapshot: snapshot,

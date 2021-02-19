@@ -6,10 +6,10 @@ part 'user.flamingo.dart';
 
 class User extends Document<User> {
   User({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference? collectionRef,
   }) : super(
             id: id,
             snapshot: snapshot,
@@ -19,16 +19,16 @@ class User extends Document<User> {
   }
 
   @Field()
-  String name;
+  String? name;
 
   @Field()
-  Timestamp editAt;
+  Timestamp? editAt;
 
   @Field()
-  Timestamp clearAt;
+  Timestamp? clearAt;
 
   @SubCollection()
-  Collection<Setting> setting;
+  late Collection<Setting> setting;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

@@ -30,8 +30,8 @@ abstract class StorageRepository {
   });
   Future<String> getDownloadUrl(StorageFile storageFile);
   Future<String> getDownloadUrlWithPath(String filePath);
-  Future<Uint8List> getData(StorageFile storageFile, [int maxSize]);
-  Future<Uint8List> getDataWithPath(String filePath, [int maxSize]);
+  Future<Uint8List?> getData(StorageFile storageFile, [int maxSize]);
+  Future<Uint8List?> getDataWithPath(String filePath, [int maxSize]);
   Future<void> delete(StorageFile storageFile);
   Future<void> deleteWithPath(String filePath);
   Future<void> deleteWithDoc(
@@ -46,20 +46,23 @@ abstract class StorageRepository {
 
 class Storage implements StorageRepository {
   Storage({
-    FirebaseStorage storage,
+    FirebaseStorage? storage,
   }) {
     _storage = storage ?? storageInstance;
   }
-  static String fileName({int length}) => Helper.randomString(length: length);
+  static String fileName({int? length}) => Helper.randomString(length: length);
 
-  FirebaseStorage _storage;
-  PublishSubject<TaskSnapshot> _uploader;
+  late FirebaseStorage _storage;
+  PublishSubject<TaskSnapshot>? _uploader;
 
   @override
   FirebaseStorage get storage => _storage;
 
   @override
-  Stream<TaskSnapshot> get uploader => _uploader.stream;
+  Stream<TaskSnapshot> get uploader {
+    assert(_uploader != null, 'uploader is null. Please call fetch().');
+    return _uploader!.stream;
+  }
 
   @override
   Reference ref(StorageFile storageFile) =>
@@ -69,7 +72,7 @@ class Storage implements StorageRepository {
   Future<StorageFile> save(
     String folderPath,
     File data, {
-    String filename,
+    String? filename,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
@@ -87,7 +90,7 @@ class Storage implements StorageRepository {
       uploadTask = ref.putFile(data, settableMetadata);
     }
     if (_uploader != null) {
-      uploadTask.snapshotEvents.listen(_uploader.add);
+      uploadTask.snapshotEvents.listen(_uploader!.add);
     }
     final snapshot = await uploadTask.whenComplete(() => null);
     final downloadUrl = await snapshot.ref.getDownloadURL();
@@ -106,7 +109,7 @@ class Storage implements StorageRepository {
     DocumentReference reference,
     String folderName,
     File data, {
-    String filename,
+    String? filename,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
@@ -140,13 +143,15 @@ class Storage implements StorageRepository {
   }
 
   @override
-  Future<Uint8List> getData(StorageFile storageFile, [int maxSize]) async {
+  Future<Uint8List?> getData(StorageFile storageFile,
+      [int maxSize = 10485760]) async {
     final ref = storage.ref().child(storageFile.path);
     return ref.getData(maxSize);
   }
 
   @override
-  Future<Uint8List> getDataWithPath(String filePath, [int maxSize]) async {
+  Future<Uint8List?> getDataWithPath(String filePath,
+      [int maxSize = 10485760]) async {
     final ref = storage.ref().child(filePath);
     return ref.getData(maxSize);
   }
@@ -192,7 +197,7 @@ class Storage implements StorageRepository {
 
   @override
   void dispose() {
-    _uploader.close();
+    _uploader?.close();
     _uploader = null;
   }
 }

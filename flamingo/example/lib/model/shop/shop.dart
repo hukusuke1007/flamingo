@@ -7,12 +7,12 @@ part 'shop.flamingo.dart';
 
 class Shop extends Document<Shop> {
   Shop({
-    String id,
-    String documentPath,
-    String collectionPath,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    String? id,
+    String? documentPath,
+    String? collectionPath,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference? collectionRef,
   }) : super(
           id: id,
           documentPath: documentPath,
@@ -23,13 +23,13 @@ class Shop extends Document<Shop> {
         );
 
   @Field()
-  String name;
+  String? name;
 
   @ModelField()
-  Cart cart;
+  Cart? cart;
 
   @ModelField()
-  List<Cart> carts;
+  List<Cart>? carts;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

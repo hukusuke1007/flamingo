@@ -1,4 +1,7 @@
-# 1.15.3
+# 2.0.0-nullsafety.0
+Migrate this package to null safety. Sdk constraints: >=2.12.0-0 <3.0.0 based on beta release guidelines.
+
+## 1.15.3
 Refactored model.
 
 ## 1.15.2

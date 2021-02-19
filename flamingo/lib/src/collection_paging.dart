@@ -1,19 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 
 import 'model/document.dart';
 
 class CollectionPaging<T extends Document<T>> {
   CollectionPaging({
-    @required this.query,
+    required this.query,
     this.limit,
-    @required this.decode,
+    required this.decode,
   });
 
   final Query query;
-  final int limit;
+  final int? limit;
   final T Function(DocumentSnapshot) decode;
-  DocumentSnapshot _startAfterDocument;
+  DocumentSnapshot? _startAfterDocument;
 
   Future<List<T>> load({
     Source source = Source.serverAndCache,
@@ -32,11 +31,11 @@ class CollectionPaging<T extends Document<T>> {
 
   Future<List<DocumentSnapshot>> _load({
     Source source = Source.serverAndCache,
-    DocumentSnapshot startAfterDocument,
+    DocumentSnapshot? startAfterDocument,
   }) async {
     var dataSource = query;
     if (limit != null) {
-      dataSource = dataSource.limit(limit);
+      dataSource = dataSource.limit(limit!);
     }
     if (startAfterDocument != null) {
       dataSource = dataSource.startAfterDocument(startAfterDocument);

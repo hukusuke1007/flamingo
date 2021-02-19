@@ -36,10 +36,10 @@ class Flamingo {
 
   /// Flamingo initializeApp. Required before using Firebase.
   static Future<void> initializeApp({
-    String name,
-    FirebaseOptions options,
-    Settings settings,
-    String rootPath,
+    String? name,
+    FirebaseOptions? options,
+    Settings? settings,
+    String? rootPath,
   }) async {
     await Firebase.initializeApp(name: name, options: options);
     overrideWithSetting(settings: settings, rootPath: rootPath);
@@ -47,10 +47,10 @@ class Flamingo {
 
   /// Update Firebase instance and reference and settings
   static void overrideWithSetting({
-    FirebaseFirestore firestoreInstance,
-    FirebaseStorage storageInstance,
-    Settings settings,
-    String rootPath,
+    FirebaseFirestore? firestoreInstance,
+    FirebaseStorage? storageInstance,
+    Settings? settings,
+    String? rootPath,
   }) {
     if (settings != null) {
       FirebaseFirestore.instance.settings = settings;
@@ -76,9 +76,9 @@ class Flamingo {
   FirebaseFirestore get firestore => _firestore;
   FirebaseStorage get firebaseStorage => _firebaseStorage;
 
-  DocumentReference _rootReference;
-  FirebaseFirestore _firestore;
-  FirebaseStorage _firebaseStorage;
+  late DocumentReference _rootReference;
+  late FirebaseFirestore _firestore;
+  late FirebaseStorage _firebaseStorage;
 }
 
 /// Firestore Instance

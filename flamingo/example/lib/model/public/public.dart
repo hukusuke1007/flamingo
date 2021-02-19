@@ -5,10 +5,10 @@ part 'public.flamingo.dart';
 
 class Public<T> extends Document<T> {
   Public({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference? collectionRef,
   }) : super(
           id: id,
           snapshot: snapshot,

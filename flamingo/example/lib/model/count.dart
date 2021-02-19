@@ -5,10 +5,10 @@ part 'count.flamingo.dart';
 
 class Count extends Document<Count> {
   Count({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference? collectionRef,
   }) : super(
             id: id,
             snapshot: snapshot,
@@ -16,10 +16,10 @@ class Count extends Document<Count> {
             collectionRef: collectionRef);
 
   @Field()
-  String userId;
+  String? userId;
 
   @Field()
-  int count = 0;
+  int? count = 0;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
