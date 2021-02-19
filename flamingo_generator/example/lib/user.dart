@@ -8,9 +8,9 @@ part 'user.flamingo.dart';
 
 class User extends Document<User> {
   User({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values) {
     item = Collection(this, UserKey.item.value);
   }

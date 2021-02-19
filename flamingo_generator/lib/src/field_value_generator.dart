@@ -56,7 +56,7 @@ class FieldValueGenerator extends Generator {
             case $enumName.${f.element.name}:
               return \'${f.element.name}\';
           """).join()}default:
-              throw Exception('Invalid data key. key: $this');
+              throw Exception('Invalid data key.');
           }
        }
      }

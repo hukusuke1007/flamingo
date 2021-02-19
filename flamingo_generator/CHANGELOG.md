@@ -1,4 +1,7 @@
-# 0.9.0-nullsafety.1
+# 0.9.0-nullsafety.2
+Modified enum extension key.
+
+## 0.9.0-nullsafety.1
 Modified enum extension key.
 
 ## 0.9.0-nullsafety.0

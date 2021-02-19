@@ -59,7 +59,7 @@ extension UserKeyExtension on UserKey {
       case UserKey.item:
         return 'item';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }

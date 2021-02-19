@@ -5,7 +5,7 @@ part 'cart.flamingo.dart';
 
 class Cart extends Model {
   Cart({
-    Map<String, dynamic> values,
+    Map<String, dynamic>? values,
   }) : super(values: values);
 
   @Field()

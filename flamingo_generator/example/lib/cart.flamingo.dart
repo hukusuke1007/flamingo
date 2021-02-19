@@ -26,7 +26,7 @@ extension CartKeyExtension on CartKey {
       case CartKey.itemAt:
         return 'itemAt';
       default:
-        throw Exception('Invalid data key. key: FieldValueGenerator');
+        throw Exception('Invalid data key.');
     }
   }
 }
