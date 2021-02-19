@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_example/model/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +15,7 @@ class _State extends State<CollectionPagingPage> {
   final ScrollController scrollController = ScrollController();
   final RefreshController refreshController = RefreshController();
 
-  late CollectionPaging<User> collectionPaging;
+  CollectionPaging<User> collectionPaging;
 
   List<User> items = [];
 

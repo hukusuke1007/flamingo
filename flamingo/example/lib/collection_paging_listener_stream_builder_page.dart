@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_example/model/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,7 +18,7 @@ class _State extends State<CollectionPagingListenerStreamBuilderPage> {
   final ScrollController scrollController = ScrollController();
   final RefreshController refreshController = RefreshController();
 
-  late CollectionPagingListener<User> collectionPagingListener;
+  CollectionPagingListener<User> collectionPagingListener;
 
   @override
   void dispose() async {
@@ -109,7 +111,7 @@ class _State extends State<CollectionPagingListenerStreamBuilderPage> {
                 controller: scrollController,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (BuildContext context, int index) {
-                  final data = items![index];
+                  final data = items[index];
                   return Slidable(
                     actionPane: const SlidableDrawerActionPane(),
                     actionExtentRatio: 0.25,
@@ -141,7 +143,7 @@ class _State extends State<CollectionPagingListenerStreamBuilderPage> {
                     ],
                   );
                 },
-                itemCount: items!.length,
+                itemCount: items.length,
               ),
             );
           },

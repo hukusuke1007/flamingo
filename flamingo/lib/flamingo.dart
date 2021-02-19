@@ -52,9 +52,7 @@ class Flamingo {
     Settings? settings,
     String? rootPath,
   }) {
-    if (settings != null) {
-      FirebaseFirestore.instance.settings = settings;
-    }
+    FirebaseFirestore.instance.settings = settings ?? const Settings();
     instance._firestore = firestoreInstance ?? FirebaseFirestore.instance;
     instance._firebaseStorage = storageInstance ?? FirebaseStorage.instance;
     instance._rootReference = instance.firestore.doc(rootPath ?? '/');

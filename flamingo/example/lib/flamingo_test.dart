@@ -104,6 +104,7 @@ class FlamingoTest {
 
   Future save() async {
     print('--- save ---');
+
     final user = User()..name = 'hoge';
     await documentAccessor.save(user);
     user.log();
@@ -166,7 +167,7 @@ class FlamingoTest {
     await documentAccessor.delete(User(id: user.id));
     final _user = await documentAccessor.load<User>(User(id: user.id));
 
-    assertDeleteDocument(_user!);
+    assertDeleteDocument(_user);
   }
 
   Future saveRaw() async {
@@ -540,7 +541,7 @@ class FlamingoTest {
     final _post = await documentAccessor.load<Post>(Post(id: post.id));
     _post!.log();
 
-    assertCreateDocument(post, _post!);
+    assertCreateDocument(post, _post);
     assertStorageFile(post.file!, _post.file!);
 
     // dispose for uploading status
@@ -1292,7 +1293,7 @@ class FlamingoTest {
     {
       final _shop =
           await documentAccessor.load<Shop>(Shop(documentPath: shop.cart!.ref));
-      print('cart: ${_shop!.cart!.ref}  ${_shop!.cart!.collectionRef}');
+      print('cart: ${_shop!.cart!.ref}  ${_shop.cart!.collectionRef}');
       print('carts: ${_shop.carts!.map((d) => '${d.ref} ${d.collectionRef}')}');
       assertCreateDocument(shop, _shop);
       assert(shop.documentPath == _shop.cart?.ref);

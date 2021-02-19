@@ -1,6 +1,8 @@
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_example/collection_paging_listener_page.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flamingo_example/collection_paging_listener_stream_builder_page.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flamingo_example/collection_paging_page.dart';
 import 'package:flutter/material.dart';
 
