@@ -613,7 +613,7 @@ final list = snapshot.docs.map((item) => Count(snapshot: item)).toList()
 ### File
 Can operation into Firebase Storage and upload and delete storage file. Using StorageFile and Storage class.
 
-For examople, create post model that have StorageFile.
+For example, create post model that have StorageFile.
 
 ```dart
 import 'package:flamingo/flamingo.dart';
@@ -800,7 +800,7 @@ Clear process only set 0 to document and update. It not try transaction process.
 
 Using DistributedCounter and Counter.
 
-For examople, create score model that have Counter.
+For example, create score model that have Counter.
 
 ```dart
 import 'package:flamingo/flamingo.dart';
