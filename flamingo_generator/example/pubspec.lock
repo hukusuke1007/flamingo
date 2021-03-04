@@ -133,21 +133,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0-1.0.nullsafety.1"
+    version: "1.0.0"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0-1.0.nullsafety.1"
+    version: "4.0.0"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0-1.0.nullsafety.1"
+    version: "1.0.0"
   code_builder:
     dependency: transitive
     description:
@@ -203,42 +203,42 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.0-1.0.nullsafety.2"
+    version: "1.0.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0-1.0.nullsafety.1"
+    version: "4.0.0"
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0-1.0.nullsafety.1"
+    version: "1.0.0"
   firebase_storage:
     dependency: transitive
     description:
       name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.0.0-1.0.nullsafety.1"
+    version: "8.0.0"
   firebase_storage_platform_interface:
     dependency: transitive
     description:
       name: firebase_storage_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0-1.0.nullsafety.1"
+    version: "2.0.0"
   firebase_storage_web:
     dependency: transitive
     description:
       name: firebase_storage_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0-1.0.nullsafety.1"
+    version: "1.0.0"
   fixnum:
     dependency: transitive
     description:
@@ -252,21 +252,21 @@ packages:
       path: "../../flamingo"
       relative: true
     source: path
-    version: "2.0.0-nullsafety.0"
+    version: "2.0.0+1"
   flamingo_annotation:
     dependency: "direct main"
     description:
       name: flamingo_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.0-nullsafety.0"
+    version: "0.5.0"
   flamingo_generator:
     dependency: "direct dev"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.9.0-nullsafety.2"
+    version: "0.9.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -407,7 +407,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0-nullsafety.2"
+    version: "2.0.0"
   pool:
     dependency: transitive
     description:
@@ -442,7 +442,7 @@ packages:
       name: rxdart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.26.0-nullsafety.1"
+    version: "0.26.0"
   shelf:
     dependency: transitive
     description:
@@ -561,5 +561,5 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
-  dart: ">=2.12.0-133.7.beta <3.0.0"
+  dart: ">=2.12.0-0.0 <3.0.0"
   flutter: ">=1.20.0"
