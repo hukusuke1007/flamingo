@@ -5,16 +5,16 @@ part 'point.flamingo.dart';
 
 class Point extends Document<Point> {
   Point({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  int pointInt;
+  int? pointInt;
 
   @Field()
-  double pointDouble;
+  double? pointDouble;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

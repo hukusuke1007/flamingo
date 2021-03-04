@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_example/model/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -115,7 +117,7 @@ class _State extends State<CollectionPagingPage> {
                     maxLines: 1,
                   ),
                   subtitle: Text(
-                    '${index + 1} ${data.name} ${data.createdAt.toDate()}',
+                    '${index + 1} ${data.name} ${data.createdAt?.toDate()}',
                     maxLines: 1,
                   ),
                 );

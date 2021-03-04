@@ -5,17 +5,17 @@ part 'score.flamingo.dart';
 
 class Score extends Document<Score> {
   Score({
-    String id,
+    String? id,
   }) : super(id: id) {
     counter = Counter(this, ScoreKey.counter.value, numShards);
   }
 
   @Field()
-  String userId;
+  String? userId;
 
   /// DistributedCounter
   @SubCollection()
-  Counter counter;
+  late Counter counter;
 
   int numShards = 10;
 

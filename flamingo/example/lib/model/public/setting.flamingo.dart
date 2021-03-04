@@ -17,7 +17,7 @@ extension SettingKeyExtension on SettingKey {
       case SettingKey.isEnable:
         return 'isEnable';
       default:
-        return null;
+        throw Exception('Invalid data key.');
     }
   }
 }

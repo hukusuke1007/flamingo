@@ -17,7 +17,7 @@ extension ItemKeyExtension on ItemKey {
       case ItemKey.name:
         return 'name';
       default:
-        return null;
+        throw Exception('Invalid data key.');
     }
   }
 }

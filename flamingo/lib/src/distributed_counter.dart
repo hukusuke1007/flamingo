@@ -15,7 +15,7 @@ class DistributedCounter implements DistributedCounterRepository {
       _create(counter.parentRef, counter.collectionName, counter.numShards);
 
   @override
-  Future increment(Counter counter, {int count}) async =>
+  Future increment(Counter counter, {int? count}) async =>
       _increment(counter.parentRef, counter.collectionName, counter.numShards,
           count: count);
 
@@ -42,12 +42,11 @@ class DistributedCounter implements DistributedCounterRepository {
 
   Future<void> _increment(
       DocumentReference ref, String collectionName, int numShards,
-      {int count}) async {
+      {int? count}) async {
     final shardId = Random().nextInt(numShards);
     final shardRef = ref.collection(collectionName).doc(shardId.toString());
-    await shardRef.update(<String, dynamic>{
-      'count': FieldValue.increment(count != null ? count : 1)
-    });
+    await shardRef
+        .update(<String, dynamic>{'count': FieldValue.increment(count ?? 1)});
     return;
   }
 

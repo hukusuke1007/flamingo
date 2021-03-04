@@ -6,11 +6,11 @@ part 'medal.flamingo.dart';
 class Medal extends Model {
   Medal({
     this.name,
-    Map<String, dynamic> values,
+    Map<String, dynamic>? values,
   }) : super(values: values);
 
   @Field()
-  String name;
+  String? name;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

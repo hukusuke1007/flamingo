@@ -1,12 +1,10 @@
-import 'package:flutter/foundation.dart';
-
 part 'storage_file.g.dart';
 
 class StorageFile {
   StorageFile(
-      {@required this.name,
-      @required this.path,
-      @required this.url,
+      {required this.name,
+      required this.path,
+      required this.url,
       this.mimeType = 'application/octet-stream',
       this.additionalData = const <String, dynamic>{},
       this.metadata = const <String, String>{}});
@@ -20,8 +18,8 @@ class StorageFile {
   final String path;
   final String url;
   final String mimeType;
-  final Map<String, dynamic> additionalData;
-  final Map<String, String> metadata;
+  final Map<String, dynamic>? additionalData;
+  final Map<String, String>? metadata;
 
   Map<String, dynamic> toJson() => _$StorageFileToJson(this);
 

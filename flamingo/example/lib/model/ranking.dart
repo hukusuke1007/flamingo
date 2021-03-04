@@ -7,10 +7,10 @@ part 'ranking.flamingo.dart';
 
 class Ranking extends Document<Ranking> {
   Ranking(
-      {String id,
-      DocumentSnapshot snapshot,
-      Map<String, dynamic> values,
-      CollectionReference collectionRef})
+      {String? id,
+      DocumentSnapshot? snapshot,
+      Map<String, dynamic>? values,
+      CollectionReference? collectionRef})
       : super(
             id: id,
             snapshot: snapshot,
@@ -20,10 +20,10 @@ class Ranking extends Document<Ranking> {
   }
 
   @Field()
-  String title;
+  String? title;
 
   @SubCollection()
-  Collection<Count> count;
+  Collection<Count>? count;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

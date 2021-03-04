@@ -8,19 +8,19 @@ part 'owner.flamingo.dart';
 
 class Owner extends Document<Owner> {
   Owner({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  String name;
+  String? name;
 
   @ModelField()
-  Address address;
+  Address? address;
 
   @ModelField()
-  List<Medal> medals;
+  List<Medal>? medals;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

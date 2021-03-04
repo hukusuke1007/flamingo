@@ -21,7 +21,7 @@ extension ScoreKeyExtension on ScoreKey {
       case ScoreKey.counter:
         return 'counter';
       default:
-        return null;
+        throw Exception('Invalid data key.');
     }
   }
 }

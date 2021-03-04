@@ -61,23 +61,23 @@ class Base {
       Helper.writeStorageListNotNull(data, key, storageFiles,
           isSetNull: isSetNull);
 
-  StorageFile storageFile(Map<String, dynamic> data, String folderName) =>
+  StorageFile? storageFile(Map<String, dynamic> data, String folderName) =>
       Helper.storageFile(data, folderName);
 
-  List<StorageFile> storageFiles(
+  List<StorageFile>? storageFiles(
           Map<String, dynamic> data, String folderName) =>
       Helper.storageFiles(data, folderName);
 
   U valueFromKey<U>(Map<String, dynamic> data, String key) =>
       Helper.valueFromKey<U>(data, key);
 
-  Map<U, V> valueMapFromKey<U, V>(Map<String, dynamic> data, String key) =>
+  Map<U, V>? valueMapFromKey<U, V>(Map<String, dynamic> data, String key) =>
       Helper.valueMapFromKey<U, V>(data, key);
 
-  List<U> valueListFromKey<U>(Map<String, dynamic> data, String key) =>
+  List<U>? valueListFromKey<U>(Map<String, dynamic> data, String key) =>
       Helper.valueListFromKey<U>(data, key);
 
-  List<Map<U, V>> valueMapListFromKey<U, V>(
+  List<Map<U, V>>? valueMapListFromKey<U, V>(
           Map<String, dynamic> data, String key) =>
       Helper.valueMapListFromKey<U, V>(data, key);
 
@@ -87,6 +87,6 @@ class Base {
 
   bool isVal(Map<String, dynamic> data, String key) => Helper.isVal(data, key);
 
-  Timestamp timestampFromMap(dynamic data, String key) =>
+  Timestamp? timestampFromMap(dynamic data, String key) =>
       Helper.timestampFromMap(data, key);
 }

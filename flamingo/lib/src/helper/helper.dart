@@ -7,12 +7,12 @@ class Helper {
   static Map<String, dynamic> fromMap(Map map) =>
       Map<String, dynamic>.from(map);
 
-  static String randomString({int length}) {
+  static String randomString({int? length}) {
     const _randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const _charsLength = _randomChars.length;
     final rand = Random();
     final codeUnits = List.generate(
-      length != null ? length : 10,
+      length ?? 10,
       (index) {
         final n = rand.nextInt(_charsLength);
         return _randomChars.codeUnitAt(n);
@@ -34,7 +34,7 @@ class Helper {
       data[fieldName] = entity.value.runtimeType == double ? 0.0 : 0;
     } else {
       if (entity.incrementValue != null) {
-        data[fieldName] = FieldValue.increment(entity.incrementValue);
+        data[fieldName] = FieldValue.increment(entity.incrementValue!);
       }
     }
   }
@@ -60,14 +60,14 @@ class Helper {
   }
 
   static void writeModelNotNull(
-      Map<String, dynamic> data, String key, Model model) {
+      Map<String, dynamic> data, String key, Model? model) {
     if (model != null) {
       data[key] = model.toData();
     }
   }
 
   static void writeModelListNotNull(
-      Map<String, dynamic> data, String key, List<Model> models) {
+      Map<String, dynamic> data, String key, List<Model>? models) {
     if (models != null) {
       _writeModelList(data, key, models);
     }
@@ -81,7 +81,7 @@ class Helper {
   static void writeStorage(
     Map<String, dynamic> data,
     String key,
-    StorageFile storageFile, {
+    StorageFile? storageFile, {
     bool isSetNull = true,
   }) =>
       _writeStorage(
@@ -95,7 +95,7 @@ class Helper {
   static void writeStorageNotNull(
     Map<String, dynamic> data,
     String key,
-    StorageFile storageFile, {
+    StorageFile? storageFile, {
     bool isSetNull = false,
   }) =>
       _writeStorage(
@@ -109,7 +109,7 @@ class Helper {
   static void writeStorageList(
     Map<String, dynamic> data,
     String key,
-    List<StorageFile> storageFiles, {
+    List<StorageFile>? storageFiles, {
     bool isSetNull = true,
   }) =>
       _writeStorageList(
@@ -123,7 +123,7 @@ class Helper {
   static void writeStorageListNotNull(
     Map<String, dynamic> data,
     String key,
-    List<StorageFile> storageFiles, {
+    List<StorageFile>? storageFiles, {
     bool isSetNull = true,
   }) =>
       _writeStorageList(
@@ -137,19 +137,21 @@ class Helper {
   static void _writeStorage(
     Map<String, dynamic> data,
     String key,
-    StorageFile storageFile, {
-    bool isNullIgnore,
-    bool isSetNull,
+    StorageFile? storageFile, {
+    bool? isNullIgnore,
+    bool? isSetNull,
   }) {
     if (storageFile != null) {
       if (!storageFile.isDeleted) {
         data[key] = storageFile.toJson();
       } else {
-        data[key] = isSetNull ? null : FieldValue.delete();
+        data[key] =
+            (isSetNull != null && isSetNull) ? null : FieldValue.delete();
       }
     } else {
-      if (!isNullIgnore) {
-        data[key] = isSetNull ? null : FieldValue.delete();
+      if (isNullIgnore != null && !isNullIgnore) {
+        data[key] =
+            (isSetNull != null && isSetNull) ? null : FieldValue.delete();
       }
     }
   }
@@ -157,9 +159,9 @@ class Helper {
   static void _writeStorageList(
     Map<String, dynamic> data,
     String key,
-    List<StorageFile> storageFiles, {
-    bool isNullIgnore,
-    bool isSetNull,
+    List<StorageFile>? storageFiles, {
+    bool? isNullIgnore,
+    bool? isSetNull,
   }) {
     if (storageFiles != null) {
       if (storageFiles.isNotEmpty) {
@@ -171,13 +173,15 @@ class Helper {
         data[key] = storageFiles;
       }
     } else {
-      if (!isNullIgnore) {
-        data[key] = isSetNull ? null : FieldValue.delete();
+      if (isNullIgnore != null && !isNullIgnore) {
+        data[key] =
+            (isSetNull != null && isSetNull) ? null : FieldValue.delete();
       }
     }
   }
 
-  static StorageFile storageFile(Map<String, dynamic> data, String folderName) {
+  static StorageFile? storageFile(
+      Map<String, dynamic> data, String folderName) {
     final fileMap = valueMapFromKey<String, dynamic>(data, folderName);
     if (fileMap != null) {
       return StorageFile.fromJson(fileMap);
@@ -186,7 +190,7 @@ class Helper {
     }
   }
 
-  static List<StorageFile> storageFiles(
+  static List<StorageFile>? storageFiles(
       Map<String, dynamic> data, String folderName) {
     final fileMapList = valueMapListFromKey<String, dynamic>(data, folderName);
     if (fileMapList != null) {
@@ -210,18 +214,18 @@ class Helper {
     return value as U;
   }
 
-  static Map<U, V> valueMapFromKey<U, V>(
+  static Map<U, V>? valueMapFromKey<U, V>(
           Map<String, dynamic> data, String key) =>
       isVal(data, key) && data[key] != null
           ? Map<U, V>.from(Helper.fromMap(data[key] as Map))
           : null;
 
-  static List<U> valueListFromKey<U>(Map<String, dynamic> data, String key) =>
+  static List<U>? valueListFromKey<U>(Map<String, dynamic> data, String key) =>
       data[key] != null
-          ? (data[key] as List)?.map((dynamic e) => e as U)?.toList()
+          ? (data[key] as List).map((dynamic e) => e as U).toList()
           : null;
 
-  static List<Map<U, V>> valueMapListFromKey<U, V>(
+  static List<Map<U, V>>? valueMapListFromKey<U, V>(
           Map<String, dynamic> data, String key) =>
       isVal(data, key) && data[key] != null
           ? (data[key] as List)
@@ -236,7 +240,7 @@ class Helper {
   static bool isVal(Map<String, dynamic> data, String key) =>
       data.containsKey(key);
 
-  static Timestamp timestampFromMap(dynamic data, String key) {
+  static Timestamp? timestampFromMap(dynamic data, String key) {
     if (data != null && data[key] is Map) {
       final rawTimestamp =
           Map<String, dynamic>.from(Helper.fromMap(data[key] as Map));

@@ -3,12 +3,12 @@ import '../base.dart';
 
 class Document<T> extends Base implements DocumentType {
   Document({
-    String id,
-    String documentPath,
-    String collectionPath,
+    String? id,
+    String? documentPath,
+    String? collectionPath,
     this.snapshot,
     this.values,
-    CollectionReference collectionRef,
+    CollectionReference? collectionRef,
   })  : assert(id == null || documentPath == null,
             'Can be used only either of \'id\' or \'documentPath\'.'),
         // ignore: lines_longer_than_80_chars
@@ -27,23 +27,21 @@ class Document<T> extends Base implements DocumentType {
       _collectionRef = _referenceDocument.parent;
       _reference = _referenceDocument;
     } else {
-      /// Set id
-      _id = id;
-
       /// Set collectionRef
       if (collectionPath != null) {
         _collectionRef = Flamingo.instance.firestore.collection(collectionPath);
       } else if (collectionRef != null) {
         _collectionRef = collectionRef;
       } else if (snapshot != null) {
-        _collectionRef = snapshot.reference.parent;
+        _collectionRef = snapshot!.reference.parent;
       } else {
         _collectionRef = collectionRootReference;
       }
 
-      /// Set reference
+      /// Set reference and Id
       if (id != null) {
-        _reference = _collectionRef.doc(_id);
+        _reference = _collectionRef.doc(id);
+        _id = id;
       } else {
         _reference = _collectionRef.doc();
         _id = _reference.id;
@@ -51,15 +49,15 @@ class Document<T> extends Base implements DocumentType {
 
       /// From snapshot
       if (snapshot != null) {
-        setSnapshot(snapshot); // setSnapshotでidが作られる
+        setSnapshot(snapshot!); // setSnapshotでidが作られる
         _reference = _collectionRef.doc(_id);
       }
     }
 
     /// From values
     if (values != null) {
-      _fromAt(values);
-      fromData(values);
+      _fromAt(values!);
+      fromData(values!);
     }
 
     /// Set path
@@ -68,8 +66,8 @@ class Document<T> extends Base implements DocumentType {
   }
 
   static String path<T extends Document<DocumentType>>({
-    String id,
-    String collectionPath,
+    String? id,
+    String? collectionPath,
   }) {
     if (collectionPath != null) {
       return id != null ? '$collectionPath/$id' : collectionPath;
@@ -82,17 +80,17 @@ class Document<T> extends Base implements DocumentType {
   }
 
   /// For constructor
-  final DocumentSnapshot snapshot;
-  final Map<String, dynamic> values;
+  final DocumentSnapshot? snapshot;
+  final Map<String, dynamic>? values;
 
   /// Field
-  Timestamp _createdAt;
-  Timestamp get createdAt => _createdAt;
+  Timestamp? _createdAt;
+  Timestamp? get createdAt => _createdAt;
 
-  Timestamp _updatedAt;
-  Timestamp get updatedAt => _updatedAt;
+  Timestamp? _updatedAt;
+  Timestamp? get updatedAt => _updatedAt;
 
-  String _id;
+  late String _id;
   String get id => _id;
 
   /// For reference
@@ -105,16 +103,16 @@ class Document<T> extends Base implements DocumentType {
   CollectionReference get collectionRootReference =>
       Flamingo.instance.rootReference.collection(modelName);
 
-  String _collectionPath;
+  late String _collectionPath;
   String get collectionPath => _collectionPath;
 
-  String _documentPath;
+  late String _documentPath;
   String get documentPath => _documentPath;
 
-  CollectionReference _collectionRef;
+  late CollectionReference _collectionRef;
   CollectionReference get collectionRef => _collectionRef;
 
-  DocumentReference _reference;
+  late DocumentReference _reference;
   DocumentReference get reference => _reference;
 
   String get createdFieldValueKey => documentCreatedAtKey;
@@ -134,21 +132,19 @@ class Document<T> extends Base implements DocumentType {
     _id = documentSnapshot.id;
     if (documentSnapshot.exists) {
       final data = documentSnapshot.data();
-      _fromAt(data);
-      fromData(data);
+      if (data != null) {
+        _fromAt(data);
+        fromData(data);
+      }
     }
   }
 
   void setAt({
-    Timestamp createdAt,
-    Timestamp updatedAt,
+    Timestamp? createdAt,
+    Timestamp? updatedAt,
   }) {
-    if (createdAt != null) {
-      _createdAt = createdAt;
-    }
-    if (updatedAt != null) {
-      _updatedAt = updatedAt;
-    }
+    _createdAt = createdAt;
+    _updatedAt = updatedAt;
   }
 
   /// Private method

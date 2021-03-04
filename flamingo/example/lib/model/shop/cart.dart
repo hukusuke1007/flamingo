@@ -7,14 +7,14 @@ class Cart extends Model {
   Cart({
     this.ref,
     this.collectionRef,
-    Map<String, dynamic> values,
+    Map<String, dynamic>? values,
   }) : super(values: values);
 
   @Field()
-  String ref;
+  String? ref;
 
   @Field()
-  String collectionRef;
+  String? collectionRef;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

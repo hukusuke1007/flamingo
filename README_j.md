@@ -59,13 +59,13 @@ part 'user.flamingo.dart';
 
 class User extends Document<User> {
   User({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  String name;
+  String? name;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -110,7 +110,7 @@ extension UserKeyExtension on UserKey {
       case UserKey.name:
         return 'name';
       default:
-        return toString();
+        throw Exception('Invalid data key.');
     }
   }
 }
@@ -159,7 +159,7 @@ Document への操作は、Flamingoが提供する DocumentAccessor を利用し
 final user = User()
       ..name = 'hoge';
 
-DocumentAccessor documentAccessor = DocumentAccessor();
+final documentAccessor = DocumentAccessor();
 
 await documentAccessor.save(user);
 ```
@@ -174,7 +174,7 @@ Firestoreへ次のように保存されます。
 また、特定のフィールドKeyに対して保存することもできます。
 
 ```dart
-DocumentAccessor documentAccessor = DocumentAccessor();
+final documentAccessor = DocumentAccessor();
 await documentAccessor.saveRaw(
   <String, dynamic>{ UserKey.name.value: 'hogehoge' },
   user.reference,
@@ -184,7 +184,7 @@ await documentAccessor.saveRaw(
 #### 読み込み
 
 ```dart
-DocumentAccessor documentAccessor = DocumentAccessor();
+final documentAccessor = DocumentAccessor();
 final user = await documentAccessor.load<User>(User(id: 'EYkOA3gBsWGbuWxOmbf0'));
 print(user.name) // hoge
 ```
@@ -195,14 +195,14 @@ print(user.name) // hoge
 final user = User(id: 'EYkOA3gBsWGbuWxOmbf0')
       ..name = 'fuga';
 
-DocumentAccessor documentAccessor = DocumentAccessor();
+final documentAccessor = DocumentAccessor();
 await documentAccessor.update(user);
 ```
 
 #### 削除
 
 ```dart
-DocumentAccessor documentAccessor = DocumentAccessor();
+final documentAccessor = DocumentAccessor();
 await documentAccessor.delete(User(id: 'EYkOA3gBsWGbuWxOmbf0'));
 ```
 
@@ -236,7 +236,7 @@ final collectionPaging = CollectionPaging<User>(
   decode: (snap) => User(snapshot: snap),
 );
 
-List<User> items = [];
+final items = <User>[];
 
 // Load 
 final _items = await collectionPaging.load();
@@ -278,7 +278,7 @@ final collectionPagingListener = CollectionPagingListener<User>(
 // Fetch to set listener.
 collectionPagingListener.fetch();
 
-List<User> items = [];
+final items = <User>[];
 
 // Get documents via listener. data is ValueStream.
 collectionPagingListener.data.listen((event) {
@@ -342,7 +342,7 @@ final disposer = user.reference.snapshots().listen((snap) {
 });
 
 // Save, update, delete
-DocumentAccessor documentAccessor = DocumentAccessor();
+final documentAccessor = DocumentAccessor();
 await documentAccessor.save(user);
 
 user.name = 'fuga';
@@ -424,19 +424,19 @@ part 'owner.flamingo.dart';
 
 class Owner extends Document<Owner> {
   Owner({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  String name;
+  String? name;
 
   @ModelField()
-  Address address;
+  Address? address;
 
   @ModelField()
-  List<Medal> medals;
+  List<Medal>? medals;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -458,14 +458,14 @@ class Address extends Model {
   Address({
     this.postCode,
     this.country,
-    Map<String, dynamic> values,
+    Map<String, dynamic>? values,
   }) : super(values: values);
 
   @Field()
-  String postCode;
+  String? postCode;
 
   @Field()
-  String country;
+  String? country;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -485,11 +485,11 @@ part 'medal.flamingo.dart';
 class Medal extends Model {
   Medal({
     this.name,
-    Map<String, dynamic> values,
+    Map<String, dynamic>? values,
   }) : super(values: values);
 
   @Field()
-  String name;
+  String? name;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -547,10 +547,10 @@ part 'ranking.flamingo.dart';
 
 class Ranking extends Document<Ranking> {
   Ranking(
-      {String id,
-      DocumentSnapshot snapshot,
-      Map<String, dynamic> values,
-      CollectionReference collectionRef})
+      {String? id,
+      DocumentSnapshot? snapshot,
+      Map<String, dynamic>? values,
+      CollectionReference? collectionRef})
       : super(
             id: id,
             snapshot: snapshot,
@@ -560,10 +560,10 @@ class Ranking extends Document<Ranking> {
   }
 
   @Field()
-  String title;
+  String? title;
 
   @SubCollection()
-  Collection<Count> count;
+  late Collection<Count> count;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -584,10 +584,10 @@ part 'count.flamingo.dart';
 
 class Count extends Document<Count> {
   Count({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference? collectionRef,
   }) : super(
             id: id,
             snapshot: snapshot,
@@ -595,7 +595,7 @@ class Count extends Document<Count> {
             collectionRef: collectionRef);
 
   @Field()
-  String userId;
+  String? userId;
 
   @Field()
   int count = 0;
@@ -653,13 +653,13 @@ import 'package:flamingo_annotation/flamingo_annotation.dart';
 part 'post.flamingo.dart';
 
 class Post extends Document<Post> {
-  Post({String id}) : super(id: id);
+  Post({String? id}) : super(id: id);
 
   @StorageField()
-  StorageFile file;
+  StorageFile? file;
 
   @StorageField()
-  List<StorageFile> files;
+  List<StorageFile>? files;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -739,9 +739,9 @@ part 'credit_card.flamingo.dart';
 
 class CreditCard extends Document<CreditCard> {
   CreditCard({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
@@ -843,17 +843,17 @@ part 'score.flamingo.dart';
 
 class Score extends Document<Score> {
   Score({
-    String id,
+    String? id,
   }) : super(id: id) {
     counter = Counter(this, ScoreKey.counter.value, numShards);
   }
 
   @Field()
-  String userId;
+  String? userId;
 
   /// DistributedCounter
   @SubCollection()
-  Counter counter;
+  late Counter counter;
 
   int numShards = 10;
 
@@ -923,25 +923,25 @@ part 'map_sample.flamingo.dart';
 
 class MapSample extends Document<MapSample> {
   MapSample({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  Map<String, String> strMap;
+  Map<String, String>? strMap;
 
   @Field()
-  Map<String, int> intMap;
+  Map<String, int>? intMap;
 
   @Field()
-  Map<String, double> doubleMap;
+  Map<String, double>? doubleMap;
 
   @Field()
-  Map<String, bool> boolMap;
+  Map<String, bool>? boolMap;
 
   @Field()
-  List<Map<String, String>> listStrMap;
+  List<Map<String, String>>? listStrMap;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
@@ -978,28 +978,28 @@ part 'list_sample.flamingo.dart';
 
 class ListSample extends Document<ListSample> {
   ListSample({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  List<String> strList;
+  List<String>? strList;
 
   @Field()
-  List<int> intList;
+  List<int>? intList;
 
   @Field()
-  List<double> doubleList;
+  List<double>? doubleList;
 
   @Field()
-  List<bool> boolList;
+  List<bool>? boolList;
 
   @StorageField(isWriteNotNull: false)
-  List<StorageFile> filesA;
+  List<StorageFile>? filesA;
 
   @StorageField()
-  List<StorageFile> filesB;
+  List<StorageFile>? filesB;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

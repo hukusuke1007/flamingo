@@ -5,13 +5,13 @@ part 'item.flamingo.dart';
 
 class Item extends Document<Item> {
   Item({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  String name;
+  String? name;
 
   /// Custom field key of createdAt and updatedAt.
   @override

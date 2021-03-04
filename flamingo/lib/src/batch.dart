@@ -5,15 +5,15 @@ abstract class BatchRepository {
   int get addedDocumentCount;
   void save(
     Document document, {
-    DocumentReference reference,
+    DocumentReference? reference,
   });
   void update(
     Document document, {
-    DocumentReference reference,
+    DocumentReference? reference,
   });
   void delete(
     Document document, {
-    DocumentReference reference,
+    DocumentReference? reference,
   });
   void saveRaw(
     Map<String, dynamic> values,
@@ -42,13 +42,13 @@ class Batch implements BatchRepository {
   @override
   int get addedDocumentCount => _batchDocument.length;
 
-  WriteBatch _writeBatch;
+  late WriteBatch _writeBatch;
   final List<_BatchDocument> _batchDocument = [];
 
   @override
   void save(
     Document document, {
-    DocumentReference reference,
+    DocumentReference? reference,
   }) {
     final data = document.toData();
     final nowAt = Timestamp.now();
@@ -63,7 +63,7 @@ class Batch implements BatchRepository {
   @override
   void update(
     Document document, {
-    DocumentReference reference,
+    DocumentReference? reference,
   }) {
     final data = document.toData();
     final nowAt = Timestamp.now();
@@ -76,7 +76,7 @@ class Batch implements BatchRepository {
   @override
   void delete(
     Document document, {
-    DocumentReference reference,
+    DocumentReference? reference,
   }) {
     _writeBatch.delete(reference ?? document.reference);
     _batchDocument.add(_BatchDocument(document, ExecuteType.delete));

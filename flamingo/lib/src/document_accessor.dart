@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 import '../flamingo.dart';
 
 abstract class DocumentAccessorRepository {
@@ -10,7 +8,7 @@ abstract class DocumentAccessorRepository {
     Increment<T> entity,
     DocumentReference reference, {
     num value,
-    bool isClear,
+    required String fieldName,
   });
   Future update(Document document);
   Future delete(Document document);
@@ -28,7 +26,7 @@ abstract class DocumentAccessorRepository {
     String updatedFieldValueKey = documentUpdatedAtKey,
   });
   Future deleteWithReference(DocumentReference reference);
-  Future<T> load<T extends Document<T>>(Document document, {Source source});
+  Future<T?> load<T extends Document<T>>(Document document, {Source? source});
 }
 
 class DocumentAccessor implements DocumentAccessorRepository {
@@ -43,9 +41,9 @@ class DocumentAccessor implements DocumentAccessorRepository {
   Future<Increment<T>> increment<T extends num>(
     Increment<T> entity,
     DocumentReference reference, {
-    num value,
-    @required String fieldName,
-    bool isClear,
+    num value = 1,
+    required String fieldName,
+    bool? isClear,
   }) async {
     var updateValue = value;
     if (isClear != null && isClear) {
@@ -76,18 +74,18 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   @override
-  Future<T> load<T extends Document<T>>(Document document,
-      {Source source}) async {
-    Document _document;
+  Future<T?> load<T extends Document<T>>(Document document,
+      {Source? source}) async {
+    Document? _document;
     if (source == null) {
       _document = await _load(document, Source.serverAndCache);
     } else {
       _document = await _load(document, source);
     }
-    return _document as T;
+    return _document != null ? _document as T : null;
   }
 
-  Future<Document> _load(Document document, Source source) async {
+  Future<Document?> _load(Document document, Source source) async {
     final documentSnapshot =
         await document.reference.get(GetOptions(source: source));
     if (documentSnapshot.data() != null) {

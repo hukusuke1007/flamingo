@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:flamingo/flamingo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
 
 class DocumentChangeData<T extends Document<T>> {
   DocumentChangeData({
-    @required this.doc,
-    @required this.docChange,
+    required this.doc,
+    required this.docChange,
   });
   final T doc;
   final DocumentChange docChange;
@@ -16,23 +15,23 @@ class DocumentChangeData<T extends Document<T>> {
 /// CollectionPagingListener is SnapshotListener + Paging features.
 class CollectionPagingListener<T extends Document<T>> {
   CollectionPagingListener({
-    @required this.query,
+    required this.query,
     this.initialLimit,
     this.pagingLimit,
-    @required this.decode,
-  })  : _limit = initialLimit,
+    required this.decode,
+  })   : _limit = initialLimit,
         _pagingListenerController =
             _PagingListener(query: query, limit: initialLimit, decode: decode);
 
   final Query query;
-  final int initialLimit;
-  final int pagingLimit;
+  final int? initialLimit;
+  final int? pagingLimit;
   final T Function(DocumentSnapshot) decode;
 
   ValueStream<List<T>> get data => _dataController.stream;
   Stream<List<DocumentChangeData<T>>> get docChanges =>
       _docChangesController.stream;
-  int get count => _dataController.value.length;
+  int get count => _dataController.value!.length;
   bool get hasMore => _hasMore;
 
   final _PagingListener<T> _pagingListenerController;
@@ -43,7 +42,7 @@ class CollectionPagingListener<T extends Document<T>> {
 
   bool _hasMore = true;
   bool _initLoaded = false;
-  int _limit;
+  int? _limit;
 
   /// To dispose SnapshotListener.
   Future<void> dispose() async {
@@ -59,7 +58,7 @@ class CollectionPagingListener<T extends Document<T>> {
         .where((event) => event != null)
         .listen((event) {
       if (_limit != null) {
-        _hasMore = event.length >= _limit;
+        _hasMore = event.length >= _limit!;
       } else {
         _hasMore = false;
       }
@@ -75,7 +74,7 @@ class CollectionPagingListener<T extends Document<T>> {
   /// To load next page data using SnapshotListener.
   void loadMore() {
     if (_hasMore && _limit != null && pagingLimit != null) {
-      _limit += pagingLimit;
+      _limit = _limit! + pagingLimit!;
       _pagingListenerController.onLoad.add(_limit);
     }
   }
@@ -83,9 +82,9 @@ class CollectionPagingListener<T extends Document<T>> {
 
 class _PagingListener<T extends Document<T>> {
   _PagingListener({
-    @required this.query,
+    required this.query,
     this.limit,
-    @required this.decode,
+    required this.decode,
     this.collectionReference,
   }) {
     _loadController
@@ -94,14 +93,14 @@ class _PagingListener<T extends Document<T>> {
   }
 
   final Query query;
-  final int limit;
+  final int? limit;
   final T Function(DocumentSnapshot) decode;
-  final CollectionReference collectionReference;
+  final CollectionReference? collectionReference;
 
   ValueStream<List<T>> get data => _dataController.stream;
   Stream<List<DocumentChangeData<T>>> get docChanges =>
       _docChangesController.stream;
-  Sink<int> get onLoad => _loadController.sink;
+  Sink<int?> get onLoad => _loadController.sink;
 
   final BehaviorSubject<List<T>> _dataController =
       BehaviorSubject<List<T>>.seeded([]);
@@ -109,7 +108,7 @@ class _PagingListener<T extends Document<T>> {
       PublishSubject<List<DocumentChangeData<T>>>();
   final PublishSubject<int> _loadController = PublishSubject<int>();
 
-  StreamSubscription<QuerySnapshot> _disposer;
+  StreamSubscription<QuerySnapshot>? _disposer;
 
   Future<void> dispose() async {
     await _disposer?.cancel();
@@ -118,18 +117,18 @@ class _PagingListener<T extends Document<T>> {
     await _loadController.close();
   }
 
-  Future<void> _fetch(int limit) async {
+  Future<void> _fetch(int? limit) async {
     if (_disposer != null) {
-      await _disposer.cancel();
+      await _disposer?.cancel();
       _disposer = null;
-      _dataController.value.clear();
+      _dataController.value!.clear();
     }
     var dataSource = query;
     if (limit != null) {
       dataSource = dataSource.limit(limit);
     }
     _disposer = dataSource.snapshots().listen((event) {
-      final docs = _dataController.value;
+      final docs = _dataController.value!;
       final changes = <DocumentChangeData<T>>[];
       for (final change in event.docChanges) {
         final doc = decode(change.doc);

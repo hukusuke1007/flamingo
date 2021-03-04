@@ -8,10 +8,10 @@ part 'user.flamingo.dart';
 
 class User extends Public<User> {
   User({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
-    CollectionReference collectionRef,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference? collectionRef,
   }) : super(
             id: id,
             snapshot: snapshot,
@@ -25,10 +25,10 @@ class User extends Public<User> {
       super.collectionRootReference.doc('v1').collection('users');
 
   @Field()
-  String name;
+  String? name;
 
   @SubCollection()
-  Collection<Setting> setting;
+  late Collection<Setting> setting;
 
   @override
   Map<String, dynamic> toData() => <String, dynamic>{

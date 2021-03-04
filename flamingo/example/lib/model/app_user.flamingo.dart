@@ -38,7 +38,7 @@ extension AppUserKeyExtension on AppUserKey {
       case AppUserKey.newMessagesCount:
         return 'newMessagesCount';
       default:
-        return null;
+        throw Exception('Invalid data key.');
     }
   }
 }

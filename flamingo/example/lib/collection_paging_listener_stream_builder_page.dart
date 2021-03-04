@@ -1,8 +1,12 @@
+// @dart=2.9
+
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_example/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_slidable/flutter_slidable.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class CollectionPagingListenerStreamBuilderPage extends StatefulWidget {
@@ -56,10 +60,10 @@ class _State extends State<CollectionPagingListenerStreamBuilderPage> {
             Padding(
               padding: const EdgeInsets.only(top: 24, right: 24),
               child: StreamBuilder<List<User>>(
-                stream: collectionPagingListener?.data,
+                stream: collectionPagingListener.data,
                 initialData: const [],
                 builder: (context, snap) {
-                  return Text('count: ${snap.data.length}');
+                  return Text('count: ${snap.data?.length}');
                 },
               ),
             )
@@ -117,7 +121,7 @@ class _State extends State<CollectionPagingListenerStreamBuilderPage> {
                         maxLines: 1,
                       ),
                       subtitle: Text(
-                        '${index + 1} ${data.name} ${data.updatedAt.toDate()}',
+                        '${index + 1} ${data.name} ${data.updatedAt?.toDate()}',
                         maxLines: 1,
                       ),
                       onTap: () async {

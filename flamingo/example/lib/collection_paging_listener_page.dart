@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_example/model/user.dart';
 import 'package:flutter/cupertino.dart';
@@ -114,7 +116,7 @@ class _State extends State<CollectionPagingListenerPage> {
                     maxLines: 1,
                   ),
                   subtitle: Text(
-                    '${index + 1} ${data.name} ${data.updatedAt.toDate()}',
+                    '${index + 1} ${data.name} ${data.updatedAt?.toDate()}',
                     maxLines: 1,
                   ),
                   onTap: () async {

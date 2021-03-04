@@ -5,25 +5,25 @@ part 'map_sample.flamingo.dart';
 
 class MapSample extends Document<MapSample> {
   MapSample({
-    String id,
-    DocumentSnapshot snapshot,
-    Map<String, dynamic> values,
+    String? id,
+    DocumentSnapshot? snapshot,
+    Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
-  Map<String, String> strMap;
+  Map<String, String>? strMap;
 
   @Field()
-  Map<String, int> intMap;
+  Map<String, int>? intMap;
 
   @Field()
-  Map<String, double> doubleMap;
+  Map<String, double>? doubleMap;
 
   @Field()
-  Map<String, bool> boolMap;
+  Map<String, bool>? boolMap;
 
   @Field()
-  List<Map<String, String>> listStrMap;
+  List<Map<String, String>>? listStrMap;
 
   @override
   Map<String, dynamic> toData() => _$toData(this);
