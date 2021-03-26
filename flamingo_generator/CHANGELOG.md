@@ -1,4 +1,7 @@
-# 0.9.0
+# 0.10.0
+Updated plugins.
+
+## 0.9.0
 Modified enum extension key.
 Migrate this package to null safety. Sdk constraints: >=2.12.0-0 <3.0.0 based on beta release guidelines.
 
