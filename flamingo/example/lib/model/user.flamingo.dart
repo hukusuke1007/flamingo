@@ -9,6 +9,7 @@ part of 'user.dart';
 /// Field value key
 enum UserKey {
   name,
+  note,
   editAt,
   clearAt,
 
@@ -20,6 +21,8 @@ extension UserKeyExtension on UserKey {
     switch (this) {
       case UserKey.name:
         return 'name';
+      case UserKey.note:
+        return 'note';
       case UserKey.editAt:
         return 'editAt';
       case UserKey.clearAt:
@@ -36,6 +39,7 @@ extension UserKeyExtension on UserKey {
 Map<String, dynamic> _$toData(User doc) {
   final data = <String, dynamic>{};
   Helper.writeNotNull(data, 'name', doc.name);
+  Helper.writeNotNull(data, 'note', doc.note);
   Helper.writeNotNull(data, 'editAt', doc.editAt);
   Helper.writeNotNull(data, 'clearAt', doc.clearAt);
 
@@ -44,16 +48,17 @@ Map<String, dynamic> _$toData(User doc) {
 
 /// For load data
 void _$fromData(User doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String>(data, 'name');
+  doc.name = Helper.valueFromKey<String?>(data, 'name');
+  doc.note = Helper.valueFromKey<String?>(data, 'note');
   if (data['editAt'] is Map) {
     doc.editAt = Helper.timestampFromMap(data, 'editAt');
   } else {
-    doc.editAt = Helper.valueFromKey<Timestamp>(data, 'editAt');
+    doc.editAt = Helper.valueFromKey<Timestamp?>(data, 'editAt');
   }
 
   if (data['clearAt'] is Map) {
     doc.clearAt = Helper.timestampFromMap(data, 'clearAt');
   } else {
-    doc.clearAt = Helper.valueFromKey<Timestamp>(data, 'clearAt');
+    doc.clearAt = Helper.valueFromKey<Timestamp?>(data, 'clearAt');
   }
 }

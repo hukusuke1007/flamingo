@@ -89,8 +89,8 @@ Map<String, dynamic> _$toData(User doc) {
 
 /// For load data
 void _$fromData(User doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String>(data, 'name');
-  doc.profile = Helper.valueFromKey<String>(data, 'profile');
+  doc.name = Helper.valueFromKey<String?>(data, 'name');
+  doc.profile = Helper.valueFromKey<String?>(data, 'profile');
   doc.strList = Helper.valueListFromKey<String>(data, 'strList');
   doc.intMap = Helper.valueMapFromKey<String, int>(data, 'intMap');
   doc.listIntMap = Helper.valueMapListFromKey<String, int>(data, 'listIntMap');

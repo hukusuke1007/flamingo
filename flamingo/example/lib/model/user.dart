@@ -22,6 +22,9 @@ class User extends Document<User> {
   String? name;
 
   @Field()
+  String? note;
+
+  @Field()
   Timestamp? editAt;
 
   @Field()
