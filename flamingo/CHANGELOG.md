@@ -1,4 +1,7 @@
-# 2.0.0
+# 2.1.0
+Updated Plugins.
+
+## 2.0.0
 Migrate this package to null safety. Sdk constraints: >=2.12.0-0 <3.0.0 based on beta release guidelines.
 
 ## 1.15.3

@@ -114,6 +114,14 @@ class FlamingoTest {
 
     assertCreateDocument(user, _user);
     assert(user.name == _user.name);
+
+    {
+      final _user = User(id: 'sameId')..name = 'hoge';
+      await documentAccessor.save(_user);
+      _user.log();
+      final _newUser = await documentAccessor.load<User>(User(id: _user.id));
+      _newUser!.log();
+    }
   }
 
   Future update() async {

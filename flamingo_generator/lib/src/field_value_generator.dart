@@ -161,11 +161,11 @@ class FieldValueGenerator extends Generator {
           if (data[\'${f.element.name}\'] is Map) {
             doc.${f.element.name} = Helper.timestampFromMap(data, \'${f.element.name}\');
           } else {
-            doc.${f.element.name} = Helper.valueFromKey<${f.elementType.type}>(data, \'${f.element.name}\');
+            doc.${f.element.name} = Helper.valueFromKey<${f.elementType.typeWithOptional}>(data, \'${f.element.name}\');
           }
           """;
         }
-        return """doc.${f.element.name} = Helper.valueFromKey<${f.elementType.type}>(data, \'${f.element.name}\');""";
+        return """doc.${f.element.name} = Helper.valueFromKey<${f.elementType.typeWithOptional}>(data, \'${f.element.name}\');""";
       }
     }
   }
@@ -231,5 +231,9 @@ class _AnnotatedElement {
 extension DartTypeExtension on DartType {
   String get type {
     return toString().replaceAll('*', '').replaceAll('?', '');
+  }
+
+  String get typeWithOptional {
+    return toString().replaceAll('*', '');
   }
 }

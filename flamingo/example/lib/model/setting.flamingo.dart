@@ -32,5 +32,5 @@ Map<String, dynamic> _$toData(Setting doc) {
 
 /// For load data
 void _$fromData(Setting doc, Map<String, dynamic> data) {
-  doc.isEnable = Helper.valueFromKey<bool>(data, 'isEnable');
+  doc.isEnable = Helper.valueFromKey<bool?>(data, 'isEnable');
 }

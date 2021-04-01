@@ -32,5 +32,5 @@ Map<String, dynamic> _$toData(Item doc) {
 
 /// For load data
 void _$fromData(Item doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String>(data, 'name');
+  doc.name = Helper.valueFromKey<String?>(data, 'name');
 }

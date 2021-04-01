@@ -36,6 +36,6 @@ Map<String, dynamic> _$toData(Address doc) {
 
 /// For load data
 void _$fromData(Address doc, Map<String, dynamic> data) {
-  doc.postCode = Helper.valueFromKey<String>(data, 'postCode');
-  doc.country = Helper.valueFromKey<String>(data, 'country');
+  doc.postCode = Helper.valueFromKey<String?>(data, 'postCode');
+  doc.country = Helper.valueFromKey<String?>(data, 'country');
 }
