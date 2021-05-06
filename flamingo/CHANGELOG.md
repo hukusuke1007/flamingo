@@ -1,4 +1,7 @@
-# 2.1.1
+# 2.2.0
+Update Firestore Plugins 2.0.0.
+
+## 2.1.1
 Upated pubspec.yaml
 
 ## 2.1.0

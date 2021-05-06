@@ -9,8 +9,9 @@ part 'owner.flamingo.dart';
 class Owner extends Document<Owner> {
   Owner({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()

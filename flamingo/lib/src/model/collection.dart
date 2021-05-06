@@ -8,7 +8,7 @@ class Collection<T extends Document<DocumentType>> {
       : ref = parent.reference.collection(name),
         path = parent.reference.collection(name).path;
 
-  final CollectionReference ref;
+  final CollectionReference<Map<String, dynamic>> ref;
   final String path;
   final String name;
 }

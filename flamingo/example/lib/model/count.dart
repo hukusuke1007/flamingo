@@ -6,9 +6,9 @@ part 'count.flamingo.dart';
 class Count extends Document<Count> {
   Count({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
-    CollectionReference? collectionRef,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(
             id: id,
             snapshot: snapshot,

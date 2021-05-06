@@ -23,10 +23,10 @@ class CollectionPagingListener<T extends Document<T>> {
         _pagingListenerController =
             _PagingListener(query: query, limit: initialLimit, decode: decode);
 
-  final Query query;
+  final Query<Map<String, dynamic>> query;
   final int? initialLimit;
   final int? pagingLimit;
-  final T Function(DocumentSnapshot) decode;
+  final T Function(DocumentSnapshot<Map<String, dynamic>>) decode;
 
   ValueStream<List<T>> get data => _dataController.stream;
   Stream<List<DocumentChangeData<T>>> get docChanges =>
@@ -92,9 +92,9 @@ class _PagingListener<T extends Document<T>> {
         .listen(_fetch);
   }
 
-  final Query query;
+  final Query<Map<String, dynamic>> query;
   final int? limit;
-  final T Function(DocumentSnapshot) decode;
+  final T Function(DocumentSnapshot<Map<String, dynamic>>) decode;
   final CollectionReference? collectionReference;
 
   ValueStream<List<T>> get data => _dataController.stream;

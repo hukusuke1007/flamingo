@@ -70,11 +70,11 @@ class Flamingo {
         sslEnabled: sslEnabled,
       );
 
-  DocumentReference get rootReference => _rootReference;
+  DocumentReference<Map<String, dynamic>> get rootReference => _rootReference;
   FirebaseFirestore get firestore => _firestore;
   FirebaseStorage get firebaseStorage => _firebaseStorage;
 
-  late DocumentReference _rootReference;
+  late DocumentReference<Map<String, dynamic>> _rootReference;
   late FirebaseFirestore _firestore;
   late FirebaseStorage _firebaseStorage;
 }
@@ -86,7 +86,8 @@ FirebaseFirestore get firestoreInstance => Flamingo.instance.firestore;
 FirebaseStorage get storageInstance => Flamingo.instance.firebaseStorage;
 
 /// RootReference
-DocumentReference get rootReference => Flamingo.instance.rootReference;
+DocumentReference<Map<String, dynamic>> get rootReference =>
+    Flamingo.instance.rootReference;
 
 /// CollectionReference
 CollectionReference collectionReference(String path) =>

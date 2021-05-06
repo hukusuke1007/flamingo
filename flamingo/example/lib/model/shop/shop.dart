@@ -10,9 +10,9 @@ class Shop extends Document<Shop> {
     String? id,
     String? documentPath,
     String? collectionPath,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
-    CollectionReference? collectionRef,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(
           id: id,
           documentPath: documentPath,
