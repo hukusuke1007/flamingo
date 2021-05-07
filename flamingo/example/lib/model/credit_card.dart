@@ -6,8 +6,9 @@ part 'credit_card.flamingo.dart';
 class CreditCard extends Document<CreditCard> {
   CreditCard({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()

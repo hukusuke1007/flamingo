@@ -60,7 +60,7 @@ part 'user.flamingo.dart';
 class User extends Document<User> {
   User({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -425,7 +425,7 @@ part 'owner.flamingo.dart';
 class Owner extends Document<Owner> {
   Owner({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -548,9 +548,9 @@ part 'ranking.flamingo.dart';
 class Ranking extends Document<Ranking> {
   Ranking(
       {String? id,
-      DocumentSnapshot? snapshot,
+      DocumentSnapshot<Map<String, dynamic>>? snapshot,
       Map<String, dynamic>? values,
-      CollectionReference? collectionRef})
+      CollectionReference<Map<String, dynamic>>? collectionRef})
       : super(
             id: id,
             snapshot: snapshot,
@@ -585,9 +585,9 @@ part 'count.flamingo.dart';
 class Count extends Document<Count> {
   Count({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
-    CollectionReference? collectionRef,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(
             id: id,
             snapshot: snapshot,
@@ -740,7 +740,7 @@ part 'credit_card.flamingo.dart';
 class CreditCard extends Document<CreditCard> {
   CreditCard({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -924,7 +924,7 @@ part 'map_sample.flamingo.dart';
 class MapSample extends Document<MapSample> {
   MapSample({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -979,7 +979,7 @@ part 'list_sample.flamingo.dart';
 class ListSample extends Document<ListSample> {
   ListSample({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 

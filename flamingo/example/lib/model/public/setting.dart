@@ -6,12 +6,12 @@ part 'setting.flamingo.dart';
 class Setting extends Document<Setting> {
   Setting({
     String? id,
-    DocumentSnapshot? documentSnapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
-    CollectionReference? collectionRef,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(
             id: id,
-            snapshot: documentSnapshot,
+            snapshot: snapshot,
             values: values,
             collectionRef: collectionRef);
 

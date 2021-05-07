@@ -23,9 +23,12 @@ class AppUser extends Document<AppUser> {
   Increment<int> newMessagesCount = Increment<int>();
   // @SubCollection()
   // Collection<Token> tokens;
-  AppUser(
-      {String? id, DocumentSnapshot? snapshot, Map<String, dynamic>? values})
-      : super(
+  AppUser({
+    String? id,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
+  }) : super(
             id: id,
             snapshot: snapshot,
             values: values,

@@ -6,8 +6,9 @@ part 'map_sample.flamingo.dart';
 class MapSample extends Document<MapSample> {
   MapSample({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()

@@ -6,9 +6,9 @@ part 'public.flamingo.dart';
 class Public<T> extends Document<T> {
   Public({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
-    CollectionReference? collectionRef,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(
           id: id,
           snapshot: snapshot,
@@ -17,7 +17,7 @@ class Public<T> extends Document<T> {
         );
 
   @override
-  CollectionReference get collectionRootReference =>
+  CollectionReference<Map<String, dynamic>> get collectionRootReference =>
       rootReference.collection('public');
 
   @Field()

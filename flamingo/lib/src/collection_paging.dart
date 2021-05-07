@@ -9,10 +9,10 @@ class CollectionPaging<T extends Document<T>> {
     required this.decode,
   });
 
-  final Query query;
+  final Query<Map<String, dynamic>> query;
   final int? limit;
-  final T Function(DocumentSnapshot) decode;
-  DocumentSnapshot? _startAfterDocument;
+  final T Function(DocumentSnapshot<Map<String, dynamic>>) decode;
+  DocumentSnapshot<Map<String, dynamic>>? _startAfterDocument;
 
   Future<List<T>> load({
     Source source = Source.serverAndCache,
@@ -29,7 +29,7 @@ class CollectionPaging<T extends Document<T>> {
     return documents.map(decode).cast<T>().toList();
   }
 
-  Future<List<DocumentSnapshot>> _load({
+  Future<List<DocumentSnapshot<Map<String, dynamic>>>> _load({
     Source source = Source.serverAndCache,
     DocumentSnapshot? startAfterDocument,
   }) async {

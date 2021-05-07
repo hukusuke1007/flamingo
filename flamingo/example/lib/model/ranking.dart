@@ -6,12 +6,12 @@ import 'count.dart';
 part 'ranking.flamingo.dart';
 
 class Ranking extends Document<Ranking> {
-  Ranking(
-      {String? id,
-      DocumentSnapshot? snapshot,
-      Map<String, dynamic>? values,
-      CollectionReference? collectionRef})
-      : super(
+  Ranking({
+    String? id,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
+    Map<String, dynamic>? values,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
+  }) : super(
             id: id,
             snapshot: snapshot,
             values: values,

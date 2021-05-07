@@ -8,7 +8,7 @@ class Document<T> extends Base implements DocumentType {
     String? collectionPath,
     this.snapshot,
     this.values,
-    CollectionReference? collectionRef,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   })  : assert(id == null || documentPath == null,
             'Can be used only either of \'id\' or \'documentPath\'.'),
         // ignore: lines_longer_than_80_chars
@@ -80,7 +80,7 @@ class Document<T> extends Base implements DocumentType {
   }
 
   /// For constructor
-  final DocumentSnapshot? snapshot;
+  final DocumentSnapshot<Map<String, dynamic>>? snapshot;
   final Map<String, dynamic>? values;
 
   /// Field
@@ -100,7 +100,7 @@ class Document<T> extends Base implements DocumentType {
       .replaceAll("\'", '')
       .toLowerCase();
 
-  CollectionReference get collectionRootReference =>
+  CollectionReference<Map<String, dynamic>> get collectionRootReference =>
       Flamingo.instance.rootReference.collection(modelName);
 
   late String _collectionPath;
@@ -109,11 +109,11 @@ class Document<T> extends Base implements DocumentType {
   late String _documentPath;
   String get documentPath => _documentPath;
 
-  late CollectionReference _collectionRef;
-  CollectionReference get collectionRef => _collectionRef;
+  late CollectionReference<Map<String, dynamic>> _collectionRef;
+  CollectionReference<Map<String, dynamic>> get collectionRef => _collectionRef;
 
-  late DocumentReference _reference;
-  DocumentReference get reference => _reference;
+  late DocumentReference<Map<String, dynamic>> _reference;
+  DocumentReference<Map<String, dynamic>> get reference => _reference;
 
   String get createdFieldValueKey => documentCreatedAtKey;
   String get updatedFieldValueKey => documentUpdatedAtKey;
@@ -128,7 +128,7 @@ class Document<T> extends Base implements DocumentType {
   void onCompleted(ExecuteType executeType) {}
 
   /// Set snapshot and documentId.
-  void setSnapshot(DocumentSnapshot documentSnapshot) {
+  void setSnapshot(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
     _id = documentSnapshot.id;
     if (documentSnapshot.exists) {
       final data = documentSnapshot.data();

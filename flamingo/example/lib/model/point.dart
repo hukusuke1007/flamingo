@@ -6,8 +6,9 @@ part 'point.flamingo.dart';
 class Point extends Document<Point> {
   Point({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(id: id, snapshot: snapshot, values: values);
 
   @Field()
