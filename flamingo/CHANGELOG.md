@@ -1,5 +1,5 @@
 # 2.2.0
-Update Firestore Plugins 2.0.0.
+Update Firestore Plugins 2.0.0. Added generics types.
 
 ## 2.1.1
 Upated pubspec.yaml

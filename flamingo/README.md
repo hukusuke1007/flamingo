@@ -56,11 +56,11 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_annotation/flamingo_annotation.dart';
 
 part 'user.flamingo.dart';
-
+<Map<String, dynamic>>
 class User extends Document<User> {
   User({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -405,7 +405,7 @@ part 'owner.flamingo.dart';
 class Owner extends Document<Owner> {
   Owner({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -522,9 +522,9 @@ part 'ranking.flamingo.dart';
 class Ranking extends Document<Ranking> {
   Ranking(
       {String? id,
-      DocumentSnapshot? snapshot,
+      DocumentSnapshot<Map<String, dynamic>>? snapshot,
       Map<String, dynamic>? values,
-      CollectionReference? collectionRef})
+      CollectionReference<Map<String, dynamic>>? collectionRef})
       : super(
             id: id,
             snapshot: snapshot,
@@ -558,9 +558,9 @@ part 'count.flamingo.dart';
 class Count extends Document<Count> {
   Count({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
-    CollectionReference? collectionRef,
+    CollectionReference<Map<String, dynamic>>? collectionRef,
   }) : super(
             id: id,
             snapshot: snapshot,
@@ -613,7 +613,7 @@ final list = snapshot.docs.map((item) => Count(snapshot: item)).toList()
 ### File
 Can operation into Firebase Storage and upload and delete storage file. Using StorageFile and Storage class.
 
-For examople, create post model that have StorageFile.
+For example, create post model that have StorageFile.
 
 ```dart
 import 'package:flamingo/flamingo.dart';
@@ -707,7 +707,7 @@ part 'credit_card.flamingo.dart';
 class CreditCard extends Document<CreditCard> {
   CreditCard({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -800,7 +800,7 @@ Clear process only set 0 to document and update. It not try transaction process.
 
 Using DistributedCounter and Counter.
 
-For examople, create score model that have Counter.
+For example, create score model that have Counter.
 
 ```dart
 import 'package:flamingo/flamingo.dart';
@@ -891,7 +891,7 @@ part 'map_sample.flamingo.dart';
 class MapSample extends Document<MapSample> {
   MapSample({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
@@ -949,7 +949,7 @@ part 'list_sample.flamingo.dart';
 class ListSample extends Document<ListSample> {
   ListSample({
     String? id,
-    DocumentSnapshot? snapshot,
+    DocumentSnapshot<Map<String, dynamic>>? snapshot,
     Map<String, dynamic>? values,
   }) : super(id: id, snapshot: snapshot, values: values);
 
