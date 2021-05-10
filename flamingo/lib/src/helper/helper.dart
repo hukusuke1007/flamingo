@@ -235,7 +235,7 @@ class Helper {
 
   static Increment<U> valueFromIncrement<U extends num>(
           Map<String, dynamic> data, String key) =>
-      Increment(value: data[key] as U);
+      Increment(value: data[key] as U?);
 
   static bool isVal(Map<String, dynamic> data, String key) =>
       data.containsKey(key);

@@ -1,4 +1,7 @@
-# 2.2.0
+# 2.2.1
+Bug fix.
+
+## 2.2.0
 Update Firestore Plugins 2.0.0. Added generics types.
 
 ## 2.1.1
