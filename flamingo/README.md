@@ -56,7 +56,7 @@ import 'package:flamingo/flamingo.dart';
 import 'package:flamingo_annotation/flamingo_annotation.dart';
 
 part 'user.flamingo.dart';
-<Map<String, dynamic>>
+
 class User extends Document<User> {
   User({
     String? id,

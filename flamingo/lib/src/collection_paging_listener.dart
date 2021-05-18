@@ -31,7 +31,7 @@ class CollectionPagingListener<T extends Document<T>> {
   ValueStream<List<T>> get data => _dataController.stream;
   Stream<List<DocumentChangeData<T>>> get docChanges =>
       _docChangesController.stream;
-  int get count => _dataController.value!.length;
+  int get count => _dataController.value.length;
   bool get hasMore => _hasMore;
 
   final _PagingListener<T> _pagingListenerController;
@@ -121,14 +121,14 @@ class _PagingListener<T extends Document<T>> {
     if (_disposer != null) {
       await _disposer?.cancel();
       _disposer = null;
-      _dataController.value!.clear();
+      _dataController.value.clear();
     }
     var dataSource = query;
     if (limit != null) {
       dataSource = dataSource.limit(limit);
     }
     _disposer = dataSource.snapshots().listen((event) {
-      final docs = _dataController.value!;
+      final docs = _dataController.value;
       final changes = <DocumentChangeData<T>>[];
       for (final change in event.docChanges) {
         final doc = decode(change.doc);
