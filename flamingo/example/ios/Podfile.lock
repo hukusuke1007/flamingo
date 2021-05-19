@@ -1,44 +1,51 @@
 PODS:
-  - cloud_firestore (2.1.0):
-    - Firebase/Firestore (= 7.11.0)
+  - cloud_firestore (2.2.0):
+    - Firebase/Firestore (= 8.0.0)
     - firebase_core
     - Flutter
-  - Firebase/CoreOnly (7.11.0):
-    - FirebaseCore (= 7.11.0)
-  - Firebase/Firestore (7.11.0):
+  - Firebase/CoreOnly (8.0.0):
+    - FirebaseCore (= 8.0.0)
+  - Firebase/Firestore (8.0.0):
     - Firebase/CoreOnly
-    - FirebaseFirestore (~> 7.11.0)
-  - Firebase/Storage (7.11.0):
+    - FirebaseFirestore (~> 8.0.0)
+  - Firebase/Storage (8.0.0):
     - Firebase/CoreOnly
-    - FirebaseStorage (~> 7.11.0)
-  - firebase_core (1.1.1):
-    - Firebase/CoreOnly (= 7.11.0)
+    - FirebaseStorage (~> 8.0.0)
+  - firebase_core (1.2.0):
+    - Firebase/CoreOnly (= 8.0.0)
     - Flutter
-  - firebase_storage (8.0.6):
-    - Firebase/Storage (= 7.11.0)
+  - firebase_storage (8.1.0):
+    - Firebase/Storage (= 8.0.0)
     - firebase_core
     - Flutter
-  - FirebaseCore (7.11.0):
-    - FirebaseCoreDiagnostics (~> 7.4)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Logger (~> 7.0)
-  - FirebaseCoreDiagnostics (7.11.0):
-    - GoogleDataTransport (~> 8.4)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Logger (~> 7.0)
+  - FirebaseCore (8.0.0):
+    - FirebaseCoreDiagnostics (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
+  - FirebaseCoreDiagnostics (8.0.0):
+    - GoogleDataTransport (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseFirestore (7.11.0)
-  - FirebaseStorage (7.11.0):
-    - FirebaseCore (~> 7.0)
-    - GTMSessionFetcher/Core (~> 1.4)
+  - FirebaseFirestore (8.0.0):
+    - FirebaseFirestore/AutodetectLeveldb (= 8.0.0)
+  - FirebaseFirestore/AutodetectLeveldb (8.0.0):
+    - FirebaseFirestore/Base
+    - FirebaseFirestore/WithLeveldb
+  - FirebaseFirestore/Base (8.0.0)
+  - FirebaseFirestore/WithLeveldb (8.0.0):
+    - FirebaseFirestore/Base
+  - FirebaseStorage (8.0.0):
+    - FirebaseCore (~> 8.0)
+    - GTMSessionFetcher/Core (~> 1.5)
   - Flutter (1.0.0)
-  - GoogleDataTransport (8.4.0):
+  - GoogleDataTransport (9.0.0):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Environment (7.4.0):
+  - GoogleUtilities/Environment (7.4.1):
     - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (7.4.0):
+  - GoogleUtilities/Logger (7.4.1):
     - GoogleUtilities/Environment
   - GTMSessionFetcher/Core (1.5.0)
   - nanopb (2.30908.0):
@@ -54,7 +61,7 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
-  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `7.11.0`)
+  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `8.0.0`)
   - Flutter (from `Flutter`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
@@ -79,7 +86,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 7.11.0
+    :tag: 8.0.0
   Flutter:
     :path: Flutter
   path_provider:
@@ -88,25 +95,25 @@ EXTERNAL SOURCES:
 CHECKOUT OPTIONS:
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 7.11.0
+    :tag: 8.0.0
 
 SPEC CHECKSUMS:
-  cloud_firestore: d40d713b447c39e4e5c1478cee269b2f2dc9cb99
-  Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
-  firebase_core: 54856a8a39b8f3e35f34fdd3373f3b92a1daa68b
-  firebase_storage: 6b8df0d28a1978a3b9f44d550d6f28c301887bbc
-  FirebaseCore: 907447d8917a4d3eb0cce2829c5a0ad21d90b432
-  FirebaseCoreDiagnostics: 68ad972f99206cef818230f3f3179d52ccfb7f8c
-  FirebaseFirestore: 783538aced1557a6b817ee121593561127a00244
-  FirebaseStorage: 8542711850ca181a3931c0ed483006a7b46039e7
+  cloud_firestore: 8ead368e38b40bb2a4c97458b7b99272399f2214
+  Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
+  firebase_core: e4d3efb030a2b2021819f8faa538bb23deb46695
+  firebase_storage: 6ea45fdb1976a9a32bf42d1a285a0103a97faaae
+  FirebaseCore: 3f09591d51292843e2a46f18358d60bf4e996255
+  FirebaseCoreDiagnostics: a31d987ba0fe16d59886a5dbadc2f1de871f88c8
+  FirebaseFirestore: 0d1548ab6085002d87c173ce3f881129f39b3565
+  FirebaseStorage: 61bcd27880fa17362f68be67d3683d04bfd7b1c7
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
-  GoogleUtilities: 284cddc7fffc14ae1907efb6f78ab95c1fccaedc
+  GoogleDataTransport: 11e3a5f2c190327df1a4a5d7e7ae3d4d5b9c9e4c
+  GoogleUtilities: f8a43108b38a68eebe8b3540e1f4f2d28843ce20
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
 
-PODFILE CHECKSUM: 3a08df7a93541d3ce4fe3bc92715af5442eea47b
+PODFILE CHECKSUM: a6459ae1b39390c45d171e09124ad432de1cd62b
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

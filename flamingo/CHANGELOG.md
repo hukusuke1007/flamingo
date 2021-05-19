@@ -1,4 +1,7 @@
-# 2.3.0
+# 2.4.0
+Updated Plugins.
+
+## 2.3.0
 Updated Plugins.
 
 ## 2.2.1
