@@ -1,4 +1,7 @@
-# 2.4.0
+# 2.4.1
+Bug fix => Removed onCompleted call in DocumentAccessor.
+
+## 2.4.0
 Updated Plugins.
 
 ## 2.3.0
