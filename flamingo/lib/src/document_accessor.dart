@@ -34,7 +34,6 @@ class DocumentAccessor implements DocumentAccessorRepository {
   Future save(Document document) async {
     final batch = Batch()..save(document);
     await batch.commit();
-    document.onCompleted(ExecuteType.create);
   }
 
   @override
@@ -63,14 +62,12 @@ class DocumentAccessor implements DocumentAccessorRepository {
   Future update(Document document) async {
     final batch = Batch()..update(document);
     await batch.commit();
-    document.onCompleted(ExecuteType.update);
   }
 
   @override
   Future delete(Document document) async {
     final batch = Batch()..delete(document);
     await batch.commit();
-    document.onCompleted(ExecuteType.delete);
   }
 
   @override
