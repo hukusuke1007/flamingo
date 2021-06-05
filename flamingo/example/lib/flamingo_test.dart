@@ -109,11 +109,36 @@ class FlamingoTest {
     await documentAccessor.save(user);
     user.log();
 
-    final _user = await documentAccessor.load<User>(User(id: user.id));
+    final _user = await documentAccessor.load<User>(
+      User(id: user.id),
+      fromCache: (cache) {
+        // 1. Load from cache
+        print('from cache $cache');
+        assertCreateDocument(user, cache!);
+      },
+    );
+    // 2. Load from serverAndCache
     _user!.log();
-
     assertCreateDocument(user, _user);
     assert(user.name == _user.name);
+
+    {
+      final _user = await documentAccessor.load<User>(
+        User(),
+        fromCache: (cache) {
+          print('from cache $cache');
+          assert(cache == null);
+        },
+      );
+      assert(_user == null);
+    }
+
+    {
+      final cache = await documentAccessor.loadCache<User>(User(id: user.id));
+      cache!.log();
+      assertCreateDocument(cache, _user);
+      assert(cache.name == _user.name);
+    }
 
     {
       final _user = User(id: 'sameId')..name = 'hoge';
