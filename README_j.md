@@ -153,13 +153,15 @@ targets:
 
 Document への操作は、Flamingoが提供する DocumentAccessor を利用します。
 
+```dart
+final documentAccessor = DocumentAccessor();
+```
+
 #### 書き込み
 
 ```dart
 final user = User()
       ..name = 'hoge';
-
-final documentAccessor = DocumentAccessor();
 
 await documentAccessor.save(user);
 ```
@@ -174,7 +176,6 @@ Firestoreへ次のように保存されます。
 また、特定のフィールドKeyに対して保存することもできます。
 
 ```dart
-final documentAccessor = DocumentAccessor();
 await documentAccessor.saveRaw(
   <String, dynamic>{ UserKey.name.value: 'hogehoge' },
   user.reference,
@@ -183,10 +184,40 @@ await documentAccessor.saveRaw(
 
 #### 読み込み
 
+最新の状態を取得します。
+
 ```dart
-final documentAccessor = DocumentAccessor();
-final user = await documentAccessor.load<User>(User(id: 'EYkOA3gBsWGbuWxOmbf0'));
-print(user.name) // hoge
+final user = await documentAccessor.load<User>(User(id: 'userId'));
+```
+
+キャッシュから取得します。
+
+```dart
+final user = await documentAccessor.loadCache<User>(User(id: 'userId'));
+```
+
+fromCacheを利用すれば、最新の状態を取得する前にキャッシュから取得したデータを反映することができます。
+
+```dart
+String name = 'Anonymous';
+
+final user = await documentAccessor.load<User>(
+  User(id: 'userId'),
+  fromCache: (cache) {
+    setState(() {
+      // 1. update state from cache
+      if (cache != null) {
+        name = cache.name;
+      }
+    });
+  },
+);
+setState(() {
+  // 2. update state from serverAndCache
+  if (user != null) {
+    name = user.name;
+  }
+});
 ```
 
 #### 更新
@@ -194,15 +225,12 @@ print(user.name) // hoge
 ```dart
 final user = User(id: 'EYkOA3gBsWGbuWxOmbf0')
       ..name = 'fuga';
-
-final documentAccessor = DocumentAccessor();
 await documentAccessor.update(user);
 ```
 
 #### 削除
 
 ```dart
-final documentAccessor = DocumentAccessor();
 await documentAccessor.delete(User(id: 'EYkOA3gBsWGbuWxOmbf0'));
 ```
 
@@ -224,7 +252,7 @@ final batch = Batch()
 await batch.commit();
 ```
 
-### Get Documents
+### Get Collection Documents
 
 #### CollectionPaging
 CollectionPagingを使えばドキュメントのページング取得ができます。
@@ -236,16 +264,34 @@ final collectionPaging = CollectionPaging<User>(
   decode: (snap) => User(snapshot: snap),
 );
 
-final items = <User>[];
-
 // Load 
-final _items = await collectionPaging.load();
-items = _items;
+List<User> items = await collectionPaging.load();
 
 // LoadMore
 final _items = await collectionPaging.loadMore();
 items.addAll(_items);
 ```
+
+fromCacheを利用すれば、最新の状態を取得する前にキャッシュから取得したデータを反映することができます。
+
+```dart
+List<User> items = [];
+
+final _items = await collectionPaging.load(
+  fromCache: (caches) {
+    setState(() {
+      // 1. update state from cache
+      items = caches;
+    });
+  },
+);
+
+// 2. update state from serverAndCache
+setState(() {
+  items = _items;
+});
+```
+
 
 CollectionGroupを使う場合は次のようにQueryを設定します。
 
