@@ -156,8 +156,8 @@ Create instance the following code.
 final user = User();
 print(user.id); // id: Automatically create document id;
 
-final user = User(id: '0000');
-print(user.id); // id: '0000'
+final user = User(id: 'userId');
+print(user.id); // id: 'userId'
 ```
 
 Using DocumentAccessor or Batch or Transaction in order to CRUD.
