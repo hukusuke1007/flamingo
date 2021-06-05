@@ -16,7 +16,16 @@ class CollectionPaging<T extends Document<T>> {
 
   Future<List<T>> load({
     Source source = Source.serverAndCache,
+    Function(List<T>)? fromCache,
   }) async {
+    if (fromCache != null) {
+      try {
+        final cacheDocuments = await _load(source: Source.cache);
+        fromCache(cacheDocuments.map(decode).cast<T>().toList());
+      } on Exception catch (_) {
+        fromCache([]);
+      }
+    }
     final documents = await _load(source: source);
     return documents.map(decode).cast<T>().toList();
   }

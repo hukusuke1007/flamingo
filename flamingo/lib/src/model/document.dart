@@ -128,14 +128,12 @@ class Document<T> extends Base implements DocumentType {
   void onCompleted(ExecuteType executeType) {}
 
   /// Set snapshot and documentId.
-  void setSnapshot(DocumentSnapshot<Map<String, dynamic>> documentSnapshot) {
-    _id = documentSnapshot.id;
-    if (documentSnapshot.exists) {
-      final data = documentSnapshot.data();
-      if (data != null) {
-        _fromAt(data);
-        fromData(data);
-      }
+  void setSnapshot(DocumentSnapshot<Map<String, dynamic>> snap) {
+    _id = snap.id;
+    if (snap.exists && snap.data() != null) {
+      final data = snap.data()!;
+      _fromAt(data);
+      fromData(data);
     }
   }
 
