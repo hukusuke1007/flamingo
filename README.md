@@ -156,8 +156,8 @@ Create instance the following code.
 final user = User();
 print(user.id); // id: Automatically create document id;
 
-final user = User(id: '0000');
-print(user.id); // id: '0000'
+final user = User(id: 'userId');
+print(user.id); // id: 'userId'
 ```
 
 Using DocumentAccessor or Batch or Transaction in order to CRUD.
@@ -203,12 +203,40 @@ await documentAccessor.saveRaw(
 Get a document.
 
 ```dart
-// get
-final user = User(id: '0000');  // need to 'id'.
-final hoge = await documentAccessor.load<User>(user);
+final user = await documentAccessor.load<User>(User(id: 'userId'));
 ```
 
-### Get Documents
+Get a document from cache.
+
+```dart
+final user = await documentAccessor.loadCache<User>(User(id: 'userId'));
+```
+
+Get a document from cache and server.
+
+```dart
+String name = 'Anonymous';
+
+final user = await documentAccessor.load<User>(
+  User(id: 'userId'),
+  fromCache: (cache) {
+    setState(() {
+      // 1. update state from cache
+      if (cache != null) {
+        name = cache.name;
+      }
+    });
+  },
+);
+setState(() {
+  // 2. update state from serverAndCache
+  if (user != null) {
+    name = user.name;
+  }
+});
+```
+
+### Get Collection Documents 
 
 #### CollectionPaging
 Can be used get and paging features of documents by CollectionPaging.
@@ -222,16 +250,34 @@ final collectionPaging = CollectionPaging<User>(
   decode: (snap) => User(snapshot: snap),
 );
 
-List<User> items = [];
-
 // Load 
-final _items = await collectionPaging.load();
-items = _items;
+List<User> items = await collectionPaging.load();
 
 // LoadMore
 final _items = await collectionPaging.loadMore();
 items.addAll(_items);
 ```
+
+Get a documents from cache and server.
+
+```dart
+List<User> items = [];
+
+final _items = await collectionPaging.load(
+  fromCache: (caches) {
+    setState(() {
+      // 1. update state from cache
+      items = caches;
+    });
+  },
+);
+
+// 2. update state from serverAndCache
+setState(() {
+  items = _items;
+});
+```
+
 
 Query of CollectionGroup.
 

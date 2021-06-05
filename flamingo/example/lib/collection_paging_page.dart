@@ -41,7 +41,17 @@ class _State extends State<CollectionPagingPage> {
   }
 
   void initLoad() async {
-    final _items = await collectionPaging.load();
+    final _items = await collectionPaging.load(
+      fromCache: (caches) {
+        setState(() {
+          // 1. Load from cache
+          print('from cache ${caches.length}');
+          items = caches;
+        });
+      },
+    );
+
+    // 2. Load from serverAndCache
     setState(() {
       items = _items;
     });

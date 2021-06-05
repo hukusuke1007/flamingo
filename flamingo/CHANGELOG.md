@@ -1,4 +1,7 @@
-# 2.4.1
+# 2.5.0
+Added loadCache and fromCache in DocumentAccessor. Added fromCache in CollectionPaging.
+
+## 2.4.1
 Bug fix => Removed onCompleted call in DocumentAccessor.
 
 ## 2.4.0

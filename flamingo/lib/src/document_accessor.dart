@@ -12,6 +12,12 @@ abstract class DocumentAccessorRepository {
   });
   Future update(Document document);
   Future delete(Document document);
+  Future<T?> load<T extends Document<T>>(
+    Document document, {
+    Source source = Source.serverAndCache,
+    Function(T?)? fromCache,
+  });
+  Future<T?> loadCache<T extends Document<T>>(Document document);
   Future saveRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
@@ -26,7 +32,6 @@ abstract class DocumentAccessorRepository {
     String updatedFieldValueKey = documentUpdatedAtKey,
   });
   Future deleteWithReference(DocumentReference reference);
-  Future<T?> load<T extends Document<T>>(Document document, {Source? source});
 }
 
 class DocumentAccessor implements DocumentAccessorRepository {
@@ -71,21 +76,41 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   @override
-  Future<T?> load<T extends Document<T>>(Document document,
-      {Source? source}) async {
-    Document? _document;
-    if (source == null) {
-      _document = await _load(document, Source.serverAndCache);
-    } else {
-      _document = await _load(document, source);
+  Future<T?> load<T extends Document<T>>(
+    Document document, {
+    Source source = Source.serverAndCache,
+    Function(T?)? fromCache,
+  }) async {
+    if (fromCache != null) {
+      try {
+        final cache = await _load(document, Source.cache);
+        fromCache(cache != null ? cache as T : null);
+      } on Exception catch (_) {
+        fromCache(null);
+      }
     }
+    final _document = await _load(document, source);
+    return _document != null ? _document as T : null;
+  }
+
+  @override
+  Future<T?> loadCache<T extends Document<T>>(Document document) async {
+    try {
+      final cache = await _load(document, Source.cache);
+      if (cache != null) {
+        return cache as T;
+      }
+    } on Exception catch (_) {
+      // nothing
+    }
+    final _document = await _load(document, Source.serverAndCache);
     return _document != null ? _document as T : null;
   }
 
   Future<Document?> _load(Document document, Source source) async {
     final documentSnapshot =
         await document.reference.get(GetOptions(source: source));
-    if (documentSnapshot.data() != null) {
+    if (documentSnapshot.exists) {
       document.setSnapshot(documentSnapshot);
       return document;
     }
