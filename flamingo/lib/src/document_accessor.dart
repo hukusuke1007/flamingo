@@ -18,6 +18,7 @@ abstract class DocumentAccessorRepository {
     Function(T?)? fromCache,
   });
   Future<T?> loadCache<T extends Document<T>>(Document document);
+  Future<T?> loadCacheOnly<T extends Document<T>>(Document document);
   Future saveRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
@@ -105,6 +106,19 @@ class DocumentAccessor implements DocumentAccessorRepository {
     }
     final _document = await _load(document, Source.serverAndCache);
     return _document != null ? _document as T : null;
+  }
+
+  @override
+  Future<T?> loadCacheOnly<T extends Document<T>>(Document document) async {
+    try {
+      final cache = await _load(document, Source.cache);
+      if (cache != null) {
+        return cache as T;
+      }
+    } on Exception catch (_) {
+      // nothing
+    }
+    return null;
   }
 
   Future<Document?> _load(Document document, Source source) async {

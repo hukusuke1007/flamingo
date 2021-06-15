@@ -1,4 +1,7 @@
-# 2.5.0
+# 2.5.1
+Updated Plugins and added loadCacheOnly in DocumentAccessor.
+
+## 2.5.0
 Added loadCache and fromCache in DocumentAccessor. Added fromCache in CollectionPaging.
 
 ## 2.4.1
