@@ -1,5 +1,5 @@
 PODS:
-  - cloud_firestore (2.2.2):
+  - cloud_firestore (2.3.0):
     - Firebase/Firestore (= 8.0.0)
     - firebase_core
     - Flutter
@@ -14,7 +14,7 @@ PODS:
   - firebase_core (1.3.0):
     - Firebase/CoreOnly (= 8.0.0)
     - Flutter
-  - firebase_storage (8.1.3):
+  - firebase_storage (9.0.0):
     - Firebase/Storage (= 8.0.0)
     - firebase_core
     - Flutter
@@ -98,10 +98,10 @@ CHECKOUT OPTIONS:
     :tag: 8.0.0
 
 SPEC CHECKSUMS:
-  cloud_firestore: 83d6cd19d24798c523265494ab81db32009fcb7b
+  cloud_firestore: 0e708a57ee3e13a56cf6a6fdaf085d5edb1e7e0f
   Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
   firebase_core: cda81ae37eda6df2bc2d16027fda527987c4bd33
-  firebase_storage: 1c82ef47319a51b82b216475b91a102bca2e66d0
+  firebase_storage: 915a6f20a4d114cdbac3b93eecce045e5b40eff3
   FirebaseCore: 3f09591d51292843e2a46f18358d60bf4e996255
   FirebaseCoreDiagnostics: a31d987ba0fe16d59886a5dbadc2f1de871f88c8
   FirebaseFirestore: 0d1548ab6085002d87c173ce3f881129f39b3565

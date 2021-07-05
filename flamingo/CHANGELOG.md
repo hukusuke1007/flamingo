@@ -1,4 +1,7 @@
-# 2.5.1
+# 2.6.0
+Updated Plugins.
+
+## 2.5.1
 Updated Plugins and added loadCacheOnly in DocumentAccessor.
 
 ## 2.5.0
