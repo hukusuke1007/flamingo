@@ -1,4 +1,7 @@
-# 2.7.0
+## 2.8.0
+Added defaultValue in valueFromKey. Updated example code.
+
+## 2.7.0
 Updated Plugins.
 
 ## 2.6.0

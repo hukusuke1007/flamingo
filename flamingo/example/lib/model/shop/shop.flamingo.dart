@@ -41,7 +41,7 @@ Map<String, dynamic> _$toData(Shop doc) {
 
 /// For load data
 void _$fromData(Shop doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String?>(data, 'name');
+  doc.name = Helper.valueFromKey<String?>(data, 'name', defaultValue: null);
 
   final _cart = Helper.valueMapFromKey<String, dynamic>(data, 'cart');
   if (_cart != null) {

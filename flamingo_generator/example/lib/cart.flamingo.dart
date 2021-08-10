@@ -44,12 +44,13 @@ Map<String, dynamic> _$toData(Cart doc) {
 
 /// For load data
 void _$fromData(Cart doc, Map<String, dynamic> data) {
-  doc.itemA = Helper.valueFromKey<String?>(data, 'itemA');
-  doc.itemB = Helper.valueFromKey<int?>(data, 'itemB');
-  doc.itemC = Helper.valueFromKey<double?>(data, 'itemC');
+  doc.itemA = Helper.valueFromKey<String?>(data, 'itemA', defaultValue: null);
+  doc.itemB = Helper.valueFromKey<int?>(data, 'itemB', defaultValue: null);
+  doc.itemC = Helper.valueFromKey<double?>(data, 'itemC', defaultValue: null);
   if (data['itemAt'] is Map) {
     doc.itemAt = Helper.timestampFromMap(data, 'itemAt');
   } else {
-    doc.itemAt = Helper.valueFromKey<Timestamp?>(data, 'itemAt');
+    doc.itemAt =
+        Helper.valueFromKey<Timestamp?>(data, 'itemAt', defaultValue: null);
   }
 }

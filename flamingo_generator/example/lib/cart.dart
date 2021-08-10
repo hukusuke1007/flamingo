@@ -20,6 +20,9 @@ class Cart extends Model {
   @Field()
   Timestamp? itemAt;
 
+  // @Field()
+  // bool isItem = true;
+
   @override
   Map<String, dynamic> toData() => _$toData(this);
 

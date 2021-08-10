@@ -50,7 +50,7 @@ Map<String, dynamic> _$toData(ModelSample doc) {
 
 /// For load data
 void _$fromData(ModelSample doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String?>(data, 'name');
+  doc.name = Helper.valueFromKey<String?>(data, 'name', defaultValue: null);
   doc.strList = Helper.valueListFromKey<String>(data, 'strList');
   doc.strMap = Helper.valueMapFromKey<String, String>(data, 'strMap');
   doc.listStrMap =

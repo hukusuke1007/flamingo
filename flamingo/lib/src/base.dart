@@ -68,8 +68,12 @@ class Base {
           Map<String, dynamic> data, String folderName) =>
       Helper.storageFiles(data, folderName);
 
-  U valueFromKey<U>(Map<String, dynamic> data, String key) =>
-      Helper.valueFromKey<U>(data, key);
+  U valueFromKey<U>(
+    Map<String, dynamic> data,
+    String key, {
+    required U defaultValue,
+  }) =>
+      Helper.valueFromKey<U>(data, key, defaultValue: defaultValue);
 
   Map<U, V>? valueMapFromKey<U, V>(Map<String, dynamic> data, String key) =>
       Helper.valueMapFromKey<U, V>(data, key);

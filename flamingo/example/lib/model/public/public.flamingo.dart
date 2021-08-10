@@ -32,5 +32,5 @@ Map<String, dynamic> _$toData(Public doc) {
 
 /// For load data
 void _$fromData(Public doc, Map<String, dynamic> data) {
-  doc.domain = Helper.valueFromKey<String>(data, 'domain');
+  doc.domain = Helper.valueFromKey<String?>(data, 'domain', defaultValue: null);
 }
