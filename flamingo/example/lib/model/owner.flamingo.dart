@@ -41,7 +41,7 @@ Map<String, dynamic> _$toData(Owner doc) {
 
 /// For load data
 void _$fromData(Owner doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String?>(data, 'name');
+  doc.name = Helper.valueFromKey<String?>(data, 'name', defaultValue: null);
 
   final _address = Helper.valueMapFromKey<String, dynamic>(data, 'address');
   if (_address != null) {

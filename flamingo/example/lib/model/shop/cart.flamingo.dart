@@ -36,6 +36,7 @@ Map<String, dynamic> _$toData(Cart doc) {
 
 /// For load data
 void _$fromData(Cart doc, Map<String, dynamic> data) {
-  doc.ref = Helper.valueFromKey<String?>(data, 'ref');
-  doc.collectionRef = Helper.valueFromKey<String?>(data, 'collectionRef');
+  doc.ref = Helper.valueFromKey<String?>(data, 'ref', defaultValue: null);
+  doc.collectionRef =
+      Helper.valueFromKey<String?>(data, 'collectionRef', defaultValue: null);
 }

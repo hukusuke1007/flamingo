@@ -1,4 +1,7 @@
-# 0.11.0
+# 0.12.0
+Added defaultValue
+
+## 0.11.0
 Bug fix.
 
 ## 0.10.0

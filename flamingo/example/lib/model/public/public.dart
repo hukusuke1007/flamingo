@@ -21,7 +21,7 @@ class Public<T> extends Document<T> {
       rootReference.collection('public');
 
   @Field()
-  String domain = 'public';
+  String? domain = 'public';
 
   @override
   Map<String, dynamic> toData() => _$toData(this);

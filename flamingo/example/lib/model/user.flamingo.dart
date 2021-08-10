@@ -12,6 +12,7 @@ enum UserKey {
   note,
   editAt,
   clearAt,
+  isValue,
 
   setting,
 }
@@ -27,6 +28,8 @@ extension UserKeyExtension on UserKey {
         return 'editAt';
       case UserKey.clearAt:
         return 'clearAt';
+      case UserKey.isValue:
+        return 'isValue';
       case UserKey.setting:
         return 'setting';
       default:
@@ -42,23 +45,28 @@ Map<String, dynamic> _$toData(User doc) {
   Helper.writeNotNull(data, 'note', doc.note);
   Helper.writeNotNull(data, 'editAt', doc.editAt);
   Helper.writeNotNull(data, 'clearAt', doc.clearAt);
+  Helper.writeNotNull(data, 'isValue', doc.isValue);
 
   return data;
 }
 
 /// For load data
 void _$fromData(User doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String?>(data, 'name');
-  doc.note = Helper.valueFromKey<String?>(data, 'note');
+  doc.name = Helper.valueFromKey<String?>(data, 'name', defaultValue: null);
+  doc.note = Helper.valueFromKey<String?>(data, 'note', defaultValue: null);
   if (data['editAt'] is Map) {
     doc.editAt = Helper.timestampFromMap(data, 'editAt');
   } else {
-    doc.editAt = Helper.valueFromKey<Timestamp?>(data, 'editAt');
+    doc.editAt =
+        Helper.valueFromKey<Timestamp?>(data, 'editAt', defaultValue: null);
   }
 
   if (data['clearAt'] is Map) {
     doc.clearAt = Helper.timestampFromMap(data, 'clearAt');
   } else {
-    doc.clearAt = Helper.valueFromKey<Timestamp?>(data, 'clearAt');
+    doc.clearAt =
+        Helper.valueFromKey<Timestamp?>(data, 'clearAt', defaultValue: null);
   }
+
+  doc.isValue = Helper.valueFromKey<bool?>(data, 'isValue', defaultValue: null);
 }

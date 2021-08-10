@@ -105,7 +105,9 @@ class FlamingoTest {
   Future save() async {
     print('--- save ---');
 
-    final user = User()..name = 'hoge';
+    final user = User()
+      ..name = 'hoge'
+      ..isValue = true;
     await documentAccessor.save(user);
     user.log();
 

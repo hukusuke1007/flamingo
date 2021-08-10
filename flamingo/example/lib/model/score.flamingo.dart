@@ -36,5 +36,5 @@ Map<String, dynamic> _$toData(Score doc) {
 
 /// For load data
 void _$fromData(Score doc, Map<String, dynamic> data) {
-  doc.userId = Helper.valueFromKey<String?>(data, 'userId');
+  doc.userId = Helper.valueFromKey<String?>(data, 'userId', defaultValue: null);
 }

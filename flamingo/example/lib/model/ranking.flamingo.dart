@@ -36,5 +36,5 @@ Map<String, dynamic> _$toData(Ranking doc) {
 
 /// For load data
 void _$fromData(Ranking doc, Map<String, dynamic> data) {
-  doc.title = Helper.valueFromKey<String?>(data, 'title');
+  doc.title = Helper.valueFromKey<String?>(data, 'title', defaultValue: null);
 }

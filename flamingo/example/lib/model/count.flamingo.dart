@@ -36,6 +36,6 @@ Map<String, dynamic> _$toData(Count doc) {
 
 /// For load data
 void _$fromData(Count doc, Map<String, dynamic> data) {
-  doc.userId = Helper.valueFromKey<String?>(data, 'userId');
-  doc.count = Helper.valueFromKey<int?>(data, 'count');
+  doc.userId = Helper.valueFromKey<String?>(data, 'userId', defaultValue: null);
+  doc.count = Helper.valueFromKey<int?>(data, 'count', defaultValue: null);
 }

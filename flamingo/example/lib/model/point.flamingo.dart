@@ -36,6 +36,8 @@ Map<String, dynamic> _$toData(Point doc) {
 
 /// For load data
 void _$fromData(Point doc, Map<String, dynamic> data) {
-  doc.pointInt = Helper.valueFromKey<int?>(data, 'pointInt');
-  doc.pointDouble = Helper.valueFromKey<double?>(data, 'pointDouble');
+  doc.pointInt =
+      Helper.valueFromKey<int?>(data, 'pointInt', defaultValue: null);
+  doc.pointDouble =
+      Helper.valueFromKey<double?>(data, 'pointDouble', defaultValue: null);
 }

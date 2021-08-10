@@ -30,6 +30,9 @@ class User extends Document<User> {
   @Field()
   Timestamp? clearAt;
 
+  @Field()
+  bool? isValue = false;
+
   @SubCollection()
   late Collection<Setting> setting;
 
@@ -46,9 +49,6 @@ class User extends Document<User> {
   }
 
   void log() {
-    print(
-        'User $modelName $id ${reference.path} $name $createdFieldValueKey $updatedFieldValueKey '
-        '${createdAt?.toDate()} '
-        '${updatedAt?.toDate()}');
+    print('User $modelName $id ${reference.path} ${toData()} ');
   }
 }

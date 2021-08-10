@@ -45,11 +45,7 @@ class Helper {
 
   static void writeModelList(
       Map<String, dynamic> data, String key, List<Model> models) {
-    if (models != null) {
-      _writeModelList(data, key, models);
-    } else {
-      data[key] = null;
-    }
+    _writeModelList(data, key, models);
   }
 
   static void writeNotNull(
@@ -200,7 +196,11 @@ class Helper {
     }
   }
 
-  static U valueFromKey<U>(Map<String, dynamic> data, String key) {
+  static U valueFromKey<U>(
+    Map<String, dynamic> data,
+    String key, {
+    required U defaultValue,
+  }) {
     final dynamic value = data[key];
     if (U.toString() == 'int') {
       if (value is double) {
@@ -210,6 +210,9 @@ class Helper {
       if (value is int) {
         return value.toDouble() as U;
       }
+    }
+    if (value == null) {
+      return defaultValue;
     }
     return value as U;
   }

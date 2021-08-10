@@ -60,13 +60,18 @@ Map<String, dynamic> _$toData(AppUser doc) {
 
 /// For load data
 void _$fromData(AppUser doc, Map<String, dynamic> data) {
-  doc.name = Helper.valueFromKey<String?>(data, 'name');
-  doc.username = Helper.valueFromKey<String?>(data, 'username');
-  doc.firstName = Helper.valueFromKey<String?>(data, 'firstName');
-  doc.lastName = Helper.valueFromKey<String?>(data, 'lastName');
-  doc.email = Helper.valueFromKey<String?>(data, 'email');
-  doc.phoneNumber = Helper.valueFromKey<String?>(data, 'phoneNumber');
-  doc.photoUrl = Helper.valueFromKey<String?>(data, 'photoUrl');
+  doc.name = Helper.valueFromKey<String?>(data, 'name', defaultValue: null);
+  doc.username =
+      Helper.valueFromKey<String?>(data, 'username', defaultValue: null);
+  doc.firstName =
+      Helper.valueFromKey<String?>(data, 'firstName', defaultValue: null);
+  doc.lastName =
+      Helper.valueFromKey<String?>(data, 'lastName', defaultValue: null);
+  doc.email = Helper.valueFromKey<String?>(data, 'email', defaultValue: null);
+  doc.phoneNumber =
+      Helper.valueFromKey<String?>(data, 'phoneNumber', defaultValue: null);
+  doc.photoUrl =
+      Helper.valueFromKey<String?>(data, 'photoUrl', defaultValue: null);
   doc.newMessagesCount =
       Helper.valueFromIncrement<int>(data, 'newMessagesCount');
 }
