@@ -10,8 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_web_plugins:
-    sdk: flutter
 
   firebase_core: ^1.4.0
   cloud_firestore: ^2.4.0
