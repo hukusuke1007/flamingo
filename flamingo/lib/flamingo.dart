@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'
     show CollectionReference, DocumentReference, FirebaseFirestore, Settings;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
+import 'package:flutter/foundation.dart';
 
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_storage/firebase_storage.dart';
@@ -52,7 +53,9 @@ class Flamingo {
     Settings? settings,
     String? rootPath,
   }) {
-    FirebaseFirestore.instance.settings = settings ?? const Settings();
+    if (!kIsWeb) {
+      FirebaseFirestore.instance.settings = settings ?? const Settings();
+    }
     instance._firestore = firestoreInstance ?? FirebaseFirestore.instance;
     instance._firebaseStorage = storageInstance ?? FirebaseStorage.instance;
     instance._rootReference = instance.firestore.doc(rootPath ?? '/');

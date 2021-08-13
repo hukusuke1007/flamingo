@@ -1,3 +1,6 @@
+# 2.9.0
+Supported Web.
+
 ## 2.8.0
 Added defaultValue in valueFromKey. Updated example code.
 

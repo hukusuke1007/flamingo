@@ -110,16 +110,18 @@ class FlamingoTest {
       ..isValue = true;
     await documentAccessor.save(user);
     user.log();
-
     final _user = await documentAccessor.load<User>(
       User(id: user.id),
       fromCache: (cache) {
         // 1. Load from cache
         print('from cache $cache');
-        assertCreateDocument(user, cache!);
+        if (cache != null) {
+          assertCreateDocument(user, cache);
+        }
       },
     );
     // 2. Load from serverAndCache
+
     _user!.log();
     assertCreateDocument(user, _user);
     assert(user.name == _user.name);
@@ -132,6 +134,7 @@ class FlamingoTest {
           assert(cache == null);
         },
       );
+
       assert(_user == null);
     }
 
@@ -459,6 +462,8 @@ class FlamingoTest {
 
   Future saveStorage() async {
     print('--- saveStorage ---');
+
+    // TODO(shohei): Suppoert Flutter Web
     final post = Post();
     final storage = Storage();
     final file =
