@@ -1,6 +1,6 @@
 name: flamingo
 description: This is Firebase Firestore Model Framework Library. Can be manage document reference and collection reference. And provide Firestore and Cloud Storage interface.
-version: 2.9.0
+version: 2.9.0-dev.1
 repository: https://github.com/hukusuke1007/flamingo
 homepage: https://github.com/hukusuke1007/flamingo
 
@@ -17,6 +17,7 @@ dependencies:
   cloud_firestore: ^2.4.0
   firebase_storage: ^10.0.1
   rxdart: ^0.27.1
+  universal_io: ^2.0.4
 
 dev_dependencies:
   flutter_test:

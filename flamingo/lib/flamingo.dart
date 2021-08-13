@@ -1,12 +1,11 @@
 library flamingo;
 
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart'
     show CollectionReference, DocumentReference, FirebaseFirestore, Settings;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 import 'package:flutter/foundation.dart';
+import 'package:universal_io/io.dart';
 
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:firebase_storage/firebase_storage.dart';

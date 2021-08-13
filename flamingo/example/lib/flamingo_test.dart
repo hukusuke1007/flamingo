@@ -9,8 +9,9 @@ import 'package:flamingo_example/model/score.dart';
 import 'package:flamingo_example/model/setting.dart';
 import 'package:flamingo_example/model/shop/cart.dart';
 import 'package:flamingo_example/model/shop/shop.dart';
+import 'package:flutter/foundation.dart';
 
-import 'image_helper.dart';
+import 'helper/image_helper.dart';
 import 'model/address.dart';
 import 'model/credit_card.dart';
 import 'model/item.dart';
@@ -462,12 +463,8 @@ class FlamingoTest {
 
   Future saveStorage() async {
     print('--- saveStorage ---');
-
-    // TODO(shohei): Suppoert Flutter Web
     final post = Post();
     final storage = Storage();
-    final file =
-        await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
@@ -478,15 +475,33 @@ class FlamingoTest {
 
     // save file metadata into firestore
     final path = '${post.documentPath}/${PostKey.file.value}';
-    post.file =
-        await storage.save(path, file, mimeType: mimeTypePng, metadata: {
-      'newPost': 'true'
-    }, additionalData: <String, dynamic>{
+    final metadata = {'newPost': 'true'};
+    final additionalData = <String, dynamic>{
       'key0': 'key',
       'key1': 10,
       'key2': 0.123,
       'key3': true,
-    });
+    };
+    if (kIsWeb) {
+      final blob = await ImageHelper.getImage('sample.jpg');
+      post.file = await storage.saveBlob(
+        path,
+        blob,
+        mimeType: mimeTypePng,
+        metadata: metadata,
+        additionalData: additionalData,
+      );
+    } else {
+      final file = await ImageHelper.getImage('sample.jpg');
+      post.file = await storage.save(
+        path,
+        file,
+        mimeType: mimeTypePng,
+        metadata: metadata,
+        additionalData: additionalData,
+      );
+    }
+
     await documentAccessor.save(post);
     post.log();
 
@@ -526,12 +541,19 @@ class FlamingoTest {
 
   Future deleteStorage() async {
     print('--- deleteStorage ---');
+
     final post = Post();
     final storage = Storage();
-    final file =
-        await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
     final path = '${post.documentPath}/${PostKey.file.value}';
-    post.file = await storage.save(path, file, mimeType: mimeTypePng);
+
+    if (kIsWeb) {
+      final blob = await ImageHelper.getImage('sample.jpg');
+      post.file = await storage.saveBlob(path, blob, mimeType: mimeTypePng);
+    } else {
+      final file = await ImageHelper.getImage('sample.jpg');
+      post.file = await storage.save(path, file, mimeType: mimeTypePng);
+    }
+
     await documentAccessor.save(post);
 
     final _post = await documentAccessor.load<Post>(post);
@@ -550,11 +572,9 @@ class FlamingoTest {
 
   Future saveStorageAndDoc() async {
     print('--- saveStorageAndDoc ---');
-    final post = Post();
 
+    final post = Post();
     final storage = Storage();
-    final file =
-        await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
@@ -563,20 +583,36 @@ class FlamingoTest {
       print('total: ${data.totalBytes} transferred: ${data.bytesTransferred}');
     });
 
-    // save file metadata into firestore
-    post.file = await storage.saveWithDoc(
-      post.reference,
-      PostKey.file.value,
-      file,
-      mimeType: mimeTypePng,
-      metadata: {'newPost': 'true'},
-      additionalData: <String, dynamic>{
-        'key0': 'key',
-        'key1': 10,
-        'key2': 0.123,
-        'key3': true,
-      },
-    );
+    final metadata = {'newPost': 'true'};
+    final additionalData = <String, dynamic>{
+      'key0': 'key',
+      'key1': 10,
+      'key2': 0.123,
+      'key3': true,
+    };
+
+    if (kIsWeb) {
+      final blob = await ImageHelper.getImage('sample.jpg');
+      post.file = await storage.saveBlobWithDoc(
+        post.reference,
+        PostKey.file.value,
+        blob,
+        mimeType: mimeTypePng,
+        metadata: metadata,
+        additionalData: additionalData,
+      );
+    } else {
+      final file = await ImageHelper.getImage('sample.jpg');
+      post.file = await storage.saveWithDoc(
+        post.reference,
+        PostKey.file.value,
+        file,
+        mimeType: mimeTypePng,
+        metadata: metadata,
+        additionalData: additionalData,
+      );
+    }
+
     print('  ----get');
     final _post = await documentAccessor.load<Post>(Post(id: post.id));
     _post!.log();
@@ -594,21 +630,35 @@ class FlamingoTest {
     final id = post.id;
 
     final storage = Storage();
-    final file =
-        await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
-    await storage.saveWithDoc(
-      post.reference,
-      PostKey.file.value,
-      file,
-      mimeType: mimeTypePng,
-      metadata: {'newPost': 'true'},
-      additionalData: <String, dynamic>{
-        'key0': 'key',
-        'key1': 10,
-        'key2': 0.123,
-        'key3': true,
-      },
-    );
+    final metadata = {'newPost': 'true'};
+    final additionalData = <String, dynamic>{
+      'key0': 'key',
+      'key1': 10,
+      'key2': 0.123,
+      'key3': true,
+    };
+
+    if (kIsWeb) {
+      final blob = await ImageHelper.getImage('sample.jpg');
+      await storage.saveBlobWithDoc(
+        post.reference,
+        PostKey.file.value,
+        blob,
+        mimeType: mimeTypePng,
+        metadata: metadata,
+        additionalData: additionalData,
+      );
+    } else {
+      final file = await ImageHelper.getImage('sample.jpg');
+      await storage.saveWithDoc(
+        post.reference,
+        PostKey.file.value,
+        file,
+        mimeType: mimeTypePng,
+        metadata: metadata,
+        additionalData: additionalData,
+      );
+    }
 
     final _post = await documentAccessor.load<Post>(Post(id: id));
     await storage.deleteWithDoc(
@@ -939,8 +989,6 @@ class FlamingoTest {
     item.log();
 
     final storage = Storage();
-    final file =
-        await ImageHelper.getImageFileFromAssets('assets', 'sample.jpg');
 
     // fetch for uploading status
     storage.fetch();
@@ -949,10 +997,18 @@ class FlamingoTest {
       print('total: ${data.totalBytes} transferred: ${data.bytesTransferred}');
     });
 
-    // save file metadata into firestore
     final path = '${item.documentPath}/${ModelSampleKey.file.value}';
-    item.file = await storage
-        .save(path, file, mimeType: mimeTypePng, metadata: {'newPost': 'true'});
+    final metadata = {'newPost': 'true'};
+    if (kIsWeb) {
+      final blob = await ImageHelper.getImage('sample.jpg');
+      item.file = await storage.saveBlob(path, blob,
+          mimeType: mimeTypePng, metadata: metadata);
+    } else {
+      final file = await ImageHelper.getImage('sample.jpg');
+      item.file = await storage.save(path, file,
+          mimeType: mimeTypePng, metadata: metadata);
+    }
+
     await documentAccessor.save(item);
     item.log();
 
