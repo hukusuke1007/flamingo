@@ -19,7 +19,7 @@ class CollectionPagingListener<T extends Document<T>> {
     this.initialLimit,
     this.pagingLimit,
     required this.decode,
-  })   : _limit = initialLimit,
+  })  : _limit = initialLimit,
         _pagingListenerController =
             _PagingListener(query: query, limit: initialLimit, decode: decode);
 
