@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:universal_io/io.dart';
 
 import '../flamingo.dart';
 
@@ -19,11 +18,28 @@ abstract class StorageRepository {
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
   });
+  Future<StorageFile> saveBlob(
+    String folderPath,
+    dynamic data, {
+    String? filename,
+    String mimeType = mimeTypeApplicationOctetStream,
+    Map<String, String> metadata = const <String, String>{},
+    Map<String, dynamic> additionalData = const <String, dynamic>{},
+  });
   Future<StorageFile> saveWithDoc(
     DocumentReference reference,
     String folderName,
     File data, {
-    String filename,
+    String? filename,
+    String mimeType = mimeTypeApplicationOctetStream,
+    Map<String, String> metadata = const <String, String>{},
+    Map<String, dynamic> additionalData = const <String, dynamic>{},
+  });
+  Future<StorageFile> saveBlobWithDoc(
+    DocumentReference reference,
+    String folderName,
+    dynamic data, {
+    String? filename,
     String mimeType = mimeTypeApplicationOctetStream,
     Map<String, String> metadata = const <String, String>{},
     Map<String, dynamic> additionalData = const <String, dynamic>{},
@@ -82,12 +98,37 @@ class Storage implements StorageRepository {
     final ref = storage.ref().child(path);
     final settableMetadata =
         SettableMetadata(contentType: mimeType, customMetadata: metadata);
-    UploadTask uploadTask;
-    if (kIsWeb) {
-      uploadTask = ref.putData(data.readAsBytesSync(), settableMetadata);
-    } else {
-      uploadTask = ref.putFile(data, settableMetadata);
+    final uploadTask = ref.putData(data.readAsBytesSync(), settableMetadata);
+    if (_uploader != null) {
+      uploadTask.snapshotEvents.listen(_uploader!.add);
     }
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await snapshot.ref.getDownloadURL();
+    return StorageFile(
+      name: refFilename,
+      url: downloadUrl,
+      path: path,
+      mimeType: mimeType,
+      metadata: metadata,
+      additionalData: additionalData,
+    );
+  }
+
+  @override
+  Future<StorageFile> saveBlob(
+    String folderPath,
+    dynamic data, {
+    String? filename,
+    String mimeType = mimeTypeApplicationOctetStream,
+    Map<String, String> metadata = const <String, String>{},
+    Map<String, dynamic> additionalData = const <String, dynamic>{},
+  }) async {
+    final refFilename = filename ?? Storage.fileName();
+    final path = '$folderPath/$refFilename';
+    final ref = storage.ref().child(path);
+    final settableMetadata =
+        SettableMetadata(contentType: mimeType, customMetadata: metadata);
+    final uploadTask = ref.putBlob(data, settableMetadata);
     if (_uploader != null) {
       uploadTask.snapshotEvents.listen(_uploader!.add);
     }
@@ -123,9 +164,35 @@ class Storage implements StorageRepository {
       additionalData: additionalData,
     );
     final documentAccessor = DocumentAccessor();
-    final values = <String, dynamic>{};
-    values['$folderName'] = storageFile.toJson();
-    await documentAccessor.saveRaw(values, reference);
+    await documentAccessor.saveRaw(<String, dynamic>{
+      '$folderName': storageFile.toJson(),
+    }, reference);
+    return storageFile;
+  }
+
+  @override
+  Future<StorageFile> saveBlobWithDoc(
+    DocumentReference reference,
+    String folderName,
+    dynamic data, {
+    String? filename,
+    String mimeType = mimeTypeApplicationOctetStream,
+    Map<String, String> metadata = const <String, String>{},
+    Map<String, dynamic> additionalData = const <String, dynamic>{},
+  }) async {
+    final folderPath = '${reference.path}/$folderName';
+    final storageFile = await saveBlob(
+      folderPath,
+      data,
+      filename: filename,
+      mimeType: mimeType,
+      metadata: metadata,
+      additionalData: additionalData,
+    );
+    final documentAccessor = DocumentAccessor();
+    await documentAccessor.saveRaw(<String, dynamic>{
+      '$folderName': storageFile.toJson(),
+    }, reference);
     return storageFile;
   }
 
