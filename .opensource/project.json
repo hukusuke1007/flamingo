@@ -1,7 +1,7 @@
 {
   "name": "flamingo",
   "type": "library",
-  "platforms": ["Android", "iOS"],
+  "platforms": ["Android", "iOS", "Web"],
   "content": "README.md",
   "pages" : [],
   "related": []
