@@ -1,4 +1,7 @@
-# 2.9.0+1
+# 2.10.0
+Updated Plugins.
+
+## 2.9.0+1
 CHORE: solved lint.
 
 ## 2.9.0
