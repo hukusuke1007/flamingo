@@ -1,4 +1,7 @@
-# 0.12.0
+# 0.13.0
+Updated analyzer plugins.
+
+## 0.12.0
 Added defaultValue
 
 ## 0.11.0
