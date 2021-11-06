@@ -1,6 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gmail.hukusuke1007.flamingo_example">
-
     <application
         android:label="flamingo_example"
         android:icon="@mipmap/ic_launcher">

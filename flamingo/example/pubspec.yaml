@@ -29,9 +29,6 @@ dev_dependencies:
     path: ../../flamingo_generator/
 
   test: ^1.14.4
-#  cloud_firestore_mocks:
-#  firebase_storage_mocks:
-
 
 flutter:
   uses-material-design: true
