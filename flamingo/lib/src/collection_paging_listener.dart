@@ -40,6 +40,8 @@ class CollectionPagingListener<T extends Document<T>> {
   final PublishSubject<List<DocumentChangeData<T>>> _docChangesController =
       PublishSubject<List<DocumentChangeData<T>>>();
 
+  StreamSubscription<List<T>>? _disposer;
+
   bool _hasMore = true;
   bool _initLoaded = false;
   int? _limit;
@@ -49,14 +51,13 @@ class CollectionPagingListener<T extends Document<T>> {
     await _pagingListenerController.dispose();
     await _dataController.close();
     await _docChangesController.close();
+    await _disposer?.cancel();
   }
 
   /// Listen to snapshot from SnapshotListener.
   void fetch() {
     assert(_initLoaded == false);
-    _pagingListenerController.data
-        .where((event) => event != null)
-        .listen((event) {
+    _disposer = _pagingListenerController.data.listen((event) {
       if (_limit != null) {
         _hasMore = event.length >= _limit!;
       } else {
@@ -64,6 +65,7 @@ class CollectionPagingListener<T extends Document<T>> {
       }
       _dataController.add(event);
     });
+
     _pagingListenerController.docChanges
         .where((event) => event.isNotEmpty)
         .pipe(_docChangesController);

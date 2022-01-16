@@ -60,6 +60,21 @@ class Flamingo {
     instance._rootReference = instance.firestore.doc(rootPath ?? '/');
   }
 
+  /// Set emulator
+  static Future<void> configureEmulator({
+    int firestorePort = 8080,
+    int storagePort = 9099,
+    bool persistenceEnabled = false,
+    bool sslEnabled = false,
+  }) async {
+    FirebaseFirestore.instance.settings = getEmulatorSettings(
+      port: firestorePort,
+      persistenceEnabled: persistenceEnabled,
+      sslEnabled: sslEnabled,
+    );
+    await configureStorageEmulator(port: storagePort);
+  }
+
   /// Get emulator settings
   static Settings getEmulatorSettings({
     int port = 8080,
@@ -70,6 +85,15 @@ class Flamingo {
         persistenceEnabled: persistenceEnabled,
         host: '${Platform.isAndroid ? '10.0.2.2' : 'localhost'}:$port',
         sslEnabled: sslEnabled,
+      );
+
+  /// Setting Storage Emulator
+  static Future<void> configureStorageEmulator({
+    int port = 9199,
+  }) =>
+      FirebaseStorage.instance.useStorageEmulator(
+        Platform.isAndroid ? '10.0.2.2' : 'localhost',
+        port,
       );
 
   DocumentReference<Map<String, dynamic>> get rootReference => _rootReference;
