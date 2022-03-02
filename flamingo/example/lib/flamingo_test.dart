@@ -116,9 +116,6 @@ class FlamingoTest {
       fromCache: (cache) {
         // 1. Load from cache
         print('from cache $cache');
-        // if (cache != null) {
-        //   assertCreateDocument(user, cache);
-        // }
         assertCreateDocument(user, cache!);
       },
     );
