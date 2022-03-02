@@ -16,7 +16,7 @@ class CollectionPaging<T extends Document<T>> {
 
   Future<List<T>> load({
     Source source = Source.serverAndCache,
-    Function(List<T>)? fromCache,
+    void Function(List<T>)? fromCache,
   }) async {
     if (fromCache != null) {
       try {

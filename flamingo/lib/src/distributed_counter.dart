@@ -4,18 +4,18 @@ import '../flamingo.dart';
 import 'model/counter.dart';
 
 abstract class DistributedCounterRepository {
-  Future create(Counter counter);
-  Future increment(Counter counter, {int count});
+  Future<void> create(Counter counter);
+  Future<void> increment(Counter counter, {int count});
   Future<int> load(Counter counter);
 }
 
 class DistributedCounter implements DistributedCounterRepository {
   @override
-  Future create(Counter counter) async =>
+  Future<void> create(Counter counter) async =>
       _create(counter.parentRef, counter.collectionName, counter.numShards);
 
   @override
-  Future increment(Counter counter, {int? count}) async =>
+  Future<void> increment(Counter counter, {int? count}) async =>
       _increment(counter.parentRef, counter.collectionName, counter.numShards,
           count: count);
 
