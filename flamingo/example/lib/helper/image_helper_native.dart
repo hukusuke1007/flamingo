@@ -8,7 +8,7 @@ class ImageHelperNative {
   static Future<File> getImageFileFromAssets(String name,
       {String assetsName = 'assets'}) async {
     final byteData = await rootBundle.load('$assetsName/$name');
-    final file = File('${(await getTemporaryDirectory())!.path}/$name');
+    final file = File('${(await getTemporaryDirectory()).path}/$name');
     await file.writeAsBytes(byteData.buffer
         .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
     return file;

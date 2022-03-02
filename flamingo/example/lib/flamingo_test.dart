@@ -116,9 +116,10 @@ class FlamingoTest {
       fromCache: (cache) {
         // 1. Load from cache
         print('from cache $cache');
-        if (cache != null) {
-          assertCreateDocument(user, cache);
-        }
+        // if (cache != null) {
+        //   assertCreateDocument(user, cache);
+        // }
+        assertCreateDocument(user, cache!);
       },
     );
     // 2. Load from serverAndCache
@@ -251,7 +252,9 @@ class FlamingoTest {
     print('--- batchSave ---');
     final userA = User()..name = 'hoge';
     final userB = User()..name = 'fuga';
-    final batch = Batch()..save(userA)..save(userB);
+    final batch = Batch()
+      ..save(userA)
+      ..save(userB);
     print(userA.id);
     print(userB.id);
     await batch.commit();
@@ -283,7 +286,9 @@ class FlamingoTest {
     print('--- batchUpdateDelete ---');
     final userA = User()..name = 'hoge';
     final userB = User()..name = 'fuga';
-    final batch = Batch()..save(userA)..save(userB);
+    final batch = Batch()
+      ..save(userA)
+      ..save(userB);
     await batch.commit();
     await _batchUpdateDelete(userA, userB);
   }
@@ -308,7 +313,9 @@ class FlamingoTest {
     print('--- batchUpdateDeleteRaw ---');
     final userA = User()..name = 'hoge';
     final userB = User()..name = 'fuga';
-    final batch = Batch()..save(userA)..save(userB);
+    final batch = Batch()
+      ..save(userA)
+      ..save(userB);
     await batch.commit();
     userA.log();
     userB.log();
@@ -422,7 +429,10 @@ class FlamingoTest {
     final countB = Count(id: '1', collectionRef: ranking.count!.ref)
       ..userId = '1'
       ..count = 100;
-    final batch = Batch()..save(ranking)..save(countA)..save(countB);
+    final batch = Batch()
+      ..save(ranking)
+      ..save(countA)
+      ..save(countB);
     await batch.commit();
 
     final snapshot = await firestoreInstance

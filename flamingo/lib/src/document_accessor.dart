@@ -3,41 +3,41 @@ import 'dart:async';
 import '../flamingo.dart';
 
 abstract class DocumentAccessorRepository {
-  Future save(Document document);
+  Future<void> save<T extends Document<T>>(Document<T> document);
   Future<Increment<T>> increment<T extends num>(
     Increment<T> entity,
     DocumentReference reference, {
     num value,
     required String fieldName,
   });
-  Future update(Document document);
-  Future delete(Document document);
+  Future<void> update<T extends Document<T>>(Document<T> document);
+  Future<void> delete<T extends Document<T>>(Document<T> document);
   Future<T?> load<T extends Document<T>>(
-    Document document, {
+    Document<T> document, {
     Source source = Source.serverAndCache,
-    Function(T?)? fromCache,
+    void Function(T?)? fromCache,
   });
-  Future<T?> loadCache<T extends Document<T>>(Document document);
-  Future<T?> loadCacheOnly<T extends Document<T>>(Document document);
-  Future saveRaw(
+  Future<T?> loadCache<T extends Document<T>>(Document<T> document);
+  Future<T?> loadCacheOnly<T extends Document<T>>(Document<T> document);
+  Future<void> saveRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
     bool isTimestamp = false,
     String createdFieldValueKey = documentCreatedAtKey,
     String updatedFieldValueKey = documentUpdatedAtKey,
   });
-  Future updateRaw(
+  Future<void> updateRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
     bool isTimestamp = false,
     String updatedFieldValueKey = documentUpdatedAtKey,
   });
-  Future deleteWithReference(DocumentReference reference);
+  Future<void> deleteWithReference(DocumentReference reference);
 }
 
 class DocumentAccessor implements DocumentAccessorRepository {
   @override
-  Future save(Document document) async {
+  Future<void> save<T extends Document<T>>(Document<T> document) async {
     final batch = Batch()..save(document);
     await batch.commit();
   }
@@ -65,22 +65,22 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   @override
-  Future update(Document document) async {
+  Future<void> update<T extends Document<T>>(Document<T> document) async {
     final batch = Batch()..update(document);
     await batch.commit();
   }
 
   @override
-  Future delete(Document document) async {
+  Future<void> delete<T extends Document<T>>(Document<T> document) async {
     final batch = Batch()..delete(document);
     await batch.commit();
   }
 
   @override
   Future<T?> load<T extends Document<T>>(
-    Document document, {
+    Document<T> document, {
     Source source = Source.serverAndCache,
-    Function(T?)? fromCache,
+    void Function(T?)? fromCache,
   }) async {
     if (fromCache != null) {
       try {
@@ -95,23 +95,23 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   @override
-  Future<T?> loadCache<T extends Document<T>>(Document document) async {
+  Future<T?> loadCache<T extends Document<T>>(Document<T> document) async {
     try {
-      final cache = await _load(document, Source.cache);
+      final cache = await _load<T>(document, Source.cache);
       if (cache != null) {
         return cache as T;
       }
     } on Exception catch (_) {
       // nothing
     }
-    final _document = await _load(document, Source.serverAndCache);
+    final _document = await _load<T>(document, Source.serverAndCache);
     return _document != null ? _document as T : null;
   }
 
   @override
-  Future<T?> loadCacheOnly<T extends Document<T>>(Document document) async {
+  Future<T?> loadCacheOnly<T extends Document<T>>(Document<T> document) async {
     try {
-      final cache = await _load(document, Source.cache);
+      final cache = await _load<T>(document, Source.cache);
       if (cache != null) {
         return cache as T;
       }
@@ -121,7 +121,8 @@ class DocumentAccessor implements DocumentAccessorRepository {
     return null;
   }
 
-  Future<Document?> _load(Document document, Source source) async {
+  Future<Document<T>?> _load<T extends Document<T>>(
+      Document<T> document, Source source) async {
     final documentSnapshot =
         await document.reference.get(GetOptions(source: source));
     if (documentSnapshot.exists) {
@@ -132,7 +133,7 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   @override
-  Future saveRaw(
+  Future<void> saveRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
     bool isTimestamp = false,
@@ -150,7 +151,7 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   @override
-  Future updateRaw(
+  Future<void> updateRaw(
     Map<String, dynamic> values,
     DocumentReference reference, {
     bool isTimestamp = false,
@@ -166,7 +167,7 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   @override
-  Future deleteWithReference(DocumentReference reference) async {
+  Future<void> deleteWithReference(DocumentReference reference) async {
     final batch = Batch()..deleteWithReference(reference);
     await batch.commit();
   }

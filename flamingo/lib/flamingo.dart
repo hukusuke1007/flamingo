@@ -1,7 +1,12 @@
 library flamingo;
 
 import 'package:cloud_firestore/cloud_firestore.dart'
-    show CollectionReference, DocumentReference, FirebaseFirestore, Settings;
+    show
+        CollectionReference,
+        DocumentReference,
+        FirebaseFirestore,
+        PersistenceSettings,
+        Settings;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart' show FirebaseStorage;
 import 'package:flutter/foundation.dart';
@@ -40,9 +45,14 @@ class Flamingo {
     FirebaseOptions? options,
     Settings? settings,
     String? rootPath,
+    bool isWebCache = true,
   }) async {
     await Firebase.initializeApp(name: name, options: options);
-    overrideWithSetting(settings: settings, rootPath: rootPath);
+    overrideWithSetting(
+      settings: settings,
+      rootPath: rootPath,
+      isWebCache: isWebCache,
+    );
   }
 
   /// Update Firebase instance and reference and settings
@@ -51,9 +61,15 @@ class Flamingo {
     FirebaseStorage? storageInstance,
     Settings? settings,
     String? rootPath,
+    required bool isWebCache,
   }) {
-    if (!kIsWeb) {
-      FirebaseFirestore.instance.settings = settings ?? const Settings();
+    if (settings != null) {
+      FirebaseFirestore.instance.settings = settings;
+    }
+    if (kIsWeb && isWebCache) {
+      FirebaseFirestore.instance.enablePersistence(
+        const PersistenceSettings(synchronizeTabs: true),
+      );
     }
     instance._firestore = firestoreInstance ?? FirebaseFirestore.instance;
     instance._firebaseStorage = storageInstance ?? FirebaseStorage.instance;
@@ -95,6 +111,10 @@ class Flamingo {
         Platform.isAndroid ? '10.0.2.2' : 'localhost',
         port,
       );
+
+  /// Clear cache
+  static Future<void> clearCache() =>
+      Flamingo.instance.firestore.clearPersistence();
 
   DocumentReference<Map<String, dynamic>> get rootReference => _rootReference;
   FirebaseFirestore get firestore => _firestore;

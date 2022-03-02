@@ -165,7 +165,7 @@ class Storage implements StorageRepository {
     );
     final documentAccessor = DocumentAccessor();
     await documentAccessor.saveRaw(<String, dynamic>{
-      '$folderName': storageFile.toJson(),
+      folderName: storageFile.toJson(),
     }, reference);
     return storageFile;
   }
@@ -191,7 +191,7 @@ class Storage implements StorageRepository {
     );
     final documentAccessor = DocumentAccessor();
     await documentAccessor.saveRaw(<String, dynamic>{
-      '$folderName': storageFile.toJson(),
+      folderName: storageFile.toJson(),
     }, reference);
     return storageFile;
   }
@@ -246,9 +246,9 @@ class Storage implements StorageRepository {
     if (storageFile.isDeleted) {
       final values = <String, dynamic>{};
       if (isNotNull) {
-        values['$folderName'] = FieldValue.delete();
+        values[folderName] = FieldValue.delete();
       } else {
-        values['$folderName'] = null;
+        values[folderName] = null;
       }
       final documentAccessor = DocumentAccessor();
       await documentAccessor.updateRaw(values, reference);

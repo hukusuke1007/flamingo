@@ -3,16 +3,16 @@ import '../flamingo.dart';
 abstract class BatchRepository {
   bool get isAddedDocument;
   int get addedDocumentCount;
-  void save(
-    Document document, {
+  void save<T extends Document<T>>(
+    Document<T> document, {
     DocumentReference? reference,
   });
-  void update(
-    Document document, {
+  void update<T extends Document<T>>(
+    Document<T> document, {
     DocumentReference? reference,
   });
-  void delete(
-    Document document, {
+  void delete<T extends Document<T>>(
+    Document<T> document, {
     DocumentReference? reference,
   });
   void saveRaw(
@@ -29,7 +29,7 @@ abstract class BatchRepository {
     String updatedFieldValueKey = documentUpdatedAtKey,
   });
   void deleteWithReference(DocumentReference reference);
-  Future commit();
+  Future<void> commit();
 }
 
 class Batch implements BatchRepository {
@@ -46,8 +46,8 @@ class Batch implements BatchRepository {
   final List<_BatchDocument> _batchDocument = [];
 
   @override
-  void save(
-    Document document, {
+  void save<T extends Document<T>>(
+    Document<T> document, {
     DocumentReference? reference,
   }) {
     final data = document.toData();
@@ -61,8 +61,8 @@ class Batch implements BatchRepository {
   }
 
   @override
-  void update(
-    Document document, {
+  void update<T extends Document<T>>(
+    Document<T> document, {
     DocumentReference? reference,
   }) {
     final data = document.toData();
@@ -74,8 +74,8 @@ class Batch implements BatchRepository {
   }
 
   @override
-  void delete(
-    Document document, {
+  void delete<T extends Document<T>>(
+    Document<T> document, {
     DocumentReference? reference,
   }) {
     _writeBatch.delete(reference ?? document.reference);
@@ -120,7 +120,7 @@ class Batch implements BatchRepository {
   }
 
   @override
-  Future commit() async {
+  Future<void> commit() async {
     await _writeBatch.commit();
     for (final item in _batchDocument) {
       item.document.onCompleted(item.executeType);
