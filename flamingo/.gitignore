@@ -27,4 +27,4 @@ doc/api/
 !.idea/codeStyleSettings.xml
 !.idea/codeStyles/*
 !.idea/vcs.xml
-
+.flutter-plugins*

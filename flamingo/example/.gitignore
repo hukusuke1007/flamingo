@@ -76,4 +76,4 @@
 
 android/app/google-services.json
 ios/Runner/GoogleService-Info.plist
-web/index.html
+lib/firebase_options.dart

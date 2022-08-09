@@ -3,7 +3,7 @@ import 'package:flamingo_example/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 class CollectionPagingListenerPage extends StatefulWidget {
   @override
@@ -106,8 +106,21 @@ class _State extends State<CollectionPagingListenerPage> {
             itemBuilder: (BuildContext context, int index) {
               final data = items[index];
               return Slidable(
-                actionPane: const SlidableDrawerActionPane(),
-                actionExtentRatio: 0.25,
+                endActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (_) async {
+                        final documentAccessor = DocumentAccessor();
+                        await documentAccessor.delete(data);
+                      },
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    ),
+                  ],
+                ),
                 child: ListTile(
                   title: Text(
                     data.id,
@@ -123,17 +136,6 @@ class _State extends State<CollectionPagingListenerPage> {
                     await documentAccessor.update(data);
                   },
                 ),
-                secondaryActions: <Widget>[
-                  IconSlideAction(
-                    caption: 'Delete',
-                    color: Colors.red,
-                    icon: Icons.delete,
-                    onTap: () async {
-                      final documentAccessor = DocumentAccessor();
-                      await documentAccessor.delete(data);
-                    },
-                  ),
-                ],
               );
             },
             itemCount: items.length,
