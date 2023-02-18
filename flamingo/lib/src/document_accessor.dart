@@ -61,7 +61,7 @@ class DocumentAccessor implements DocumentAccessorRepository {
         isTimestamp: true,
       );
     await batch.commit();
-    return Increment(value: updateValue as T, incrementValue: null);
+    return Increment(value: updateValue as T);
   }
 
   @override
@@ -90,8 +90,8 @@ class DocumentAccessor implements DocumentAccessorRepository {
         fromCache(null);
       }
     }
-    final _document = await _load(document, source);
-    return _document != null ? _document as T : null;
+    final document0 = await _load(document, source);
+    return document0 != null ? document0 as T : null;
   }
 
   @override
@@ -104,8 +104,8 @@ class DocumentAccessor implements DocumentAccessorRepository {
     } on Exception catch (_) {
       // nothing
     }
-    final _document = await _load<T>(document, Source.serverAndCache);
-    return _document != null ? _document as T : null;
+    final document0 = await _load<T>(document, Source.serverAndCache);
+    return document0 != null ? document0 as T : null;
   }
 
   @override
@@ -122,7 +122,9 @@ class DocumentAccessor implements DocumentAccessorRepository {
   }
 
   Future<Document<T>?> _load<T extends Document<T>>(
-      Document<T> document, Source source) async {
+    Document<T> document,
+    Source source,
+  ) async {
     final documentSnapshot =
         await document.reference.get(GetOptions(source: source));
     if (documentSnapshot.exists) {

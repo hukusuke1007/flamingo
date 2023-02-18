@@ -15,7 +15,10 @@ class Base {
       Helper.writeModel(data, key, model);
 
   void writeModelList(
-          Map<String, dynamic> data, String key, List<Model> models) =>
+    Map<String, dynamic> data,
+    String key,
+    List<Model> models,
+  ) =>
       Helper.writeModelList(data, key, models);
 
   void writeNotNull(Map<String, dynamic> data, String key, dynamic value) =>
@@ -25,7 +28,10 @@ class Base {
       Helper.writeModelNotNull(data, key, model);
 
   void writeModelListNotNull(
-          Map<String, dynamic> data, String key, List<Model> models) =>
+    Map<String, dynamic> data,
+    String key,
+    List<Model> models,
+  ) =>
       Helper.writeModelListNotNull(data, key, models);
 
   void writeStorage(
@@ -58,14 +64,20 @@ class Base {
     List<StorageFile> storageFiles, {
     bool isSetNull = true,
   }) =>
-      Helper.writeStorageListNotNull(data, key, storageFiles,
-          isSetNull: isSetNull);
+      Helper.writeStorageListNotNull(
+        data,
+        key,
+        storageFiles,
+        isSetNull: isSetNull,
+      );
 
   StorageFile? storageFile(Map<String, dynamic> data, String folderName) =>
       Helper.storageFile(data, folderName);
 
   List<StorageFile>? storageFiles(
-          Map<String, dynamic> data, String folderName) =>
+    Map<String, dynamic> data,
+    String folderName,
+  ) =>
       Helper.storageFiles(data, folderName);
 
   U valueFromKey<U>(
@@ -82,11 +94,15 @@ class Base {
       Helper.valueListFromKey<U>(data, key);
 
   List<Map<U, V>>? valueMapListFromKey<U, V>(
-          Map<String, dynamic> data, String key) =>
+    Map<String, dynamic> data,
+    String key,
+  ) =>
       Helper.valueMapListFromKey<U, V>(data, key);
 
   Increment<U> valueFromIncrement<U extends num>(
-          Map<String, dynamic> data, String key) =>
+    Map<String, dynamic> data,
+    String key,
+  ) =>
       Helper.valueFromIncrement<U>(data, key);
 
   bool isVal(Map<String, dynamic> data, String key) => Helper.isVal(data, key);

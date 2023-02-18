@@ -22,13 +22,13 @@ class Increment<T extends num> {
   Increment<T> onRefresh() {
     Increment<T> result;
     if (isClearValue) {
-      final _value = T.toString() == 'double' ? 0.0 : 0;
-      result = Increment<T>(value: _value as T);
+      final value = T.toString() == 'double' ? 0.0 : 0;
+      result = Increment<T>(value: value as T);
     } else {
       if (incrementValue != null) {
-        final _value =
+        final value0 =
             value != null ? value! + incrementValue! : incrementValue;
-        result = Increment<T>(value: _value! as T);
+        result = Increment<T>(value: value0! as T);
       } else {
         result = Increment<T>(value: value);
       }

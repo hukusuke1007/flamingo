@@ -1,13 +1,14 @@
 part 'storage_file.g.dart';
 
 class StorageFile {
-  StorageFile(
-      {required this.name,
-      required this.path,
-      required this.url,
-      this.mimeType = 'application/octet-stream',
-      this.additionalData = const <String, dynamic>{},
-      this.metadata = const <String, String>{}});
+  StorageFile({
+    required this.name,
+    required this.path,
+    required this.url,
+    this.mimeType = 'application/octet-stream',
+    this.additionalData = const <String, dynamic>{},
+    this.metadata = const <String, String>{},
+  });
   factory StorageFile.fromJson(Map<String, dynamic> json) =>
       _$StorageFileFromJson(json);
 

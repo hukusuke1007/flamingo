@@ -4,7 +4,7 @@ import '../type/type.dart';
 import 'document.dart';
 
 class Collection<T extends Document<DocumentType>> {
-  Collection(Document parent, this.name)
+  Collection(Document<DocumentType> parent, this.name)
       : ref = parent.reference.collection(name),
         path = parent.reference.collection(name).path;
 

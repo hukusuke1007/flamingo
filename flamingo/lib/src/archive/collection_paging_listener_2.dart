@@ -4,7 +4,6 @@
 // import 'package:flutter/foundation.dart';
 // import 'package:rxdart/rxdart.dart';
 //
-// // TODO(shohei): リアルタイムアップデートのみのページング
 // /// やりたいことができなかった
 //
 // /// CollectionPagingListener is SnapshotListener + Paging features.
