@@ -11,7 +11,7 @@ dependencies:
   build: ^2.3.1
   meta: ^1.7.0
   source_gen: ^1.2.3
-  flamingo_annotation: 1.0.0
+  flamingo_annotation: 1.0.0-dev.1
 
 dev_dependencies:
   test:
