@@ -1,4 +1,7 @@
-# 2.18.0
+# 3.0.0
+Updated Plugins and modified example code.
+
+## 2.18.0
 Updated Plugins and modified example code.
 
 ## 2.17.0
