@@ -52,8 +52,7 @@ void _$fromData(Owner doc, Map<String, dynamic> data) {
 
   final _medals = Helper.valueMapListFromKey<String, dynamic>(data, 'medals');
   if (_medals != null) {
-    doc.medals =
-        _medals.where((d) => d != null).map((d) => Medal(values: d)).toList();
+    doc.medals = _medals.map((d) => Medal(values: d)).toList();
   } else {
     doc.medals = null;
   }

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flamingo/src/type/type.dart';
 
 import 'document.dart';
 
 class Counter {
-  Counter(Document parent, this.collectionName, this.numShards)
+  Counter(Document<DocumentType> parent, this.collectionName, this.numShards)
       : parentRef = parent.reference,
         path = parent.reference.path;
 

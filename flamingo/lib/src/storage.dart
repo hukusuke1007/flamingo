@@ -164,9 +164,12 @@ class Storage implements StorageRepository {
       additionalData: additionalData,
     );
     final documentAccessor = DocumentAccessor();
-    await documentAccessor.saveRaw(<String, dynamic>{
-      folderName: storageFile.toJson(),
-    }, reference);
+    await documentAccessor.saveRaw(
+      <String, dynamic>{
+        folderName: storageFile.toJson(),
+      },
+      reference,
+    );
     return storageFile;
   }
 
@@ -190,9 +193,12 @@ class Storage implements StorageRepository {
       additionalData: additionalData,
     );
     final documentAccessor = DocumentAccessor();
-    await documentAccessor.saveRaw(<String, dynamic>{
-      folderName: storageFile.toJson(),
-    }, reference);
+    await documentAccessor.saveRaw(
+      <String, dynamic>{
+        folderName: storageFile.toJson(),
+      },
+      reference,
+    );
     return storageFile;
   }
 
@@ -209,15 +215,19 @@ class Storage implements StorageRepository {
   }
 
   @override
-  Future<Uint8List?> getData(StorageFile storageFile,
-      [int maxSize = 10485760]) async {
+  Future<Uint8List?> getData(
+    StorageFile storageFile, [
+    int maxSize = 10485760,
+  ]) async {
     final ref = storage.ref().child(storageFile.path);
     return ref.getData(maxSize);
   }
 
   @override
-  Future<Uint8List?> getDataWithPath(String filePath,
-      [int maxSize = 10485760]) async {
+  Future<Uint8List?> getDataWithPath(
+    String filePath, [
+    int maxSize = 10485760,
+  ]) async {
     final ref = storage.ref().child(filePath);
     return ref.getData(maxSize);
   }

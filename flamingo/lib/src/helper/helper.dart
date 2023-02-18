@@ -4,18 +4,18 @@ import '../../flamingo.dart';
 
 class Helper {
   const Helper._();
-  static Map<String, dynamic> fromMap(Map map) =>
+  static Map<String, dynamic> fromMap(Map<String, dynamic> map) =>
       Map<String, dynamic>.from(map);
 
   static String randomString({int? length}) {
-    const _randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    const _charsLength = _randomChars.length;
+    const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const charsLength = randomChars.length;
     final rand = Random();
     final codeUnits = List.generate(
       length ?? 10,
       (index) {
-        final n = rand.nextInt(_charsLength);
-        return _randomChars.codeUnitAt(n);
+        final n = rand.nextInt(charsLength);
+        return randomChars.codeUnitAt(n);
       },
     );
     return String.fromCharCodes(codeUnits);
@@ -44,33 +44,48 @@ class Helper {
   }
 
   static void writeModelList(
-      Map<String, dynamic> data, String key, List<Model> models) {
+    Map<String, dynamic> data,
+    String key,
+    List<Model> models,
+  ) {
     _writeModelList(data, key, models);
   }
 
   static void writeNotNull(
-      Map<String, dynamic> data, String key, dynamic value) {
+    Map<String, dynamic> data,
+    String key,
+    dynamic value,
+  ) {
     if (value != null) {
       data[key] = value;
     }
   }
 
   static void writeModelNotNull(
-      Map<String, dynamic> data, String key, Model? model) {
+    Map<String, dynamic> data,
+    String key,
+    Model? model,
+  ) {
     if (model != null) {
       data[key] = model.toData();
     }
   }
 
   static void writeModelListNotNull(
-      Map<String, dynamic> data, String key, List<Model>? models) {
+    Map<String, dynamic> data,
+    String key,
+    List<Model>? models,
+  ) {
     if (models != null) {
       _writeModelList(data, key, models);
     }
   }
 
   static void _writeModelList(
-      Map<String, dynamic> data, String key, List<Model> models) {
+    Map<String, dynamic> data,
+    String key,
+    List<Model> models,
+  ) {
     data[key] = models.map((d) => d.toData()).toList();
   }
 
@@ -177,7 +192,9 @@ class Helper {
   }
 
   static StorageFile? storageFile(
-      Map<String, dynamic> data, String folderName) {
+    Map<String, dynamic> data,
+    String folderName,
+  ) {
     final fileMap = valueMapFromKey<String, dynamic>(data, folderName);
     if (fileMap != null) {
       return StorageFile.fromJson(fileMap);
@@ -187,10 +204,12 @@ class Helper {
   }
 
   static List<StorageFile>? storageFiles(
-      Map<String, dynamic> data, String folderName) {
+    Map<String, dynamic> data,
+    String folderName,
+  ) {
     final fileMapList = valueMapListFromKey<String, dynamic>(data, folderName);
     if (fileMapList != null) {
-      return fileMapList.map((d) => StorageFile.fromJson(d)).toList();
+      return fileMapList.map(StorageFile.fromJson).toList();
     } else {
       return null;
     }
@@ -218,9 +237,11 @@ class Helper {
   }
 
   static Map<U, V>? valueMapFromKey<U, V>(
-          Map<String, dynamic> data, String key) =>
+    Map<String, dynamic> data,
+    String key,
+  ) =>
       isVal(data, key) && data[key] != null
-          ? Map<U, V>.from(Helper.fromMap(data[key] as Map))
+          ? Map<U, V>.from(Helper.fromMap(data[key] as Map<String, dynamic>))
           : null;
 
   static List<U>? valueListFromKey<U>(Map<String, dynamic> data, String key) =>
@@ -229,7 +250,9 @@ class Helper {
           : null;
 
   static List<Map<U, V>>? valueMapListFromKey<U, V>(
-          Map<String, dynamic> data, String key) =>
+    Map<String, dynamic> data,
+    String key,
+  ) =>
       isVal(data, key) && data[key] != null
           ? (data[key] as List)
               .map((dynamic d) => Map<U, V>.from(d as Map))
@@ -237,16 +260,23 @@ class Helper {
           : null;
 
   static Increment<U> valueFromIncrement<U extends num>(
-          Map<String, dynamic> data, String key) =>
+    Map<String, dynamic> data,
+    String key,
+  ) =>
       Increment(value: data[key] as U?);
 
   static bool isVal(Map<String, dynamic> data, String key) =>
       data.containsKey(key);
 
   static Timestamp? timestampFromMap(dynamic data, String key) {
+    // ignore: avoid_dynamic_calls
     if (data != null && data[key] is Map) {
-      final rawTimestamp =
-          Map<String, dynamic>.from(Helper.fromMap(data[key] as Map));
+      final rawTimestamp = Map<String, dynamic>.from(
+        Helper.fromMap(
+          // ignore: avoid_dynamic_calls
+          data[key] as Map<String, dynamic>,
+        ),
+      );
       final second = rawTimestamp['_seconds'] as int;
       final nanoseconds = rawTimestamp['_nanoseconds'] as int;
       return Timestamp(second, nanoseconds);

@@ -183,7 +183,6 @@
 //               }
 //             }
 //             docs.insert(change.newIndex, data);
-//             // TODO(shohei): It will be refactored this later.
 //             if (initialLimit >= docs.length) {
 //               _startAfterDocument = querySnapshot.docs.last;
 //             }

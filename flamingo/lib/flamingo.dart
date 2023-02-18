@@ -1,5 +1,3 @@
-library flamingo;
-
 import 'package:cloud_firestore/cloud_firestore.dart'
     show
         CollectionReference,

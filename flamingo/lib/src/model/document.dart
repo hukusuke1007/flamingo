@@ -9,23 +9,27 @@ class Document<T> extends Base implements DocumentType {
     this.snapshot,
     this.values,
     CollectionReference<Map<String, dynamic>>? collectionRef,
-  })  : assert(id == null || documentPath == null,
-            'Can be used only either of \'id\' or \'documentPath\'.'),
+  })  : assert(
+          id == null || documentPath == null,
+          'Can be used only either of \'id\' or \'documentPath\'.',
+        ),
         // ignore: lines_longer_than_80_chars
         assert(
-            documentPath == null || collectionPath == null,
-            // ignore: lines_longer_than_80_chars
-            'Can be used only either of \'documentPath\' or \'collectionPath\'.'),
+          documentPath == null || collectionPath == null,
+          // ignore: lines_longer_than_80_chars
+          'Can be used only either of \'documentPath\' or \'collectionPath\'.',
+        ),
         assert(
-            collectionPath == null || collectionRef == null,
-            // ignore: lines_longer_than_80_chars
-            'Can be used only either of \'collectionPath\' or \'collectionRef\'.') {
+          collectionPath == null || collectionRef == null,
+          // ignore: lines_longer_than_80_chars
+          'Can be used only either of \'collectionPath\' or \'collectionRef\'.',
+        ) {
     if (documentPath != null) {
       /// From reference path.
-      final _referenceDocument = Flamingo.instance.firestore.doc(documentPath);
-      _id = _referenceDocument.id;
-      _collectionRef = _referenceDocument.parent;
-      _reference = _referenceDocument;
+      final referenceDocument = Flamingo.instance.firestore.doc(documentPath);
+      _id = referenceDocument.id;
+      _collectionRef = referenceDocument.parent;
+      _reference = referenceDocument;
     } else {
       /// Set collectionRef
       if (collectionPath != null) {
@@ -72,10 +76,10 @@ class Document<T> extends Base implements DocumentType {
     if (collectionPath != null) {
       return id != null ? '$collectionPath/$id' : collectionPath;
     } else {
-      final _collectionPath = Flamingo.instance.rootReference
+      final collectionPath0 = Flamingo.instance.rootReference
           .collection(T.toString().toLowerCase())
           .path;
-      return id != null ? '$_collectionPath/$id' : _collectionPath;
+      return id != null ? '$collectionPath0/$id' : collectionPath0;
     }
   }
 
@@ -97,7 +101,7 @@ class Document<T> extends Base implements DocumentType {
   String get modelName => toString()
       .replaceAll('*', '')
       .split(' ')[2]
-      .replaceAll("\'", '')
+      .replaceAll("'", '')
       .toLowerCase();
 
   CollectionReference<Map<String, dynamic>> get collectionRootReference =>

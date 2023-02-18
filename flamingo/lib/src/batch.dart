@@ -56,7 +56,10 @@ class Batch implements BatchRepository {
     data[document.updatedFieldValueKey] = nowAt;
     document.setAt(createdAt: nowAt, updatedAt: nowAt);
     _writeBatch.set(
-        reference ?? document.reference, data, SetOptions(merge: true));
+      reference ?? document.reference,
+      data,
+      SetOptions(merge: true),
+    );
     _batchDocument.add(_BatchDocument(document, ExecuteType.create));
   }
 
@@ -131,6 +134,6 @@ class Batch implements BatchRepository {
 
 class _BatchDocument {
   _BatchDocument(this.document, this.executeType);
-  final Document document;
+  final Document<dynamic> document;
   final ExecuteType executeType;
 }

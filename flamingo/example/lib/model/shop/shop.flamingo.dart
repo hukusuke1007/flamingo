@@ -52,8 +52,7 @@ void _$fromData(Shop doc, Map<String, dynamic> data) {
 
   final _carts = Helper.valueMapListFromKey<String, dynamic>(data, 'carts');
   if (_carts != null) {
-    doc.carts =
-        _carts.where((d) => d != null).map((d) => Cart(values: d)).toList();
+    doc.carts = _carts.map((d) => Cart(values: d)).toList();
   } else {
     doc.carts = null;
   }

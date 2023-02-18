@@ -3,6 +3,7 @@ import 'package:flamingo_example/collection_paging_listener_page.dart';
 import 'package:flamingo_example/collection_paging_listener_stream_builder_page.dart';
 import 'package:flamingo_example/collection_paging_page.dart';
 import 'package:flamingo_example/firebase_options.dart';
+import 'package:flamingo_example/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 import 'flamingo_test.dart';
@@ -63,10 +64,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () {
+                    onTap: () {
                       Navigator.of(context, rootNavigator: false)
                           .push<void>(MaterialPageRoute(
                         builder: (BuildContext context) =>
@@ -83,10 +83,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightGreen,
-                    onPressed: () {
+                    onTap: () {
                       Navigator.of(context, rootNavigator: false)
                           .push<void>(MaterialPageRoute(
                         builder: (BuildContext context) =>
@@ -98,10 +97,10 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  const SizedBox(width: 8),
+                  RoundedButton(
                     color: Colors.orange,
-                    onPressed: () {
+                    onTap: () {
                       Navigator.of(context, rootNavigator: false)
                           .push<void>(MaterialPageRoute(
                         builder: (BuildContext context) =>
@@ -126,10 +125,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.all();
                     },
                     child: Text(
@@ -150,10 +148,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.save();
                     },
                     child: Text(
@@ -161,21 +158,22 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
-                    color: Colors.amberAccent,
-                    onPressed: () async {
-                      await test.update();
-                    },
-                    child: Text(
-                      'update',
-                      style: TextStyle(color: Colors.white),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: RoundedButton(
+                      color: Colors.amberAccent,
+                      onTap: () async {
+                        await test.update();
+                      },
+                      child: Text(
+                        'update',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.black12,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.delete();
                     },
                     child: Text(
@@ -196,10 +194,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.saveRaw();
                     },
                     child: Text(
@@ -207,21 +204,22 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
-                    color: Colors.amberAccent,
-                    onPressed: () async {
-                      await test.updateRaw();
-                    },
-                    child: Text(
-                      'update',
-                      style: TextStyle(color: Colors.white),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: RoundedButton(
+                      color: Colors.amberAccent,
+                      onTap: () async {
+                        await test.updateRaw();
+                      },
+                      child: Text(
+                        'update',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.black12,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.deleteRaw();
                     },
                     child: Text(
@@ -242,10 +240,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.batchSave();
                     },
                     child: Text(
@@ -253,10 +250,10 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  const SizedBox(width: 8),
+                  RoundedButton(
                     color: Colors.black12,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.batchUpdateDelete();
                     },
                     child: Text(
@@ -277,10 +274,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.batchSaveRaw();
                     },
                     child: Text(
@@ -288,10 +284,10 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  const SizedBox(width: 8),
+                  RoundedButton(
                     color: Colors.black12,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.batchUpdateDeleteRaw();
                     },
                     child: Text(
@@ -312,10 +308,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.batchCollectionCRUD();
                     },
                     child: Text(
@@ -336,10 +331,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.redAccent,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.getAndUpdate();
                     },
                     child: Text(
@@ -347,10 +341,10 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  const SizedBox(width: 8),
+                  RoundedButton(
                     color: Colors.green,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.getCollection();
                     },
                     child: Text(
@@ -371,10 +365,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.green,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.subCollection();
                     },
                     child: Text(
@@ -395,10 +388,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.saveStorage();
                     },
                     child: Text(
@@ -406,10 +398,9 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.black12,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.deleteStorage();
                     },
                     child: Text(
@@ -430,10 +421,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.saveStorageAndDoc();
                     },
                     child: Text(
@@ -441,10 +431,9 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.black12,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.deleteStorageAndDoc();
                     },
                     child: Text(
@@ -452,10 +441,9 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.saveAndDeleteStorageDocWithDocumentAccessor();
                     },
                     child: Text(
@@ -476,10 +464,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.distributedCounter();
                     },
                     child: Text(
@@ -500,10 +487,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.transactionSave();
                     },
                     child: Text(
@@ -511,10 +497,9 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.amber,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.transactionUpdate();
                     },
                     child: Text(
@@ -522,10 +507,9 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.black12,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.transactionDelete();
                     },
                     child: Text(
@@ -546,10 +530,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.saveMap();
                     },
                     child: Text(
@@ -570,10 +553,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.saveList();
                     },
                     child: Text(
@@ -594,10 +576,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.checkModelSample();
                     },
                     child: Text(
@@ -618,10 +599,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.listenerSample();
                     },
                     child: Text(
@@ -642,10 +622,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.model();
                     },
                     child: Text(
@@ -666,10 +645,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.incrementTest1();
                     },
                     child: Text(
@@ -677,21 +655,22 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
-                    color: Colors.deepPurple,
-                    onPressed: () async {
-                      await test.incrementTest2();
-                    },
-                    child: Text(
-                      'Save 2',
-                      style: TextStyle(color: Colors.white),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: RoundedButton(
+                      color: Colors.deepPurple,
+                      onTap: () async {
+                        await test.incrementTest2();
+                      },
+                      child: Text(
+                        'Save 2',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.deepOrangeAccent,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.incrementTest3();
                     },
                     child: Text(
@@ -712,10 +691,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.valueZeroTest();
                     },
                     child: Text(
@@ -736,10 +714,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.extendCRUD();
                     },
                     child: Text(
@@ -760,10 +737,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.testReferencePath();
                     },
                     child: Text(
@@ -784,10 +760,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.testCustomFieldValueKey();
                     },
                     child: Text(
@@ -808,10 +783,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.testErrorCheck();
                     },
                     child: Text(
@@ -832,10 +806,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.loadUsers();
                     },
                     child: Text(
@@ -843,10 +816,10 @@ class HomePage extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  const SizedBox(width: 8),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       await test.loadMoreUsers();
                     },
                     child: Text(

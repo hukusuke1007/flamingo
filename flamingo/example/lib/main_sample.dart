@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flamingo_example/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -55,10 +56,9 @@ class _HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.all(4),
+                  RoundedButton(
                     color: Colors.lightBlue,
-                    onPressed: () async {
+                    onTap: () async {
                       final ref =
                           FirebaseFirestore.instance.collection('aaaa').doc();
                       ref.set({'user': 'aaa'});
