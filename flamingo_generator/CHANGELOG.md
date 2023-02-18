@@ -1,4 +1,7 @@
-# 0.13.0
+# 1.0.0
+Updated plugins.
+
+## 0.13.0
 Updated analyzer plugins.
 
 ## 0.12.0

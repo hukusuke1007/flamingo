@@ -1,6 +1,6 @@
 name: flamingo_annotation
 description: Automatically generate code for converting flamingo JSON by annotating Dart classes.
-version: 1.0.0-dev.1
+version: 1.0.0
 homepage: https://github.com/hukusuke1007/flamingo
 
 environment:

@@ -18,7 +18,7 @@ dependencies:
 
   flamingo:
     path: ../
-  flamingo_annotation: 1.0.0-dev.1
+  flamingo_annotation: 1.0.0
 
 dev_dependencies:
   flutter_test:
