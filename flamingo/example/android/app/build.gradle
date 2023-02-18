@@ -46,7 +46,7 @@ android {
     defaultConfig {
         applicationId "com.gmail.hukusuke1007.flamingo_example"
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
